@@ -583,7 +583,12 @@ function CountryFlag({ code }: { code: string }) {
     <img
       src={`https://kapowaz.github.io/square-flags/flags/${code}.svg`}
       width={18}
-      className="rounded-[3px] overflow-clip ring-1 ring-white/[0.08]"
+      className={cn(
+        "rounded-[4px] overflow-clip",
+        "ring-1 ring-glass-border",
+        "transition-all duration-glass",
+        "hover:ring-glass-border-strong",
+      )}
       alt={code}
     />
   )
@@ -607,14 +612,14 @@ export function ApplicationsTable() {
   }
 
   return (
-    <div className="px-5 w-full gap-4 flex flex-col">
+    <div className="px-6 w-full gap-5 flex flex-col">
       {/* Header */}
-      <div className="flex flex-row items-center w-full pt-5">
-        <div className="flex-1 flex flex-col gap-1">
+      <div className="flex flex-row items-center w-full pt-6">
+        <div className="flex-1 flex flex-col gap-1.5">
           <h4 className="text-xl font-semibold tracking-tight text-white">
             33 applications
           </h4>
-          <p className="text-sm text-white/55">
+          <p className="text-[13px] text-white/50">
             Pending LOA queue
           </p>
         </div>
@@ -625,29 +630,44 @@ export function ApplicationsTable() {
               size="default"
               className="gap-2"
             >
-              <ArrowDownZA className="h-4 w-4" />
+              <ArrowDownZA className="h-4 w-4 opacity-70" />
               <span>Created date</span>
             </Button>
             <Button variant="secondary" className="gap-2">
-              <SlidersHorizontal className="h-4 w-4" />
+              <SlidersHorizontal className="h-4 w-4 opacity-70" />
               <span>Filters</span>
             </Button>
             <Button variant="secondary" size="icon">
-              <Columns3 className="h-4 w-4" />
+              <Columns3 className="h-4 w-4 opacity-70" />
             </Button>
             <Button variant="secondary" size="icon">
-              <MoreVertical className="h-4 w-4" />
+              <MoreVertical className="h-4 w-4 opacity-70" />
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="w-full h-[calc(100vh-140px)] rounded-2xl border border-white/[0.08] bg-[#0d0d0d] overflow-hidden">
-        <div className="w-full h-full overflow-x-auto overflow-y-auto">
+      {/* Table - Glass Container */}
+      <div className={cn(
+        // Glass surface styling
+        "relative w-full h-[calc(100vh-150px)] overflow-hidden",
+        "rounded-glass-xl",
+        "bg-glass-bg backdrop-blur-glass",
+        "border border-glass-border",
+        "shadow-glass-lg",
+        // Specular highlight
+        "before:absolute before:inset-0 before:rounded-[inherit]",
+        "before:bg-gradient-to-br before:from-white/[0.06] before:via-transparent before:to-transparent",
+        "before:pointer-events-none before:z-[1]",
+      )}>
+        <div className="relative z-[2] w-full h-full overflow-x-auto overflow-y-auto">
           <Table className="min-w-[1400px]">
-            <TableHeader className="sticky top-0 bg-[#0d0d0d] z-10">
-              <TableRow className="hover:bg-transparent border-white/[0.06]">
+            <TableHeader className={cn(
+              "sticky top-0 z-10",
+              "bg-gradient-to-b from-[rgba(10,10,10,0.95)] to-[rgba(10,10,10,0.85)]",
+              "backdrop-blur-glass",
+            )}>
+              <TableRow className="hover:bg-transparent border-glass-border-subtle">
                 <TableHead className="w-12">
                   <Checkbox
                     checked={selectedRows.length === applications.length}
@@ -673,8 +693,9 @@ export function ApplicationsTable() {
                 <TableRow
                   key={app.id}
                   className={cn(
-                    "transition-all duration-150",
-                    selectedRows.includes(app.id) && "bg-white/[0.06]"
+                    "transition-all duration-glass ease-glass",
+                    "hover:bg-glass-bg",
+                    selectedRows.includes(app.id) && "bg-glass-bg-active"
                   )}
                 >
                   <TableCell>
@@ -684,8 +705,11 @@ export function ApplicationsTable() {
                     />
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2 min-w-0">
-                      <Avatar className="h-5 w-5 flex-shrink-0 rounded ring-1 ring-white/[0.08]">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <Avatar className={cn(
+                        "h-5 w-5 flex-shrink-0 rounded-[4px]",
+                        "ring-1 ring-glass-border",
+                      )}>
                         <AvatarImage
                           src="https://app.passage.com/cdn-images/partners/george-brown-college.jpeg/256"
                           alt="George Brown College"
@@ -695,9 +719,9 @@ export function ApplicationsTable() {
                       <span className="truncate text-white/90 text-[13px]">{app.program}</span>
                     </div>
                   </TableCell>
-                  <TableCell>{app.user}</TableCell>
-                  <TableCell>{app.intake}</TableCell>
-                  <TableCell className="font-mono">{app.age}</TableCell>
+                  <TableCell className="text-white/85">{app.user}</TableCell>
+                  <TableCell className="text-white/70">{app.intake}</TableCell>
+                  <TableCell className="font-mono text-white/60">{app.age}</TableCell>
                   <TableCell>
                     <CountryFlag code={app.nationality} />
                   </TableCell>
@@ -710,7 +734,10 @@ export function ApplicationsTable() {
                       size="sm"
                       className="uppercase tracking-wider"
                     >
-                      <span className="inline-block rounded-full mr-1.5 shrink-0 bg-current w-1 h-1" />
+                      <span className={cn(
+                        "inline-block rounded-full mr-1.5 shrink-0 w-1 h-1",
+                        app.progressionStatus === "success" ? "bg-emerald-400" : "bg-amber-400"
+                      )} />
                       {app.progressionLevel}
                     </Badge>
                   </TableCell>
@@ -727,25 +754,33 @@ export function ApplicationsTable() {
                     <div className="flex items-center gap-2 min-w-0">
                       <div
                         className={cn(
-                          "w-1.5 h-1.5 rounded-full flex-shrink-0",
+                          "w-1.5 h-1.5 rounded-full flex-shrink-0 transition-all",
                           app.etAtLoaStatus === "warning"
-                            ? "bg-amber-400"
-                            : "bg-white/30"
+                            ? "bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.4)]"
+                            : "bg-white/25"
                         )}
                       />
-                      <span className="font-mono text-xs truncate">{app.etAtLoa}</span>
+                      <span className="font-mono text-[11px] text-white/60 truncate">{app.etAtLoa}</span>
                     </div>
                   </TableCell>
-                  <TableCell>{app.tuitionPaymentType}</TableCell>
-                  <TableCell className="font-mono text-[12px]">{app.studentId}</TableCell>
+                  <TableCell className="text-white/70 text-[12px]">{app.tuitionPaymentType}</TableCell>
+                  <TableCell className="font-mono text-[11px] text-white/50">{app.studentId}</TableCell>
                   <TableCell>
                     {app.isDeferral ? (
-                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/[0.12]">
+                      <div className={cn(
+                        "flex items-center justify-center w-5 h-5 rounded-full",
+                        "bg-emerald-500/[0.1] backdrop-blur-glass-light",
+                        "border border-emerald-500/[0.15]",
+                      )}>
                         <Check className="h-3 w-3 text-emerald-400" />
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-white/[0.04]">
-                        <X className="h-3 w-3 text-white/30" />
+                      <div className={cn(
+                        "flex items-center justify-center w-5 h-5 rounded-full",
+                        "bg-glass-bg backdrop-blur-glass-light",
+                        "border border-glass-border-subtle",
+                      )}>
+                        <X className="h-3 w-3 text-white/25" />
                       </div>
                     )}
                   </TableCell>

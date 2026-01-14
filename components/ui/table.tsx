@@ -20,7 +20,7 @@ const TableHeader = React.forwardRef<
   <thead 
     ref={ref} 
     className={cn(
-      "[&_tr]:border-b [&_tr]:border-white/[0.08]",
+      "[&_tr]:border-b [&_tr]:border-glass-border-subtle",
       className
     )} 
     {...props} 
@@ -47,7 +47,7 @@ const TableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      "border-t border-white/[0.08] bg-white/[0.02] font-medium [&>tr]:last:border-b-0",
+      "border-t border-glass-border-subtle bg-glass-bg font-medium [&>tr]:last:border-b-0",
       className
     )}
     {...props}
@@ -62,7 +62,10 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-white/[0.08] transition-colors hover:bg-white/[0.04] data-[state=selected]:bg-white/[0.06]",
+      "border-b border-glass-border-subtle",
+      "transition-all duration-glass ease-glass",
+      "hover:bg-glass-bg",
+      "data-[state=selected]:bg-glass-bg-active",
       className
     )}
     {...props}
@@ -77,7 +80,10 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-8 px-3 text-left align-middle text-[10px] font-semibold uppercase tracking-[0.06em] text-white/50 [&:has([role=checkbox])]:pr-0 whitespace-nowrap",
+      "h-9 px-3 text-left align-middle",
+      "text-[10px] font-semibold uppercase tracking-[0.08em]",
+      "text-white/45",
+      "[&:has([role=checkbox])]:pr-0 whitespace-nowrap",
       className
     )}
     {...props}
@@ -92,7 +98,9 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "px-3 py-1.5 align-middle text-[13px] text-white/90 [&:has([role=checkbox])]:pr-0 max-w-0 truncate",
+      "px-3 py-2 align-middle",
+      "text-[13px] text-white/85",
+      "[&:has([role=checkbox])]:pr-0 max-w-0 truncate",
       className
     )}
     {...props}
@@ -106,7 +114,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-4 text-sm text-white/55", className)}
+    className={cn("mt-4 text-sm text-white/50", className)}
     {...props}
   />
 ))

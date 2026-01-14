@@ -43,20 +43,43 @@ function ProcessItem({
   return (
     <div
       className={cn(
-        "flex items-center py-2.5 px-3 rounded-xl cursor-pointer transition-all duration-150 group",
+        // Base styling
+        "relative flex items-center py-2.5 px-3",
+        "rounded-glass-md cursor-pointer",
+        "transition-all duration-glass ease-glass group",
+        // Active state - glass effect
         isActive 
-          ? "bg-white/[0.08] border border-white/[0.12]" 
-          : "hover:bg-white/[0.04] border border-transparent"
+          ? [
+              "bg-glass-bg-active backdrop-blur-glass",
+              "border border-glass-border-strong",
+              "shadow-glass-md",
+              // Specular highlight
+              "before:absolute before:inset-0 before:rounded-[inherit]",
+              "before:bg-gradient-to-br before:from-white/[0.08] before:via-transparent before:to-transparent",
+              "before:pointer-events-none",
+            ]
+          : [
+              "hover:bg-glass-bg hover:border-glass-border",
+              "border border-transparent",
+              "hover:shadow-glass-sm",
+            ]
       )}
       onClick={onClick}
     >
+      {/* Color indicator with glow effect */}
       <div
-        className="flex-shrink-0 w-1.5 h-4 mr-3 rounded-full"
-        style={{ backgroundColor: color }}
+        className="relative flex-shrink-0 w-1.5 h-4 mr-3 rounded-full"
+        style={{ 
+          backgroundColor: color,
+          boxShadow: isActive ? `0 0 8px ${color}50` : 'none',
+        }}
       />
-      <div className="flex items-center justify-between w-full">
+      <div className="relative z-10 flex items-center justify-between w-full">
         <div className="flex flex-col">
-          <p className="text-white/90 font-medium text-[13px] group-hover:text-white transition-colors">
+          <p className={cn(
+            "font-medium text-[13px] transition-colors duration-glass",
+            isActive ? "text-white" : "text-white/85 group-hover:text-white"
+          )}>
             {label}
           </p>
           {subtitle && (
@@ -65,19 +88,30 @@ function ProcessItem({
         </div>
         <div className="flex items-center gap-2">
           {isComplete ? (
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/[0.12] text-emerald-400 text-[10px] font-bold">
+            <span className={cn(
+              "flex items-center justify-center w-5 h-5",
+              "rounded-full",
+              "bg-emerald-500/[0.12] backdrop-blur-glass-light",
+              "border border-emerald-500/[0.2]",
+              "text-emerald-400 text-[10px] font-bold",
+            )}>
               ✓
             </span>
           ) : (
             count !== undefined && (
-              <span className="text-[12px] text-white/55 font-mono tabular-nums bg-white/[0.04] px-2 py-0.5 rounded-md">
+              <span className={cn(
+                "text-[11px] text-white/60 font-mono tabular-nums",
+                "bg-glass-bg backdrop-blur-glass-light",
+                "border border-glass-border-subtle",
+                "px-2 py-0.5 rounded-glass-sm",
+              )}>
                 {count}
               </span>
             )
           )}
           {avatar !== undefined && (
             avatar ? (
-              <Avatar className="w-5 h-5">
+              <Avatar className="w-5 h-5 ring-1 ring-glass-border">
                 <AvatarImage src={avatar} alt="assignee" />
               </Avatar>
             ) : (
@@ -101,12 +135,17 @@ function ProcessSection({ title, icon, children, defaultOpen = true }: ProcessSe
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
   return (
-    <div className="transition-all">
+    <div className="transition-all duration-glass">
       <div
-        className="flex items-center px-1 py-2.5 cursor-pointer transition-all duration-150 rounded-lg hover:bg-white/[0.02] group"
+        className={cn(
+          "flex items-center px-2 py-2.5 cursor-pointer",
+          "rounded-glass-sm",
+          "transition-all duration-glass ease-glass group",
+          "hover:bg-glass-bg",
+        )}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex-shrink-0 scale-75 text-white/40 group-hover:text-white/60 transition-colors">
+        <div className="flex-shrink-0 scale-75 text-white/35 group-hover:text-white/55 transition-colors duration-glass">
           {icon || (
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 3H4.99c-1.11 0-1.98.89-1.98 2L3 19c0 1.1.88 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2m0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H4.99V5H19z" />
@@ -114,19 +153,22 @@ function ProcessSection({ title, icon, children, defaultOpen = true }: ProcessSe
           )}
         </div>
         <div className="flex-1 w-full flex items-start flex-col gap-1">
-          <p className="text-[11px] text-white/70 font-semibold leading-none uppercase tracking-[0.08em] group-hover:text-white/90 transition-colors">
+          <p className="text-[10px] text-white/55 font-semibold leading-none uppercase tracking-[0.1em] group-hover:text-white/80 transition-colors duration-glass">
             {title}
           </p>
         </div>
-        <div className="flex-shrink-0 ml-2 text-white/40 group-hover:text-white/60 transition-colors">
-          {isOpen ? (
-            <ChevronDown className="h-4 w-4" />
-          ) : (
-            <ChevronRight className="h-4 w-4" />
-          )}
+        <div className={cn(
+          "flex-shrink-0 ml-2",
+          "text-white/35 group-hover:text-white/55",
+          "transition-all duration-glass",
+        )}>
+          <ChevronDown className={cn(
+            "h-3.5 w-3.5 transition-transform duration-glass",
+            !isOpen && "-rotate-90"
+          )} />
         </div>
       </div>
-      {isOpen && <div className="space-y-1 pl-1">{children}</div>}
+      {isOpen && <div className="space-y-1 pl-1.5">{children}</div>}
     </div>
   )
 }
@@ -135,11 +177,22 @@ export function ProcessPanel() {
   const [activeItem, setActiveItem] = useState("pending-loa")
 
   return (
-    <div className="w-[380px] overflow-y-auto h-full bg-[#0a0a0a] border-r border-white/[0.08]">
-      <div className="flex flex-col h-full">
+    <div className={cn(
+      "w-[380px] overflow-y-auto h-full",
+      // Glass panel background
+      "bg-gradient-to-b from-glass-bg to-transparent",
+      "backdrop-blur-glass",
+      "border-r border-glass-border-subtle",
+      // Specular highlight at top
+      "relative",
+      "before:absolute before:top-0 before:left-0 before:right-0 before:h-40",
+      "before:bg-gradient-to-b before:from-white/[0.02] before:to-transparent",
+      "before:pointer-events-none before:z-0",
+    )}>
+      <div className="relative z-10 flex flex-col h-full">
         <div className="relative">
           {/* Tab Header */}
-          <div className="sticky top-0 z-10 p-4 bg-[#0a0a0a]">
+          <div className="sticky top-0 z-10 p-4 bg-gradient-to-b from-[#0a0a0a] to-transparent pb-6">
             <Tabs defaultValue="process" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="process">
@@ -165,25 +218,39 @@ export function ProcessPanel() {
                           <SelectItem value="visa">Visa process</SelectItem>
                         </SelectContent>
                       </Select>
-                      <X className="absolute size-3 right-10 top-1/2 -translate-y-1/2 text-white/35 hover:text-white/70 cursor-pointer transition-colors" />
+                      <X className={cn(
+                        "absolute size-3 right-10 top-1/2 -translate-y-1/2",
+                        "text-white/30 hover:text-white/70 cursor-pointer",
+                        "transition-colors duration-glass",
+                      )} />
                     </div>
                   </div>
 
                   {/* Process Groups */}
-                  <div className="mt-6 pt-4 border-t border-white/[0.08]">
+                  <div className="mt-6 pt-4 border-t border-glass-border-subtle">
                     <div className="space-y-3">
                       {/* GBC Admission - Open */}
                       <Accordion type="single" collapsible defaultValue="gbc">
                         <AccordionItem
                           value="gbc"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className={cn(
+                            // Glass card styling
+                            "relative border-none rounded-glass-lg overflow-hidden p-4 mb-3",
+                            "bg-glass-bg backdrop-blur-glass",
+                            "border border-glass-border",
+                            "shadow-glass",
+                            // Specular highlight
+                            "before:absolute before:inset-0 before:rounded-[inherit]",
+                            "before:bg-gradient-to-br before:from-white/[0.06] before:via-transparent before:to-transparent",
+                            "before:pointer-events-none before:z-0",
+                          )}
                         >
-                          <AccordionTrigger className="p-0 hover:no-underline">
+                          <AccordionTrigger className="relative z-10 p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-white">GBC Admission</span>
                             </div>
                           </AccordionTrigger>
-                          <AccordionContent className="px-0 py-0 pt-4">
+                          <AccordionContent className="relative z-10 px-0 py-0 pt-4">
                             <div className="space-y-5">
                               {/* Pending decision */}
                               <ProcessSection title="Pending decision">
@@ -193,7 +260,7 @@ export function ProcessPanel() {
                                   color="#ff6b35"
                                   avatar=""
                                 />
-                                <div className="my-2 border-t border-white/[0.06]" />
+                                <div className="my-2.5 border-t border-glass-border-subtle" />
                                 <ProcessItem
                                   label="Pending approval"
                                   count={106}
@@ -210,7 +277,7 @@ export function ProcessPanel() {
                                   color="#ff6b35"
                                   avatar=""
                                 />
-                                <div className="my-2 border-t border-white/[0.06]" />
+                                <div className="my-2.5 border-t border-glass-border-subtle" />
                                 <ProcessItem
                                   label="Pending LOA"
                                   count={33}
@@ -263,7 +330,7 @@ export function ProcessPanel() {
                                   avatar=""
                                   isComplete
                                 />
-                                <div className="my-2 border-t border-white/[0.06]" />
+                                <div className="my-2.5 border-t border-glass-border-subtle" />
                                 <ProcessItem
                                   label="All cases"
                                   color="#22d3ee"
@@ -286,7 +353,7 @@ export function ProcessPanel() {
                                   color="#ff6b35"
                                   avatar=""
                                 />
-                                <div className="my-2 border-t border-white/[0.06]" />
+                                <div className="my-2.5 border-t border-glass-border-subtle" />
                                 <ProcessItem
                                   label="Additional documents"
                                   subtitle="Pending user"
@@ -308,7 +375,7 @@ export function ProcessPanel() {
                                   avatar=""
                                   isComplete
                                 />
-                                <div className="my-2 border-t border-white/[0.06]" />
+                                <div className="my-2.5 border-t border-glass-border-subtle" />
                                 <ProcessItem
                                   label="All pending requirements"
                                   count={63}
@@ -340,15 +407,23 @@ export function ProcessPanel() {
                         {/* NC Admission - Closed */}
                         <AccordionItem
                           value="nc"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className={cn(
+                            "relative border-none rounded-glass-lg overflow-hidden p-4 mb-3",
+                            "bg-glass-bg backdrop-blur-glass",
+                            "border border-glass-border",
+                            "shadow-glass",
+                            "before:absolute before:inset-0 before:rounded-[inherit]",
+                            "before:bg-gradient-to-br before:from-white/[0.06] before:via-transparent before:to-transparent",
+                            "before:pointer-events-none before:z-0",
+                          )}
                         >
-                          <AccordionTrigger className="p-0 hover:no-underline">
+                          <AccordionTrigger className="relative z-10 p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-white">NC Admission</span>
                             </div>
                           </AccordionTrigger>
-                          <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                          <AccordionContent className="relative z-10 pt-4">
+                            <div className="text-sm text-white/50">
                               NC Admission process items...
                             </div>
                           </AccordionContent>
@@ -357,15 +432,23 @@ export function ProcessPanel() {
                         {/* BVC Admission - Closed */}
                         <AccordionItem
                           value="bvc"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className={cn(
+                            "relative border-none rounded-glass-lg overflow-hidden p-4 mb-3",
+                            "bg-glass-bg backdrop-blur-glass",
+                            "border border-glass-border",
+                            "shadow-glass",
+                            "before:absolute before:inset-0 before:rounded-[inherit]",
+                            "before:bg-gradient-to-br before:from-white/[0.06] before:via-transparent before:to-transparent",
+                            "before:pointer-events-none before:z-0",
+                          )}
                         >
-                          <AccordionTrigger className="p-0 hover:no-underline">
+                          <AccordionTrigger className="relative z-10 p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-white">BVC Admission</span>
                             </div>
                           </AccordionTrigger>
-                          <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                          <AccordionContent className="relative z-10 pt-4">
+                            <div className="text-sm text-white/50">
                               BVC Admission process items...
                             </div>
                           </AccordionContent>
@@ -374,15 +457,23 @@ export function ProcessPanel() {
                         {/* Other schools Admission - Closed */}
                         <AccordionItem
                           value="other"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className={cn(
+                            "relative border-none rounded-glass-lg overflow-hidden p-4 mb-3",
+                            "bg-glass-bg backdrop-blur-glass",
+                            "border border-glass-border",
+                            "shadow-glass",
+                            "before:absolute before:inset-0 before:rounded-[inherit]",
+                            "before:bg-gradient-to-br before:from-white/[0.06] before:via-transparent before:to-transparent",
+                            "before:pointer-events-none before:z-0",
+                          )}
                         >
-                          <AccordionTrigger className="p-0 hover:no-underline">
+                          <AccordionTrigger className="relative z-10 p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-white">Other schools Admission</span>
                             </div>
                           </AccordionTrigger>
-                          <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                          <AccordionContent className="relative z-10 pt-4">
+                            <div className="text-sm text-white/50">
                               Other schools process items...
                             </div>
                           </AccordionContent>
@@ -391,15 +482,23 @@ export function ProcessPanel() {
                         {/* Admission confirmation - Closed */}
                         <AccordionItem
                           value="confirmation"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className={cn(
+                            "relative border-none rounded-glass-lg overflow-hidden p-4 mb-3",
+                            "bg-glass-bg backdrop-blur-glass",
+                            "border border-glass-border",
+                            "shadow-glass",
+                            "before:absolute before:inset-0 before:rounded-[inherit]",
+                            "before:bg-gradient-to-br before:from-white/[0.06] before:via-transparent before:to-transparent",
+                            "before:pointer-events-none before:z-0",
+                          )}
                         >
-                          <AccordionTrigger className="p-0 hover:no-underline">
+                          <AccordionTrigger className="relative z-10 p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-white">Admission confirmation</span>
                             </div>
                           </AccordionTrigger>
-                          <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                          <AccordionContent className="relative z-10 pt-4">
+                            <div className="text-sm text-white/50">
                               Admission confirmation items...
                             </div>
                           </AccordionContent>
@@ -408,15 +507,23 @@ export function ProcessPanel() {
                         {/* Admission offer status - Closed */}
                         <AccordionItem
                           value="offer-status"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className={cn(
+                            "relative border-none rounded-glass-lg overflow-hidden p-4 mb-3",
+                            "bg-glass-bg backdrop-blur-glass",
+                            "border border-glass-border",
+                            "shadow-glass",
+                            "before:absolute before:inset-0 before:rounded-[inherit]",
+                            "before:bg-gradient-to-br before:from-white/[0.06] before:via-transparent before:to-transparent",
+                            "before:pointer-events-none before:z-0",
+                          )}
                         >
-                          <AccordionTrigger className="p-0 hover:no-underline">
+                          <AccordionTrigger className="relative z-10 p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-white">Admission offer status</span>
                             </div>
                           </AccordionTrigger>
-                          <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                          <AccordionContent className="relative z-10 pt-4">
+                            <div className="text-sm text-white/50">
                               Admission offer status items...
                             </div>
                           </AccordionContent>
@@ -425,15 +532,23 @@ export function ProcessPanel() {
                         {/* Program switch - Closed */}
                         <AccordionItem
                           value="program-switch"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className={cn(
+                            "relative border-none rounded-glass-lg overflow-hidden p-4 mb-3",
+                            "bg-glass-bg backdrop-blur-glass",
+                            "border border-glass-border",
+                            "shadow-glass",
+                            "before:absolute before:inset-0 before:rounded-[inherit]",
+                            "before:bg-gradient-to-br before:from-white/[0.06] before:via-transparent before:to-transparent",
+                            "before:pointer-events-none before:z-0",
+                          )}
                         >
-                          <AccordionTrigger className="p-0 hover:no-underline">
+                          <AccordionTrigger className="relative z-10 p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-white">Program switch</span>
                             </div>
                           </AccordionTrigger>
-                          <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                          <AccordionContent className="relative z-10 pt-4">
+                            <div className="text-sm text-white/50">
                               Program switch items...
                             </div>
                           </AccordionContent>
@@ -445,8 +560,12 @@ export function ProcessPanel() {
               </TabsContent>
 
               <TabsContent value="owner">
-                <div className="p-4 text-white/55">
-                  Owner view content...
+                <div className={cn(
+                  "p-4 rounded-glass-lg mt-4",
+                  "bg-glass-bg backdrop-blur-glass",
+                  "border border-glass-border-subtle",
+                )}>
+                  <p className="text-white/50 text-sm">Owner view content...</p>
                 </div>
               </TabsContent>
             </Tabs>

@@ -30,26 +30,59 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
       href={href}
       onClick={onClick}
       className={cn(
-        "flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-150 relative group",
+        // Base styling
+        "relative flex items-center justify-center w-10 h-10 rounded-glass-md",
+        "transition-all duration-glass ease-glass group",
+        // Inactive state
         active
-          ? "bg-white/[0.12] text-white"
-          : "text-white/55 hover:bg-white/[0.08] hover:text-white/80"
+          ? [
+              "bg-glass-bg-active backdrop-blur-glass",
+              "border border-glass-border-strong",
+              "text-white",
+              "shadow-glass-md",
+              // Active indicator glow
+              "before:absolute before:inset-0 before:rounded-[inherit]",
+              "before:bg-gradient-to-br before:from-white/[0.12] before:via-white/[0.04] before:to-transparent",
+              "before:pointer-events-none",
+            ]
+          : [
+              "text-white/50",
+              "hover:bg-glass-bg hover:backdrop-blur-glass",
+              "hover:border hover:border-glass-border-subtle",
+              "hover:text-white/90 hover:shadow-glass-sm",
+              "hover:-translate-y-[1px]",
+              "active:translate-y-0 active:scale-[0.95]",
+            ]
       )}
       aria-label={label}
     >
-      {icon}
+      <span className="relative z-10">{icon}</span>
       {badge && (
         <span
-          className="absolute -top-0.5 -right-1 text-[9px] font-bold tracking-tight"
+          className="absolute -top-0.5 -right-1 text-[9px] font-bold tracking-tight z-20"
           style={{ color: badgeColor || "#ff6b35" }}
         >
           {badge}
         </span>
       )}
-      {/* Tooltip */}
+      {/* Tooltip - Glass styled */}
       {label && (
-        <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-[#1a1a1a] border border-white/[0.12] text-white text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-50 shadow-giga-sm">
-          {label}
+        <div className={cn(
+          "absolute left-full ml-3 px-3 py-2",
+          "rounded-glass-md",
+          "bg-glass-bg-elevated backdrop-blur-glass-heavy",
+          "border border-glass-border-strong",
+          "shadow-glass-lg",
+          "text-white text-xs font-medium whitespace-nowrap",
+          "opacity-0 pointer-events-none",
+          "group-hover:opacity-100",
+          "transition-opacity duration-glass z-50",
+          // Specular highlight
+          "before:absolute before:inset-0 before:rounded-[inherit]",
+          "before:bg-gradient-to-br before:from-white/[0.1] before:via-transparent before:to-transparent",
+          "before:pointer-events-none",
+        )}>
+          <span className="relative z-10">{label}</span>
         </div>
       )}
     </a>
@@ -58,22 +91,52 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
 
 export function SidebarNav() {
   return (
-    <div className="w-[64px] bg-[#0a0a0a] flex flex-col h-full border-r border-white/[0.08]">
+    <div className={cn(
+      "w-[68px] flex flex-col h-full",
+      // Glass rail styling
+      "bg-gradient-to-b from-glass-bg to-transparent",
+      "backdrop-blur-glass-heavy",
+      "border-r border-glass-border-subtle",
+      // Specular highlight
+      "relative",
+      "before:absolute before:top-0 before:left-0 before:right-0 before:h-32",
+      "before:bg-gradient-to-b before:from-white/[0.03] before:to-transparent",
+      "before:pointer-events-none",
+    )}>
       {/* Top section */}
-      <div className="flex flex-col items-center gap-1 p-3">
+      <div className="relative z-10 flex flex-col items-center gap-1.5 p-3">
         {/* Logo */}
         <div className="w-10 h-10 flex items-center justify-center mb-3">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[rgba(197,204,195,0.95)] to-[rgba(168,176,165,0.35)] flex items-center justify-center text-[#0a0a0a] text-sm font-bold shadow-giga-sm">
+          <div className={cn(
+            "w-9 h-9 rounded-glass-md",
+            "bg-gradient-to-br from-[#c5ccc3] to-[#a8b0a5]",
+            "flex items-center justify-center",
+            "text-[#0a0a0a] text-sm font-bold",
+            "shadow-glass-md shadow-[rgba(197,204,195,0.25)]",
+            "transition-all duration-glass",
+            "hover:shadow-glass-glow hover:-translate-y-[1px]",
+          )}>
             P
           </div>
         </div>
 
         {/* Search */}
-        <div className="w-10 h-10 flex items-center justify-center bg-[#141414] border border-white/[0.08] rounded-xl shadow-giga-sm hover:border-white/[0.14] transition-all duration-150 cursor-pointer group">
-          <Search className="w-[18px] h-[18px] text-white/55 group-hover:text-white/80 transition-colors" />
+        <div className={cn(
+          "w-10 h-10 flex items-center justify-center",
+          "rounded-glass-md",
+          "bg-glass-bg backdrop-blur-glass",
+          "border border-glass-border",
+          "shadow-glass-sm",
+          "transition-all duration-glass ease-glass cursor-pointer group",
+          "hover:bg-glass-bg-hover hover:border-glass-border-strong",
+          "hover:shadow-glass-md hover:-translate-y-[1px]",
+          "active:translate-y-0 active:scale-[0.95]",
+        )}>
+          <Search className="w-[18px] h-[18px] text-white/50 group-hover:text-white/90 transition-colors duration-glass" />
         </div>
 
-        <div className="w-8 h-px bg-white/[0.08] my-2" />
+        {/* Divider - Glass styled */}
+        <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent my-2" />
 
         {/* Dashboard */}
         <NavItem
@@ -220,7 +283,7 @@ export function SidebarNav() {
       </div>
 
       {/* Bottom section */}
-      <div className="mt-auto flex flex-col items-center gap-1 p-3 border-t border-white/[0.08]">
+      <div className="relative z-10 mt-auto flex flex-col items-center gap-1.5 p-3 border-t border-glass-border-subtle">
         {/* Refresh */}
         <NavItem
           icon={<RefreshCw className="w-5 h-5" />}
@@ -228,8 +291,22 @@ export function SidebarNav() {
         />
 
         {/* Profile */}
-        <div className="w-10 h-10 flex items-center justify-center">
-          <GradientAvatar name="John Doe" size="md" className="ring-2 ring-white/[0.12] ring-offset-2 ring-offset-[#0a0a0a]" />
+        <div className={cn(
+          "w-10 h-10 flex items-center justify-center",
+          "rounded-glass-md",
+          "transition-all duration-glass",
+          "hover:bg-glass-bg hover:shadow-glass-sm",
+          "cursor-pointer",
+        )}>
+          <GradientAvatar 
+            name="John Doe" 
+            size="md" 
+            className={cn(
+              "ring-2 ring-glass-border-strong ring-offset-2 ring-offset-[#0a0a0a]",
+              "transition-all duration-glass",
+              "hover:ring-white/[0.25]",
+            )} 
+          />
         </div>
       </div>
     </div>
