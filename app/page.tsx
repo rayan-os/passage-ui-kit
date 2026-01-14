@@ -1,8 +1,9 @@
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+    <main className="min-h-dvh bg-background flex items-center justify-center">
       <div className="text-center space-y-8">
         {/* Logo */}
         <div className="flex justify-center">
@@ -22,12 +23,9 @@ export default function HomePage() {
         </div>
 
         {/* CTA */}
-        <Link 
-          href="/admin-panel"
-          className="inline-flex items-center justify-center px-8 py-3 bg-white text-[#0a0a0a] font-semibold rounded-full hover:opacity-90 transition-opacity"
-        >
-          Open Admin Panel
-        </Link>
+        <Button asChild className="px-8">
+          <Link href="/admin-panel">Open Admin Panel</Link>
+        </Button>
       </div>
     </main>
   )
