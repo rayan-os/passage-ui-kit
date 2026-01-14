@@ -1,9 +1,15 @@
+"use client"
+
 import { SidebarNav } from "@/components/sidebar-nav"
 import { ProcessPanel } from "@/components/process-panel"
 import { ApplicationsTable } from "@/components/applications-table"
 import { GlassContainer } from "@/components/ui/glass"
+import { PassageAssistantDrawer } from "@/components/passage-assistant-drawer"
+import { useState } from "react"
 
 export default function AdminPanelPage() {
+  const [assistantOpen, setAssistantOpen] = useState(true)
+
   return (
     <GlassContainer density="subtle" className="h-screen">
       <main className="flex h-full overflow-hidden liquid-bg">
@@ -25,6 +31,8 @@ export default function AdminPanelPage() {
           </div>
         </div>
       </main>
+
+      <PassageAssistantDrawer open={assistantOpen} onOpenChange={setAssistantOpen} />
     </GlassContainer>
   )
 }
