@@ -4,29 +4,29 @@
 
 @layer base {
   :root {
-    /* GIGA Design System - Dark Theme (Default) */
-    
+    /* GIGA Design System - Light Theme (Default) */
+
     /* Background Colors */
-    --bg: #0a0a0a;
-    --panel: #121212;
-    --panel-2: #161616;
-    --bg-card: #141414;
-    --bg-card-hover: #1a1a1a;
-    
+    --bg: #fbfbfb;
+    --panel: rgba(255, 255, 255, 0.78);
+    --panel-2: rgba(255, 255, 255, 0.92);
+    --bg-card: rgba(255, 255, 255, 0.70);
+    --bg-card-hover: rgba(255, 255, 255, 0.86);
+
     /* Text Colors */
-    --text: #ffffff;
-    --muted: rgba(255, 255, 255, 0.72);
-    --muted-2: rgba(255, 255, 255, 0.55);
-    --text-gray: rgba(255, 255, 255, 0.6);
-    --text-disabled: rgba(255, 255, 255, 0.35);
-    
+    --text: rgba(10, 10, 10, 0.96);
+    --muted: rgba(10, 10, 10, 0.72);
+    --muted-2: rgba(10, 10, 10, 0.56);
+    --text-gray: rgba(10, 10, 10, 0.6);
+    --text-disabled: rgba(10, 10, 10, 0.35);
+
     /* Border Colors */
-    --border: rgba(255, 255, 255, 0.12);
-    --border-2: rgba(255, 255, 255, 0.08);
-    --border-subtle: rgba(255, 255, 255, 0.10);
-    --border-hover: rgba(255, 255, 255, 0.14);
-    --border-active: rgba(255, 255, 255, 0.20);
-    
+    --border: rgba(0, 0, 0, 0.10);
+    --border-2: rgba(0, 0, 0, 0.08);
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --border-hover: rgba(0, 0, 0, 0.14);
+    --border-active: rgba(0, 0, 0, 0.18);
+
     /* Accent Colors */
     --accent: #c5ccc3;
     --accent-2: #a8b0a5;
@@ -34,7 +34,80 @@
     --accent-teal: #14b8a6;
     --accent-orange: #ff6b35;
     --accent-yellow: #fbbf24;
-    
+
+    /* Semantic Colors - HSL format for Tailwind */
+    --background: 0 0% 99%;
+    --foreground: 0 0% 6%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 6%;
+    --primary: 110 7% 32%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 97%;
+    --secondary-foreground: 0 0% 10%;
+    --muted-hsl: 0 0% 96%;
+    --muted-foreground: 0 0% 42%;
+    --accent-hsl: 110 7% 32%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border-hsl: 0 0% 0% / 0.10;
+    --input: 0 0% 0% / 0.10;
+    --ring: 110 7% 32%;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 0 0% 6%;
+    --warning: 38 92% 50%;
+
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+    --radius: 12px;
+
+    /* Shadows */
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.10);
+    --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.14);
+
+    /* Layout */
+    --max-width: 1320px;
+    --padding: 40px;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-medium: 0.3s ease;
+    --transition-slow: 0.5s ease;
+  }
+}
+
+@layer base {
+  .dark {
+    /* GIGA Design System - Dark Theme */
+
+    /* Background Colors */
+    --bg: #0a0a0a;
+    --panel: #121212;
+    --panel-2: #161616;
+    --bg-card: #141414;
+    --bg-card-hover: #1a1a1a;
+
+    /* Text Colors */
+    --text: #ffffff;
+    --muted: rgba(255, 255, 255, 0.72);
+    --muted-2: rgba(255, 255, 255, 0.55);
+    --text-gray: rgba(255, 255, 255, 0.6);
+    --text-disabled: rgba(255, 255, 255, 0.35);
+
+    /* Border Colors */
+    --border: rgba(255, 255, 255, 0.12);
+    --border-2: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.10);
+    --border-hover: rgba(255, 255, 255, 0.14);
+    --border-active: rgba(255, 255, 255, 0.20);
+
     /* Semantic Colors - HSL format for Tailwind */
     --background: 0 0% 4%;
     --foreground: 0 0% 100%;
@@ -58,28 +131,11 @@
     --sidebar: 0 0% 7%;
     --sidebar-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
-    
-    /* Border Radius */
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 20px;
-    --radius-xl: 24px;
-    --radius-full: 9999px;
-    --radius: 12px;
-    
+
     /* Shadows */
     --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
     --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
     --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
-    
-    /* Layout */
-    --max-width: 1320px;
-    --padding: 40px;
-    
-    /* Transitions */
-    --transition-fast: 0.15s ease;
-    --transition-medium: 0.3s ease;
-    --transition-slow: 0.5s ease;
   }
 }
 
@@ -91,6 +147,31 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-sans), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+@layer components {
+  /* Vision Pro-ish glass surface: works in both themes */
+  .giga-glass {
+    background: color-mix(in srgb, hsl(var(--card)) 78%, transparent);
+    border: 1px solid hsl(var(--border-hsl));
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px) saturate(1.25);
+    -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  }
+
+  .giga-app-bg {
+    background:
+      radial-gradient(900px 520px at 18% 0%, rgba(197, 204, 195, 0.18), transparent 58%),
+      radial-gradient(760px 480px at 82% 18%, rgba(59, 130, 246, 0.14), transparent 55%),
+      linear-gradient(180deg, color-mix(in srgb, hsl(var(--background)) 92%, black 8%) 0%, hsl(var(--background)) 68%, hsl(var(--background)) 100%);
+  }
+
+  .dark .giga-app-bg {
+    background:
+      radial-gradient(900px 520px at 18% 0%, rgba(197, 204, 195, 0.14), transparent 58%),
+      radial-gradient(760px 480px at 82% 18%, rgba(59, 130, 246, 0.12), transparent 55%),
+      linear-gradient(180deg, #070707 0%, #0b0b0b 48%, #0a0a0a 100%);
   }
 }
 
@@ -177,23 +258,4 @@
 
 .animate-pulse-giga {
   animation: pulse 2s infinite;
-}
-
-/* Correct scrollbar selectors (keep these active) */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.20);
 }
