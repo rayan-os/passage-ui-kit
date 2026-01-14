@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* GIGA Design System - Dark Theme (Default) */
+    
+    /* Background Colors */
+    --bg: #0a0a0a;
+    --panel: #121212;
+    --panel-2: #161616;
+    --bg-card: #141414;
+    --bg-card-hover: #1a1a1a;
+    
+    /* Text Colors */
+    --text: #ffffff;
+    --muted: rgba(255, 255, 255, 0.72);
+    --muted-2: rgba(255, 255, 255, 0.55);
+    --text-gray: rgba(255, 255, 255, 0.6);
+    --text-disabled: rgba(255, 255, 255, 0.35);
+    
+    /* Border Colors */
+    --border: rgba(255, 255, 255, 0.12);
+    --border-2: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.10);
+    --border-hover: rgba(255, 255, 255, 0.14);
+    --border-active: rgba(255, 255, 255, 0.20);
+    
+    /* Accent Colors */
+    --accent: #c5ccc3;
+    --accent-2: #a8b0a5;
+    --accent-blue: #3b82f6;
+    --accent-teal: #14b8a6;
+    --accent-orange: #ff6b35;
+    --accent-yellow: #fbbf24;
+    
+    /* Semantic Colors - HSL format for Tailwind */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 100 7% 78%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 9%;
+    --secondary-foreground: 0 0% 100%;
+    --muted-hsl: 0 0% 14%;
+    --muted-foreground: 0 0% 72%;
+    --accent-hsl: 100 7% 78%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border-hsl: 0 0% 100% / 0.12;
+    --input: 0 0% 100% / 0.10;
+    --ring: 100 7% 78%;
+    --sidebar: 0 0% 7%;
+    --sidebar-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+    --radius: 12px;
+    
+    /* Shadows */
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
+    
+    /* Layout */
+    --max-width: 1320px;
+    --padding: 40px;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-medium: 0.3s ease;
+    --transition-slow: 0.5s ease;
+  }
+}
+
+@layer base {
+  * {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  
+  body {
+    @apply bg-[#0a0a0a] text-white antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Glass effect utility classes */
+.glass {
+  background: rgba(18, 18, 18, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Gradient backgrounds */
+.gradient-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+}
+
+.gradient-page {
+  background: linear-gradient(180deg, #070707 0%, #0d0d0d 40%, #0a0a0a 100%);
+}
+
+/* Avatar gradient */
+.avatar-gradient {
+  background: radial-gradient(circle at 30% 30%, rgba(197, 204, 195, 0.95), rgba(168, 176, 165, 0.35));
+}
+
+/* Hover lift animation */
+.hover-lift {
+  transition: transform var(--transition-fast);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Custom scrollbar styles - GIGA themed */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.20);
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Pulse animation for indicators */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-giga {
+  animation: pulse 2s infinite;
+}
