@@ -17,60 +17,61 @@ module.exports = {
     },
     extend: {
       colors: {
-        // GIGA Design System Colors
-        giga: {
-          bg: '#0a0a0a',
-          panel: '#121212',
-          'panel-2': '#161616',
-          card: '#141414',
-          'card-hover': '#1a1a1a',
-          accent: '#c5ccc3',
-          'accent-2': '#a8b0a5',
-          blue: '#3b82f6',
-          teal: '#14b8a6',
-          orange: '#ff6b35',
-          yellow: '#fbbf24',
-        },
-        // Semantic colors
-        border: "rgba(255, 255, 255, 0.12)",
-        input: "rgba(255, 255, 255, 0.10)",
-        ring: "#c5ccc3",
-        background: "#0a0a0a",
-        foreground: "#ffffff",
+        // Single source of truth: CSS variables from app/globals.css
+        border: "hsl(var(--border-hsl))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#c5ccc3",
-          foreground: "#0a0a0a",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#161616",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
-          DEFAULT: "#ef4444",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "#1a1a1a",
-          foreground: "rgba(255, 255, 255, 0.55)",
+          DEFAULT: "hsl(var(--muted-hsl))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "#c5ccc3",
-          foreground: "#0a0a0a",
+          DEFAULT: "hsl(var(--accent-hsl))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
-          DEFAULT: "#121212",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
         },
         card: {
-          DEFAULT: "#121212",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
         sidebar: {
-          DEFAULT: "#121212",
-          foreground: "#ffffff",
+          DEFAULT: "hsl(var(--sidebar))",
+          foreground: "hsl(var(--sidebar-foreground))",
         },
         warning: {
-          DEFAULT: "#fbbf24",
+          DEFAULT: "hsl(var(--warning))",
+        },
+
+        // Compatibility layer for existing classes like `ring-offset-giga-bg`
+        giga: {
+          bg: "hsl(var(--background))",
+          panel: "hsl(var(--popover))",
+          "panel-2": "hsl(var(--secondary))",
+          card: "hsl(var(--card))",
+          "card-hover": "hsl(var(--muted-hsl))",
+          accent: "hsl(var(--primary))",
+          "accent-2": "hsl(var(--accent-hsl))",
+          blue: "#3b82f6",
+          teal: "#14b8a6",
+          orange: "#ff6b35",
+          yellow: "#fbbf24",
         },
       },
       borderRadius: {

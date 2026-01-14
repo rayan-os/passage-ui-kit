@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import {
   ArrowDownZA,
   SlidersHorizontal,
@@ -8,10 +8,25 @@ import {
   MoreVertical,
   Check,
   X,
+  TriangleAlert,
+  Files,
+  ShieldAlert,
+  ChevronRight,
+  Clock,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Table,
   TableBody,
@@ -20,7 +35,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
+import { GradientAvatar } from "@/components/ui/avatar"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 
 interface Application {
@@ -42,6 +58,15 @@ interface Application {
   studentId: string
   isDeferral: boolean
 }
+
+type RiskLevel = "Low" | "Medium" | "High"
+
+const STAGES = [
+  "Submitted",
+  "Screening approved",
+  "Loan approved",
+  "Pending LOA",
+] as const
 
 const applications: Application[] = [
   {
@@ -578,19 +603,483 @@ const applications: Application[] = [
   },
 ]
 
+function countryCodeToFlagEmoji(code: string) {
+  const cleaned = (code || "").trim().toUpperCase()
+  if (cleaned.length !== 2) return "🏳"
+  const A = 65
+  const base = 0x1f1e6
+  const first = cleaned.charCodeAt(0) - A
+  const second = cleaned.charCodeAt(1) - A
+  if (first < 0 || first > 25 || second < 0 || second > 25) return "🏳"
+  return String.fromCodePoint(base + first, base + second)
+}
+
 function CountryFlag({ code }: { code: string }) {
+  const flag = countryCodeToFlagEmoji(code)
   return (
-    <img
-      src={`https://kapowaz.github.io/square-flags/flags/${code}.svg`}
-      width={18}
-      className="rounded-[3px] overflow-clip ring-1 ring-white/[0.08]"
-      alt={code}
-    />
+    <span
+      className="inline-flex items-center justify-center w-[18px] h-[18px] rounded-[5px] bg-foreground/[0.04] ring-1 ring-border text-[12px] leading-none"
+      aria-label={code.toUpperCase()}
+      title={code.toUpperCase()}
+    >
+      {flag}
+    </span>
+  )
+}
+
+function riskFromApp(app: Application): RiskLevel {
+  if (app.progressionStatus === "warning") return "High"
+  if (app.etAtLoaStatus === "warning") return "Medium"
+  return "Low"
+}
+
+function riskChipTone(risk: RiskLevel) {
+  switch (risk) {
+    case "High":
+      return "text-amber-700 dark:text-amber-300 bg-amber-500/[0.10] dark:bg-amber-500/[0.12] border-amber-500/[0.18]"
+    case "Medium":
+      return "text-foreground/80 bg-foreground/[0.04] border-border"
+    default:
+      return "text-foreground/70 bg-foreground/[0.03] border-border"
+  }
+}
+
+function KpiChip({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode
+  label: string
+  value: number
+}) {
+  return (
+    <div
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full border px-3 h-9",
+        "bg-card/60 backdrop-blur-xl shadow-giga-sm",
+        "text-sm font-semibold tabular-nums",
+        "border-border text-foreground/80"
+      )}
+    >
+      <span className="text-foreground/55">{icon}</span>
+      <span className="text-foreground/60 font-medium">{label}</span>
+      <span className="text-foreground">{value}</span>
+    </div>
+  )
+}
+
+function StagePill({
+  value,
+  onChange,
+}: {
+  value: string
+  onChange: (next: string) => void
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "inline-flex items-center gap-2",
+            "h-7 px-3 rounded-full border border-border",
+            "bg-foreground/[0.04] text-foreground/90 font-semibold text-[12px]",
+            "hover:bg-foreground/[0.06] transition-colors"
+          )}
+          title="Change stage"
+        >
+          <span className="truncate max-w-[180px]">{value}</span>
+          <ChevronRight className="h-3.5 w-3.5 text-foreground/40 rotate-90" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuLabel>Change stage</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {STAGES.map((s) => (
+          <DropdownMenuItem key={s} onSelect={() => onChange(s)}>
+            {s}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+function CasePanel({
+  app,
+  open,
+  onClose,
+}: {
+  app: Application | null
+  open: boolean
+  onClose: () => void
+}) {
+  if (!open) return null
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <div
+        className="absolute inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="absolute right-4 top-4 bottom-4 w-[520px] max-w-[calc(100vw-2rem)] giga-glass rounded-[28px] overflow-hidden">
+        <div className="h-full flex flex-col">
+          <div className="px-5 py-4 border-b border-border bg-card/60 backdrop-blur-xl">
+            <div className="flex items-start gap-3">
+              <GradientAvatar
+                name={app?.user || "Applicant"}
+                size="lg"
+                className="ring-1 ring-border"
+              />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <div className="text-[16px] font-semibold text-foreground truncate">
+                    {app?.user || "Applicant"}
+                  </div>
+                  {app?.progressionLevel ? (
+                    <Badge
+                      variant="secondary"
+                      shape="pill"
+                      className="border border-border bg-foreground/[0.04] text-foreground/80"
+                    >
+                      {app.progressionLevel}
+                    </Badge>
+                  ) : null}
+                </div>
+                <div className="mt-1 text-sm text-foreground/55 truncate">
+                  {app?.program || ""}
+                </div>
+              </div>
+              <Button variant="ghost" size="icon" aria-label="Close" onClick={onClose}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          <div className="px-5 pt-4 flex-1 min-h-0">
+            <Tabs defaultValue="overview" className="w-full h-full flex flex-col">
+              <TabsList className="w-full grid grid-cols-4">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="docs">Docs</TabsTrigger>
+                <TabsTrigger value="messages">Messages</TabsTrigger>
+                <TabsTrigger value="audit">Audit</TabsTrigger>
+              </TabsList>
+
+              <div className="pt-4 pb-5 overflow-y-auto flex-1 min-h-0">
+                <TabsContent value="overview" className="mt-0">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl border border-border bg-card/60 p-4">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                        SLA
+                      </div>
+                      <div className="mt-2 flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-foreground/50" />
+                        <div className="font-semibold text-foreground">
+                          {app?.etAtLoa || "—"}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-card/60 p-4">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                        Payment
+                      </div>
+                      <div className="mt-2 text-foreground font-semibold">
+                        {app?.tuitionPaymentType || "—"}
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-card/60 p-4">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                        Applicant details
+                      </div>
+                      <div className="mt-2 text-sm text-foreground/80 space-y-1">
+                        <div>
+                          Intake:{" "}
+                          <span className="font-semibold text-foreground">{app?.intake}</span>
+                        </div>
+                        <div>
+                          Age:{" "}
+                          <span className="font-mono tabular-nums text-foreground">{app?.age}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span>Nationality:</span>
+                          {app?.nationality ? <CountryFlag code={app.nationality} /> : null}
+                          <span className="font-mono text-xs text-foreground/70">
+                            {app?.nationality?.toUpperCase()}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span>Residence:</span>
+                          {app?.residenceCountry ? <CountryFlag code={app.residenceCountry} /> : null}
+                          <span className="font-mono text-xs text-foreground/70">
+                            {app?.residenceCountry?.toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="rounded-2xl border border-border bg-card/60 p-4">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                        IDs & flags
+                      </div>
+                      <div className="mt-2 text-sm text-foreground/80 space-y-1">
+                        <div>
+                          Student ID:{" "}
+                          <span className="font-mono tabular-nums text-foreground">
+                            {app?.studentId || "—"}
+                          </span>
+                        </div>
+                        <div>
+                          Deferral:{" "}
+                          <span className="font-semibold text-foreground">
+                            {app?.isDeferral ? "Yes" : "No"}
+                          </span>
+                        </div>
+                        <div>
+                          Offer expiry:{" "}
+                          <span className="font-semibold text-foreground">
+                            {app?.offerExpiryDate || "—"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-2xl border border-border bg-card/60 p-4">
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                      Timeline
+                    </div>
+                    <div className="mt-3 text-sm text-foreground/55">
+                      No timeline events in this demo.
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="docs" className="mt-0">
+                  <div className="rounded-2xl border border-border bg-card/60 p-4">
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                      Documents
+                    </div>
+                    <div className="mt-3 text-sm text-foreground/55">
+                      No documents connected in this demo.
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="messages" className="mt-0">
+                  <div className="rounded-2xl border border-border bg-card/60 p-4">
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                      Messages
+                    </div>
+                    <div className="mt-3 text-sm text-foreground/55">
+                      No messages in this demo.
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="audit" className="mt-0">
+                  <div className="rounded-2xl border border-border bg-card/60 p-4">
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                      Audit log
+                    </div>
+                    <div className="mt-3 text-sm text-foreground/55">
+                      No audit events in this demo.
+                    </div>
+                  </div>
+                </TabsContent>
+              </div>
+            </Tabs>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function FiltersPanel({
+  open,
+  onClose,
+  stage,
+  setStage,
+  risk,
+  setRisk,
+  payment,
+  setPayment,
+  onClear,
+}: {
+  open: boolean
+  onClose: () => void
+  stage: string | null
+  setStage: (v: string | null) => void
+  risk: RiskLevel | null
+  setRisk: (v: RiskLevel | null) => void
+  payment: string | null
+  setPayment: (v: string | null) => void
+  onClear: () => void
+}) {
+  if (!open) return null
+
+  const payments = ["Passage loan", "Pay directly to school"] as const
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <div
+        className="absolute inset-0 bg-black/10 dark:bg-black/30 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="absolute right-4 top-4 bottom-4 w-[420px] max-w-[calc(100vw-2rem)] giga-glass rounded-[28px] overflow-hidden">
+        <div className="h-full flex flex-col">
+          <div className="px-5 py-4 border-b border-border bg-card/60 backdrop-blur-xl">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <div className="text-[16px] font-semibold text-foreground">
+                  Filters
+                </div>
+                <div className="text-sm text-foreground/55">
+                  Refine the queue without losing context.
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={onClear}>
+                  Clear all
+                </Button>
+                <Button variant="ghost" size="icon" aria-label="Close" onClick={onClose}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-5 space-y-5 overflow-y-auto">
+            <div className="space-y-2">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                Stage
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setStage(null)}
+                  className={cn(
+                    "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                    stage == null
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                  )}
+                >
+                  All
+                </button>
+                {STAGES.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setStage(s)}
+                    className={cn(
+                      "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                      stage === s
+                        ? "bg-foreground text-background border-foreground"
+                        : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                    )}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                Risk
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRisk(null)}
+                  className={cn(
+                    "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                    risk == null
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                  )}
+                >
+                  All
+                </button>
+                {(["Low", "Medium", "High"] as const).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRisk(r)}
+                    className={cn(
+                      "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                      risk === r
+                        ? "bg-foreground text-background border-foreground"
+                        : cn("border", riskChipTone(r), "hover:bg-foreground/[0.06]")
+                    )}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                Payment
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPayment(null)}
+                  className={cn(
+                    "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                    payment == null
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                  )}
+                >
+                  All
+                </button>
+                {payments.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setPayment(p)}
+                    className={cn(
+                      "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                      payment === p
+                        ? "bg-foreground text-background border-foreground"
+                        : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                    )}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-card/60 p-4">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                Tip
+              </div>
+              <div className="mt-2 text-sm text-foreground/55">
+                Click any row to open the right-side case view with full details.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
 export function ApplicationsTable() {
   const [selectedRows, setSelectedRows] = useState<number[]>([])
+  const [query, setQuery] = useState("")
+  const [density, setDensity] = useState<"compact" | "comfortable">("compact")
+  const [stageOverride, setStageOverride] = useState<Record<number, string>>({})
+  const [selectedAppId, setSelectedAppId] = useState<number | null>(null)
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const [stageFilter, setStageFilter] = useState<string | null>(null)
+  const [riskFilter, setRiskFilter] = useState<RiskLevel | null>(null)
+  const [paymentFilter, setPaymentFilter] = useState<string | null>(null)
 
   const toggleRow = (id: number) => {
     setSelectedRows((prev) =>
@@ -598,85 +1087,209 @@ export function ApplicationsTable() {
     )
   }
 
-  const toggleAll = () => {
-    if (selectedRows.length === applications.length) {
-      setSelectedRows([])
-    } else {
-      setSelectedRows(applications.map((a) => a.id))
-    }
-  }
+  const filtered = applications.filter((app) => {
+    const q = query.trim().toLowerCase()
+    if (!q) return true
+    return (
+      app.program.toLowerCase().includes(q) ||
+      app.user.toLowerCase().includes(q) ||
+      app.intake.toLowerCase().includes(q) ||
+      app.tuitionPaymentType.toLowerCase().includes(q)
+    )
+  }).filter((app) => {
+    const stage = stageOverride[app.id] ?? app.progressionLevel
+    if (stageFilter && stage !== stageFilter) return false
+    if (paymentFilter && app.tuitionPaymentType !== paymentFilter) return false
+    const risk = riskFromApp(app)
+    if (riskFilter && risk !== riskFilter) return false
+    return true
+  })
+
+  const selectedApp = useMemo(() => {
+    if (selectedAppId == null) return null
+    return applications.find((a) => a.id === selectedAppId) || null
+  }, [selectedAppId])
+
+  const kpis = useMemo(() => {
+    const inView = filtered
+    const slaRisk = inView.filter((a) => a.etAtLoaStatus === "warning").length
+    const policyConflicts = inView.filter((a) => a.progressionStatus === "warning").length
+    const missingDocs = Math.max(0, Math.round(inView.length * 0.43))
+    return { slaRisk, missingDocs, policyConflicts }
+  }, [filtered])
+
+  const filteredIdSet = new Set(filtered.map((a) => a.id))
+  const selectedInView = selectedRows.filter((id) => filteredIdSet.has(id))
+  const allInViewSelected =
+    filtered.length > 0 && selectedInView.length === filtered.length
 
   return (
-    <div className="px-5 w-full gap-4 flex flex-col">
+    <div className="w-full h-full min-h-0 flex flex-col px-6 py-6 gap-4">
       {/* Header */}
-      <div className="flex flex-row items-center w-full pt-5">
-        <div className="flex-1 flex flex-col gap-1">
-          <h4 className="text-xl font-semibold tracking-tight text-white">
-            33 applications
-          </h4>
-          <p className="text-sm text-white/55">
-            Pending LOA queue
-          </p>
-        </div>
-        <div className="flex-1 flex items-center gap-2 justify-end">
-          <div className="flex items-center justify-end gap-2">
-            <Button
+      <div className="flex flex-row items-start gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3 flex-wrap">
+            <h4 className="text-[34px] leading-[1.05] font-semibold tracking-tight text-foreground">
+              {filtered.length}
+              <span className="text-foreground/70 font-semibold"> applications</span>
+            </h4>
+            <Badge
               variant="secondary"
-              size="default"
-              className="gap-2"
+              shape="pill"
+              className="border border-border bg-foreground/[0.04] text-foreground/80"
             >
-              <ArrowDownZA className="h-4 w-4" />
-              <span>Created date</span>
-            </Button>
-            <Button variant="secondary" className="gap-2">
-              <SlidersHorizontal className="h-4 w-4" />
-              <span>Filters</span>
-            </Button>
-            <Button variant="secondary" size="icon">
-              <Columns3 className="h-4 w-4" />
-            </Button>
-            <Button variant="secondary" size="icon">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
+              Pending LOA queue
+            </Badge>
+            {query.trim() ? (
+              <span className="text-sm text-foreground/45">Filtered</span>
+            ) : null}
           </div>
+          <div className="mt-2 text-sm text-foreground/55">
+            Keep the table clean; open a case panel for full context.
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 justify-end">
+          <KpiChip icon={<Clock className="h-4 w-4" />} label="SLA risk" value={kpis.slaRisk} />
+          <KpiChip icon={<Files className="h-4 w-4" />} label="Missing docs" value={kpis.missingDocs} />
+          <KpiChip icon={<ShieldAlert className="h-4 w-4" />} label="Policy conflicts" value={kpis.policyConflicts} />
+
+          <Button variant="secondary" size="default" className="gap-2">
+            <ArrowDownZA className="h-4 w-4" />
+            <span>Created date</span>
+          </Button>
+          <Button
+            variant="secondary"
+            className="gap-2"
+            onClick={() => setFiltersOpen(true)}
+          >
+            <SlidersHorizontal className="h-4 w-4" />
+            <span>Filters</span>
+          </Button>
+          <Button variant="secondary" size="icon" aria-label="Columns">
+            <Columns3 className="h-4 w-4" />
+          </Button>
+          <ThemeToggle />
+          <Button variant="secondary" size="icon" aria-label="More">
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex-1 min-w-[260px] max-w-[520px]">
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search program, applicant, intake, payment…"
+            aria-label="Search applications"
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="inline-flex items-center rounded-lg border border-border bg-foreground/[0.03] p-0.5">
+            <button
+              type="button"
+              onClick={() => setDensity("compact")}
+              className={cn(
+                "h-8 px-3 rounded-md text-xs font-semibold transition-colors",
+                density === "compact"
+                  ? "bg-foreground text-background"
+                  : "text-foreground/70 hover:text-foreground hover:bg-foreground/[0.06]"
+              )}
+            >
+              Compact
+            </button>
+            <button
+              type="button"
+              onClick={() => setDensity("comfortable")}
+              className={cn(
+                "h-8 px-3 rounded-md text-xs font-semibold transition-colors",
+                density === "comfortable"
+                  ? "bg-foreground text-background"
+                  : "text-foreground/70 hover:text-foreground hover:bg-foreground/[0.06]"
+              )}
+            >
+              Comfortable
+            </button>
+          </div>
+
+          {query.trim() ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2"
+              onClick={() => setQuery("")}
+            >
+              <X className="h-3.5 w-3.5" />
+              Clear
+            </Button>
+          ) : null}
         </div>
       </div>
 
       {/* Table */}
-      <div className="w-full h-[calc(100vh-140px)] rounded-2xl border border-white/[0.08] bg-[#0d0d0d] overflow-hidden">
-        <div className="w-full h-full overflow-x-auto overflow-y-auto">
-          <Table className="min-w-[1400px]">
-            <TableHeader className="sticky top-0 bg-[#0d0d0d] z-10">
-              <TableRow className="hover:bg-transparent border-white/[0.06]">
+      <div className="w-full flex-1 min-h-0 rounded-2xl giga-glass overflow-hidden">
+        <div className="w-full h-full overflow-auto">
+          <Table className="min-w-[1120px]" data-density={density}>
+            <TableHeader className="sticky top-0 z-10 bg-card/70 backdrop-blur-xl">
+              <TableRow className="hover:bg-transparent border-border">
                 <TableHead className="w-12">
                   <Checkbox
-                    checked={selectedRows.length === applications.length}
-                    onCheckedChange={toggleAll}
+                    checked={allInViewSelected}
+                    onCheckedChange={() => {
+                      if (allInViewSelected) {
+                        setSelectedRows((prev) =>
+                          prev.filter((id) => !filteredIdSet.has(id))
+                        )
+                      } else {
+                        setSelectedRows((prev) => {
+                          const set = new Set(prev)
+                          for (const a of filtered) set.add(a.id)
+                          return Array.from(set)
+                        })
+                      }
+                    }}
                   />
                 </TableHead>
-                <TableHead className="min-w-[280px]">Program</TableHead>
-                <TableHead className="min-w-[180px]">User</TableHead>
-                <TableHead className="min-w-[90px]">Intake</TableHead>
-                <TableHead className="min-w-[50px]">Age</TableHead>
-                <TableHead className="min-w-[50px]">Nat.</TableHead>
-                <TableHead className="min-w-[50px]">Res.</TableHead>
-                <TableHead className="min-w-[160px]">Progression</TableHead>
-                <TableHead className="min-w-[60px]">B2X</TableHead>
-                <TableHead className="min-w-[110px]">ET @ LOA</TableHead>
-                <TableHead className="min-w-[130px]">Payment</TableHead>
-                <TableHead className="min-w-[100px]">Student ID</TableHead>
-                <TableHead className="min-w-[70px]">Deferral</TableHead>
+                <TableHead className="min-w-[300px]">Program</TableHead>
+                <TableHead className="min-w-[200px]">Applicant</TableHead>
+                <TableHead className="min-w-[220px]">Stage</TableHead>
+                <TableHead className="min-w-[110px]">SLA</TableHead>
+                <TableHead className="min-w-[120px]">Risk</TableHead>
+                <TableHead className="min-w-[200px]">Payment</TableHead>
+                <TableHead className="min-w-[220px] text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {applications.map((app) => (
-                <TableRow
-                  key={app.id}
-                  className={cn(
-                    "transition-all duration-150",
-                    selectedRows.includes(app.id) && "bg-white/[0.06]"
-                  )}
-                >
+              {filtered.length === 0 ? (
+                <TableRow className="hover:bg-transparent">
+                  <TableCell className="py-10" colSpan={8}>
+                    <div className="flex flex-col items-center justify-center gap-2 text-center">
+                      <div className="text-sm font-semibold text-foreground">
+                        No results
+                      </div>
+                      <div className="text-sm text-foreground/55">
+                        Try a different search term.
+                      </div>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filtered.map((app) => (
+                  <TableRow
+                    key={app.id}
+                    data-state={
+                      selectedRows.includes(app.id) ? "selected" : undefined
+                    }
+                    className="transition-all duration-150 group cursor-pointer"
+                    onClick={(e) => {
+                      const target = e.target as HTMLElement
+                      if (target.closest('button,[role="checkbox"]')) return
+                      setSelectedAppId(app.id)
+                    }}
+                  >
                   <TableCell>
                     <Checkbox
                       checked={selectedRows.includes(app.id)}
@@ -685,76 +1298,164 @@ export function ApplicationsTable() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2 min-w-0">
-                      <Avatar className="h-5 w-5 flex-shrink-0 rounded ring-1 ring-white/[0.08]">
-                        <AvatarImage
-                          src="https://app.passage.com/cdn-images/partners/george-brown-college.jpeg/256"
-                          alt="George Brown College"
-                          className="object-contain"
-                        />
-                      </Avatar>
-                      <span className="truncate text-white/90 text-[13px]">{app.program}</span>
+                      <GradientAvatar
+                        name={app.program}
+                        size="sm"
+                        className="flex-shrink-0 ring-1 ring-border"
+                      />
+                      <span className="truncate text-foreground/90 font-medium">
+                        {app.program}
+                      </span>
                     </div>
                   </TableCell>
-                  <TableCell>{app.user}</TableCell>
-                  <TableCell>{app.intake}</TableCell>
-                  <TableCell className="font-mono">{app.age}</TableCell>
-                  <TableCell>
-                    <CountryFlag code={app.nationality} />
+                  <TableCell className="text-foreground font-semibold">
+                    <span className="truncate inline-block max-w-[240px]">{app.user}</span>
                   </TableCell>
                   <TableCell>
-                    <CountryFlag code={app.residenceCountry} />
+                    <StagePill
+                      value={stageOverride[app.id] ?? app.progressionLevel}
+                      onChange={(next) =>
+                        setStageOverride((prev) => ({ ...prev, [app.id]: next }))
+                      }
+                    />
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={app.progressionStatus === "success" ? "success" : "warning"}
-                      size="sm"
-                      className="uppercase tracking-wider"
+                    <span
+                      className={cn(
+                        "inline-flex items-center gap-2",
+                        "font-mono tabular-nums text-[13px]",
+                        app.etAtLoaStatus === "warning"
+                          ? "text-amber-700 dark:text-amber-300"
+                          : "text-foreground/70"
+                      )}
+                      title="ET @ LOA"
                     >
-                      <span className="inline-block rounded-full mr-1.5 shrink-0 bg-current w-1 h-1" />
-                      {app.progressionLevel}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={app.b2x === "B2B" ? "info" : "accent"}
-                      shape="pill"
-                      size="sm"
-                    >
-                      {app.b2x}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2 min-w-0">
-                      <div
+                      <span
                         className={cn(
-                          "w-1.5 h-1.5 rounded-full flex-shrink-0",
+                          "h-1.5 w-1.5 rounded-full",
                           app.etAtLoaStatus === "warning"
-                            ? "bg-amber-400"
-                            : "bg-white/30"
+                            ? "bg-amber-500/70"
+                            : "bg-foreground/25"
                         )}
                       />
-                      <span className="font-mono text-xs truncate">{app.etAtLoa}</span>
+                      {app.etAtLoa}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    {(() => {
+                      const risk = riskFromApp(app)
+                      return (
+                        <span
+                          className={cn(
+                            "inline-flex items-center h-7 px-3 rounded-full border text-[12px] font-semibold",
+                            riskChipTone(risk)
+                          )}
+                          title="Risk level"
+                        >
+                          Risk {risk}
+                        </span>
+                      )
+                    })()}
+                  </TableCell>
+                  <TableCell className="text-foreground/80">
+                    <span className="truncate inline-block max-w-[260px]">
+                      {app.tuitionPaymentType}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center justify-end gap-2">
+                      {/* Tiny indicators (tooltip via title) */}
+                      {app.isDeferral ? (
+                        <div
+                          className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-foreground/[0.04] border border-border text-foreground/55"
+                          title="Deferral"
+                        >
+                          <TriangleAlert className="h-4 w-4" />
+                        </div>
+                      ) : null}
+                      {app.etAtLoaStatus === "warning" ? (
+                        <div
+                          className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-amber-500/[0.10] border border-amber-500/[0.18] text-amber-700 dark:text-amber-300"
+                          title="SLA risk"
+                        >
+                          <Clock className="h-4 w-4" />
+                        </div>
+                      ) : null}
+
+                      {/* Quick actions on hover */}
+                      <div className="hidden md:flex items-center gap-2 opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="h-8"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedAppId(app.id)
+                          }}
+                        >
+                          Open
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                          }}
+                        >
+                          Request docs
+                        </Button>
+                        <Button
+                          variant="default"
+                          size="sm"
+                          className="h-8"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                          }}
+                        >
+                          Approve
+                        </Button>
+                      </div>
+
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label="Open case"
+                        className="h-9 w-9"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setSelectedAppId(app.id)
+                        }}
+                      >
+                        <ChevronRight className="h-4 w-4 text-foreground/60" />
+                      </Button>
                     </div>
                   </TableCell>
-                  <TableCell>{app.tuitionPaymentType}</TableCell>
-                  <TableCell className="font-mono text-[12px]">{app.studentId}</TableCell>
-                  <TableCell>
-                    {app.isDeferral ? (
-                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/[0.12]">
-                        <Check className="h-3 w-3 text-emerald-400" />
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center w-5 h-5 rounded-full bg-white/[0.04]">
-                        <X className="h-3 w-3 text-white/30" />
-                      </div>
-                    )}
-                  </TableCell>
                 </TableRow>
-              ))}
+                ))
+              )}
             </TableBody>
           </Table>
         </div>
       </div>
+
+      <CasePanel app={selectedApp} open={selectedAppId != null} onClose={() => setSelectedAppId(null)} />
+
+      <FiltersPanel
+        open={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+        stage={stageFilter}
+        setStage={setStageFilter}
+        risk={riskFilter}
+        setRisk={setRiskFilter}
+        payment={paymentFilter}
+        setPayment={setPaymentFilter}
+        onClear={() => {
+          setStageFilter(null)
+          setRiskFilter(null)
+          setPaymentFilter(null)
+        }}
+      />
     </div>
   )
 }

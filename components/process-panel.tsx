@@ -43,24 +43,24 @@ function ProcessItem({
   return (
     <div
       className={cn(
-        "flex items-center py-2.5 px-3 rounded-xl cursor-pointer transition-all duration-150 group",
+        "flex items-center py-2 px-3 rounded-xl cursor-pointer transition-all duration-150 group",
         isActive 
-          ? "bg-white/[0.08] border border-white/[0.12]" 
-          : "hover:bg-white/[0.04] border border-transparent"
+          ? "bg-foreground/[0.06] border border-border" 
+          : "hover:bg-foreground/[0.04] border border-transparent"
       )}
       onClick={onClick}
     >
       <div
-        className="flex-shrink-0 w-1.5 h-4 mr-3 rounded-full"
+        className="flex-shrink-0 w-1 h-6 mr-3 rounded-full opacity-80"
         style={{ backgroundColor: color }}
       />
       <div className="flex items-center justify-between w-full">
         <div className="flex flex-col">
-          <p className="text-white/90 font-medium text-[13px] group-hover:text-white transition-colors">
+          <p className="text-foreground/90 font-medium text-[13px] group-hover:text-foreground transition-colors">
             {label}
           </p>
           {subtitle && (
-            <p className="text-[11px] leading-5 text-white/40">{subtitle}</p>
+            <p className="text-[11px] leading-5 text-foreground/45">{subtitle}</p>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -70,7 +70,7 @@ function ProcessItem({
             </span>
           ) : (
             count !== undefined && (
-              <span className="text-[12px] text-white/55 font-mono tabular-nums bg-white/[0.04] px-2 py-0.5 rounded-md">
+              <span className="text-[12px] text-foreground/55 font-mono tabular-nums bg-foreground/[0.04] px-2 py-0.5 rounded-md">
                 {count}
               </span>
             )
@@ -103,10 +103,10 @@ function ProcessSection({ title, icon, children, defaultOpen = true }: ProcessSe
   return (
     <div className="transition-all">
       <div
-        className="flex items-center px-1 py-2.5 cursor-pointer transition-all duration-150 rounded-lg hover:bg-white/[0.02] group"
+        className="flex items-center px-1 py-2.5 cursor-pointer transition-all duration-150 rounded-lg hover:bg-foreground/[0.03] group"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex-shrink-0 scale-75 text-white/40 group-hover:text-white/60 transition-colors">
+        <div className="flex-shrink-0 scale-75 text-foreground/40 group-hover:text-foreground/60 transition-colors">
           {icon || (
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 3H4.99c-1.11 0-1.98.89-1.98 2L3 19c0 1.1.88 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2m0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H4.99V5H19z" />
@@ -114,11 +114,11 @@ function ProcessSection({ title, icon, children, defaultOpen = true }: ProcessSe
           )}
         </div>
         <div className="flex-1 w-full flex items-start flex-col gap-1">
-          <p className="text-[11px] text-white/70 font-semibold leading-none uppercase tracking-[0.08em] group-hover:text-white/90 transition-colors">
+          <p className="text-[11px] text-foreground/70 font-semibold leading-none uppercase tracking-[0.08em] group-hover:text-foreground/90 transition-colors">
             {title}
           </p>
         </div>
-        <div className="flex-shrink-0 ml-2 text-white/40 group-hover:text-white/60 transition-colors">
+        <div className="flex-shrink-0 ml-2 text-foreground/40 group-hover:text-foreground/60 transition-colors">
           {isOpen ? (
             <ChevronDown className="h-4 w-4" />
           ) : (
@@ -135,11 +135,11 @@ export function ProcessPanel() {
   const [activeItem, setActiveItem] = useState("pending-loa")
 
   return (
-    <div className="w-[380px] overflow-y-auto h-full bg-[#0a0a0a] border-r border-white/[0.08]">
+    <div className="w-[380px] overflow-y-auto h-full giga-glass border-r border-border">
       <div className="flex flex-col h-full">
         <div className="relative">
           {/* Tab Header */}
-          <div className="sticky top-0 z-10 p-4 bg-[#0a0a0a]">
+          <div className="sticky top-0 z-10 p-4 bg-background/65 backdrop-blur-xl">
             <Tabs defaultValue="process" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="process">
@@ -165,22 +165,22 @@ export function ProcessPanel() {
                           <SelectItem value="visa">Visa process</SelectItem>
                         </SelectContent>
                       </Select>
-                      <X className="absolute size-3 right-10 top-1/2 -translate-y-1/2 text-white/35 hover:text-white/70 cursor-pointer transition-colors" />
+                      <X className="absolute size-3 right-10 top-1/2 -translate-y-1/2 text-foreground/35 hover:text-foreground/70 cursor-pointer transition-colors" />
                     </div>
                   </div>
 
                   {/* Process Groups */}
-                  <div className="mt-6 pt-4 border-t border-white/[0.08]">
+                  <div className="mt-6 pt-4 border-t border-border">
                     <div className="space-y-3">
                       {/* GBC Admission - Open */}
                       <Accordion type="single" collapsible defaultValue="gbc">
                         <AccordionItem
                           value="gbc"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden giga-glass p-4 mb-3"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-white">GBC Admission</span>
+                              <span className="font-semibold text-foreground">GBC Admission</span>
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="px-0 py-0 pt-4">
@@ -193,7 +193,7 @@ export function ProcessPanel() {
                                   color="#ff6b35"
                                   avatar=""
                                 />
-                                <div className="my-2 border-t border-white/[0.06]" />
+                                <div className="my-2 border-t border-border" />
                                 <ProcessItem
                                   label="Pending approval"
                                   count={106}
@@ -210,7 +210,7 @@ export function ProcessPanel() {
                                   color="#ff6b35"
                                   avatar=""
                                 />
-                                <div className="my-2 border-t border-white/[0.06]" />
+                                <div className="my-2 border-t border-border" />
                                 <ProcessItem
                                   label="Pending LOA"
                                   count={33}
@@ -263,7 +263,7 @@ export function ProcessPanel() {
                                   avatar=""
                                   isComplete
                                 />
-                                <div className="my-2 border-t border-white/[0.06]" />
+                                <div className="my-2 border-t border-border" />
                                 <ProcessItem
                                   label="All cases"
                                   color="#22d3ee"
@@ -340,15 +340,15 @@ export function ProcessPanel() {
                         {/* NC Admission - Closed */}
                         <AccordionItem
                           value="nc"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden giga-glass p-4 mb-3"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-white">NC Admission</span>
+                              <span className="font-semibold text-foreground">NC Admission</span>
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                            <div className="text-sm text-foreground/55">
                               NC Admission process items...
                             </div>
                           </AccordionContent>
@@ -357,15 +357,15 @@ export function ProcessPanel() {
                         {/* BVC Admission - Closed */}
                         <AccordionItem
                           value="bvc"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden giga-glass p-4 mb-3"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-white">BVC Admission</span>
+                              <span className="font-semibold text-foreground">BVC Admission</span>
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                            <div className="text-sm text-foreground/55">
                               BVC Admission process items...
                             </div>
                           </AccordionContent>
@@ -374,15 +374,15 @@ export function ProcessPanel() {
                         {/* Other schools Admission - Closed */}
                         <AccordionItem
                           value="other"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden giga-glass p-4 mb-3"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-white">Other schools Admission</span>
+                              <span className="font-semibold text-foreground">Other schools Admission</span>
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                            <div className="text-sm text-foreground/55">
                               Other schools process items...
                             </div>
                           </AccordionContent>
@@ -391,15 +391,15 @@ export function ProcessPanel() {
                         {/* Admission confirmation - Closed */}
                         <AccordionItem
                           value="confirmation"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden giga-glass p-4 mb-3"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-white">Admission confirmation</span>
+                              <span className="font-semibold text-foreground">Admission confirmation</span>
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                            <div className="text-sm text-foreground/55">
                               Admission confirmation items...
                             </div>
                           </AccordionContent>
@@ -408,15 +408,15 @@ export function ProcessPanel() {
                         {/* Admission offer status - Closed */}
                         <AccordionItem
                           value="offer-status"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden giga-glass p-4 mb-3"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-white">Admission offer status</span>
+                              <span className="font-semibold text-foreground">Admission offer status</span>
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                            <div className="text-sm text-foreground/55">
                               Admission offer status items...
                             </div>
                           </AccordionContent>
@@ -425,15 +425,15 @@ export function ProcessPanel() {
                         {/* Program switch - Closed */}
                         <AccordionItem
                           value="program-switch"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden giga-glass p-4 mb-3"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
-                              <span className="font-semibold text-white">Program switch</span>
+                              <span className="font-semibold text-foreground">Program switch</span>
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="pt-4">
-                            <div className="text-sm text-white/55">
+                            <div className="text-sm text-foreground/55">
                               Program switch items...
                             </div>
                           </AccordionContent>
@@ -445,7 +445,7 @@ export function ProcessPanel() {
               </TabsContent>
 
               <TabsContent value="owner">
-                <div className="p-4 text-white/55">
+                <div className="p-4 text-foreground/55">
                   Owner view content...
                 </div>
               </TabsContent>

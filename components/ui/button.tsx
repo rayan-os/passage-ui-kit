@@ -10,25 +10,25 @@ const buttonVariants = cva(
       variant: {
         // Primary - White button (GIGA style)
         default:
-          "bg-white text-[#0a0a0a] border border-white hover:opacity-92 active:translate-y-[1px]",
+          "bg-foreground text-background border border-foreground hover:opacity-92 active:translate-y-[1px]",
         // Secondary - Ghost button (GIGA style)
         secondary:
-          "bg-white/[0.08] text-white border border-white/[0.12] hover:bg-white/[0.12] hover:border-white/[0.14]",
+          "bg-foreground/[0.06] text-foreground border border-border hover:bg-foreground/[0.09] hover:border-foreground/[0.18]",
         // Destructive
         destructive:
           "bg-red-500/20 text-red-400 border border-red-500/20 hover:bg-red-500/30",
         // Outline
         outline:
-          "border border-white/[0.12] bg-transparent text-white hover:bg-white/[0.08] hover:border-white/[0.14]",
+          "border border-border bg-transparent text-foreground hover:bg-foreground/[0.06] hover:border-foreground/[0.16]",
         // Ghost
         ghost: 
-          "text-white/70 hover:text-white hover:bg-white/[0.08]",
+          "text-foreground/70 hover:text-foreground hover:bg-foreground/[0.06]",
         // Link
         link: 
           "text-giga-accent underline-offset-4 hover:underline",
         // Action button - small white button (GIGA style)
         action:
-          "bg-white/[0.92] text-[#0a0a0a] font-bold hover:bg-white active:translate-y-[1px]",
+          "bg-foreground/[0.92] text-background font-bold hover:bg-foreground active:translate-y-[1px]",
       },
       size: {
         default: "h-10 px-6 py-2 text-sm rounded-full",
