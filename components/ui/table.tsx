@@ -10,9 +10,9 @@ const Table = React.forwardRef<
     className={cn(
       "w-full caption-bottom text-sm",
       // Density tokens (override by passing `data-density="compact"` on <Table />)
-      "[--giga-table-head-h:2rem] [--giga-table-cell-py:0.375rem] [--giga-table-cell-fs:13px]",
+      "[--giga-table-head-h:1.75rem] [--giga-table-cell-py:0.25rem] [--giga-table-cell-fs:12px]",
       "data-[density=compact]:[--giga-table-head-h:1.75rem] data-[density=compact]:[--giga-table-cell-py:0.25rem] data-[density=compact]:[--giga-table-cell-fs:12px]",
-      "data-[density=comfortable]:[--giga-table-head-h:2.25rem] data-[density=comfortable]:[--giga-table-cell-py:0.5rem] data-[density=comfortable]:[--giga-table-cell-fs:13px]",
+      "data-[density=comfortable]:[--giga-table-head-h:2.125rem] data-[density=comfortable]:[--giga-table-cell-py:0.45rem] data-[density=comfortable]:[--giga-table-cell-fs:13px]",
       className
     )}
     {...props}
@@ -27,7 +27,7 @@ const TableHeader = React.forwardRef<
   <thead 
     ref={ref} 
     className={cn(
-      "[&_tr]:border-b [&_tr]:border-white/[0.08]",
+      "[&_tr]:border-b [&_tr]:border-border",
       className
     )} 
     {...props} 
@@ -54,7 +54,7 @@ const TableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      "border-t border-white/[0.08] bg-white/[0.02] font-medium [&>tr]:last:border-b-0",
+      "border-t border-border bg-foreground/[0.02] font-medium [&>tr]:last:border-b-0",
       className
     )}
     {...props}
@@ -69,7 +69,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-white/[0.08] transition-colors hover:bg-white/[0.04] data-[state=selected]:bg-white/[0.06]",
+      "border-b border-border transition-colors hover:bg-foreground/[0.04] data-[state=selected]:bg-foreground/[0.06]",
       className
     )}
     {...props}
@@ -84,7 +84,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-[var(--giga-table-head-h)] px-3 text-left align-middle text-[10px] font-semibold uppercase tracking-[0.06em] text-white/50 [&:has([role=checkbox])]:pr-0 whitespace-nowrap",
+      "h-[var(--giga-table-head-h)] px-3 text-left align-middle text-[10px] font-semibold uppercase tracking-[0.06em] text-foreground/50 [&:has([role=checkbox])]:pr-0 whitespace-nowrap",
       className
     )}
     {...props}
@@ -99,7 +99,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "px-3 py-[var(--giga-table-cell-py)] align-middle text-[length:var(--giga-table-cell-fs)] text-white/90 [&:has([role=checkbox])]:pr-0 max-w-0 truncate",
+      "px-3 py-[var(--giga-table-cell-py)] align-middle text-[length:var(--giga-table-cell-fs)] text-foreground/90 [&:has([role=checkbox])]:pr-0 max-w-0 truncate",
       className
     )}
     {...props}
@@ -113,7 +113,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-4 text-sm text-white/55", className)}
+    className={cn("mt-4 text-sm text-foreground/55", className)}
     {...props}
   />
 ))

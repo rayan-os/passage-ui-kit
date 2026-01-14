@@ -13,7 +13,7 @@ export default function AdminPanelPage({
   return (
     <main
       className={cn(
-        "flex h-dvh overflow-hidden bg-background",
+        "flex h-dvh overflow-hidden giga-app-bg",
         screenshotMode && "p-10"
       )}
     >
@@ -25,14 +25,14 @@ export default function AdminPanelPage({
         className={cn(
           "flex-1 flex h-full min-w-0",
           screenshotMode &&
-            "rounded-[28px] border border-white/[0.10] bg-giga-panel shadow-giga overflow-hidden"
+            "rounded-[28px] giga-glass overflow-hidden"
         )}
       >
         {/* Process panel */}
         {!screenshotMode && <ProcessPanel />}
 
         {/* Data table area */}
-        <div className="flex-1 h-full min-w-0 overflow-hidden bg-background">
+        <div className="flex-1 h-full min-w-0 overflow-hidden">
           <div className="w-full flex h-full">
             <div className="flex-1 min-w-0">
               <ApplicationsTable />

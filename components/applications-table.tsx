@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import {
   Table,
   TableBody,
@@ -594,7 +595,7 @@ function CountryFlag({ code }: { code: string }) {
   const flag = countryCodeToFlagEmoji(code)
   return (
     <span
-      className="inline-flex items-center justify-center w-[18px] h-[18px] rounded-[5px] bg-white/[0.04] ring-1 ring-white/[0.10] text-[12px] leading-none"
+      className="inline-flex items-center justify-center w-[18px] h-[18px] rounded-[5px] bg-foreground/[0.04] ring-1 ring-border text-[12px] leading-none"
       aria-label={code.toUpperCase()}
       title={code.toUpperCase()}
     >
@@ -635,13 +636,13 @@ export function ApplicationsTable() {
       {/* Header */}
       <div className="flex flex-row items-start gap-4">
         <div className="flex-1 flex flex-col gap-1 min-w-0">
-          <h4 className="text-[20px] leading-[1.2] font-semibold tracking-tight text-white">
+          <h4 className="text-[20px] leading-[1.2] font-semibold tracking-tight text-foreground">
             {filtered.length} applications
           </h4>
-          <p className="text-sm text-white/55">
+          <p className="text-sm text-foreground/55">
             Pending LOA queue
             {query.trim() ? (
-              <span className="text-white/40"> · filtered</span>
+              <span className="text-foreground/40"> · filtered</span>
             ) : null}
           </p>
         </div>
@@ -657,6 +658,7 @@ export function ApplicationsTable() {
           <Button variant="secondary" size="icon" aria-label="Columns">
             <Columns3 className="h-4 w-4" />
           </Button>
+          <ThemeToggle />
           <Button variant="secondary" size="icon" aria-label="More">
             <MoreVertical className="h-4 w-4" />
           </Button>
@@ -675,15 +677,15 @@ export function ApplicationsTable() {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="inline-flex items-center rounded-lg border border-white/[0.10] bg-white/[0.04] p-0.5">
+          <div className="inline-flex items-center rounded-lg border border-border bg-foreground/[0.03] p-0.5">
             <button
               type="button"
               onClick={() => setDensity("compact")}
               className={cn(
                 "h-8 px-3 rounded-md text-xs font-semibold transition-colors",
                 density === "compact"
-                  ? "bg-white text-[#0a0a0a]"
-                  : "text-white/70 hover:text-white hover:bg-white/[0.06]"
+                  ? "bg-foreground text-background"
+                  : "text-foreground/70 hover:text-foreground hover:bg-foreground/[0.06]"
               )}
             >
               Compact
@@ -694,8 +696,8 @@ export function ApplicationsTable() {
               className={cn(
                 "h-8 px-3 rounded-md text-xs font-semibold transition-colors",
                 density === "comfortable"
-                  ? "bg-white text-[#0a0a0a]"
-                  : "text-white/70 hover:text-white hover:bg-white/[0.06]"
+                  ? "bg-foreground text-background"
+                  : "text-foreground/70 hover:text-foreground hover:bg-foreground/[0.06]"
               )}
             >
               Comfortable
@@ -717,11 +719,11 @@ export function ApplicationsTable() {
       </div>
 
       {/* Table */}
-      <div className="w-full flex-1 min-h-0 rounded-2xl border border-white/[0.08] bg-giga-panel overflow-hidden">
+      <div className="w-full flex-1 min-h-0 rounded-2xl giga-glass overflow-hidden">
         <div className="w-full h-full overflow-auto">
           <Table className="min-w-[1400px]" data-density={density}>
-            <TableHeader className="sticky top-0 bg-giga-panel z-10">
-              <TableRow className="hover:bg-transparent border-white/[0.06]">
+            <TableHeader className="sticky top-0 z-10 bg-card/70 backdrop-blur-xl">
+              <TableRow className="hover:bg-transparent border-border">
                 <TableHead className="w-12">
                   <Checkbox
                     checked={allInViewSelected}
@@ -759,10 +761,10 @@ export function ApplicationsTable() {
                 <TableRow className="hover:bg-transparent">
                   <TableCell className="py-10" colSpan={13}>
                     <div className="flex flex-col items-center justify-center gap-2 text-center">
-                      <div className="text-sm font-semibold text-white">
+                      <div className="text-sm font-semibold text-foreground">
                         No results
                       </div>
-                      <div className="text-sm text-white/55">
+                      <div className="text-sm text-foreground/55">
                         Try a different search term.
                       </div>
                     </div>
@@ -788,14 +790,14 @@ export function ApplicationsTable() {
                       <GradientAvatar
                         name={app.program}
                         size="sm"
-                        className="flex-shrink-0 ring-1 ring-white/[0.10]"
+                        className="flex-shrink-0 ring-1 ring-border"
                       />
-                      <span className="truncate text-white/90">
+                      <span className="truncate text-foreground/90">
                         {app.program}
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-white/90">
+                  <TableCell className="text-foreground/90">
                     {app.user}
                   </TableCell>
                   <TableCell>{app.intake}</TableCell>
@@ -834,7 +836,7 @@ export function ApplicationsTable() {
                           "w-1.5 h-1.5 rounded-full flex-shrink-0",
                           app.etAtLoaStatus === "warning"
                             ? "bg-amber-400"
-                            : "bg-white/30"
+                            : "bg-foreground/30"
                         )}
                       />
                       <span className="font-mono text-xs truncate">{app.etAtLoa}</span>

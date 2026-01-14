@@ -32,8 +32,8 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
       className={cn(
         "flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-150 relative group",
         active
-          ? "bg-white/[0.12] text-white"
-          : "text-white/55 hover:bg-white/[0.08] hover:text-white/80"
+          ? "bg-foreground/[0.10] text-foreground"
+          : "text-foreground/55 hover:bg-foreground/[0.06] hover:text-foreground/80"
       )}
       aria-label={label}
     >
@@ -48,7 +48,7 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
       )}
       {/* Tooltip */}
       {label && (
-        <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-muted border border-white/[0.12] text-white text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-50 shadow-giga-sm">
+        <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-popover border border-border text-popover-foreground text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-50 shadow-giga-sm">
           {label}
         </div>
       )}
@@ -58,7 +58,7 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
 
 export function SidebarNav() {
   return (
-    <div className="w-[64px] bg-background flex flex-col h-full border-r border-white/[0.08]">
+    <div className="w-[64px] giga-glass flex flex-col h-full border-r border-border">
       {/* Top section */}
       <div className="flex flex-col items-center gap-1 p-3">
         {/* Logo */}
@@ -69,11 +69,11 @@ export function SidebarNav() {
         </div>
 
         {/* Search */}
-        <div className="w-10 h-10 flex items-center justify-center bg-card border border-white/[0.08] rounded-xl shadow-giga-sm hover:border-white/[0.14] transition-all duration-150 cursor-pointer group">
-          <Search className="w-[18px] h-[18px] text-white/55 group-hover:text-white/80 transition-colors" />
+        <div className="w-10 h-10 flex items-center justify-center bg-card/70 border border-border rounded-xl shadow-giga-sm hover:border-foreground/[0.16] transition-all duration-150 cursor-pointer group">
+          <Search className="w-[18px] h-[18px] text-foreground/55 group-hover:text-foreground/80 transition-colors" />
         </div>
 
-        <div className="w-8 h-px bg-white/[0.08] my-2" />
+        <div className="w-8 h-px bg-border my-2" />
 
         {/* Dashboard */}
         <NavItem
@@ -118,7 +118,7 @@ export function SidebarNav() {
           label="Internal Tasks"
         />
 
-        <div className="w-8 h-px bg-white/[0.08] my-2" />
+        <div className="w-8 h-px bg-border my-2" />
 
         {/* Funnel Health Tracker */}
         <NavItem
@@ -220,7 +220,7 @@ export function SidebarNav() {
       </div>
 
       {/* Bottom section */}
-      <div className="mt-auto flex flex-col items-center gap-1 p-3 border-t border-white/[0.08]">
+      <div className="mt-auto flex flex-col items-center gap-1 p-3 border-t border-border">
         {/* Refresh */}
         <NavItem
           icon={<RefreshCw className="w-5 h-5" />}
@@ -229,7 +229,7 @@ export function SidebarNav() {
 
         {/* Profile */}
         <div className="w-10 h-10 flex items-center justify-center">
-          <GradientAvatar name="John Doe" size="md" className="ring-2 ring-white/[0.12] ring-offset-2 ring-offset-giga-bg" />
+          <GradientAvatar name="John Doe" size="md" className="ring-2 ring-border ring-offset-2 ring-offset-background" />
         </div>
       </div>
     </div>

@@ -9,13 +9,13 @@ const badgeVariants = cva(
       variant: {
         // Default - subtle dark badge (GIGA style)
         default:
-          "bg-white/[0.08] text-white/70 border border-transparent",
+          "bg-foreground/[0.06] text-foreground/70 border border-transparent",
         // Secondary
         secondary:
-          "bg-white/[0.08] text-white/70",
+          "bg-foreground/[0.06] text-foreground/70",
         // Accent badge with sage green (GIGA style)
         accent:
-          "bg-[rgba(197,204,195,0.12)] text-white/85 border border-[rgba(197,204,195,0.20)]",
+          "bg-[rgba(197,204,195,0.16)] text-foreground/90 border border-[rgba(197,204,195,0.24)]",
         // Success - greenish
         success:
           "bg-emerald-500/[0.12] text-emerald-400 border border-emerald-500/[0.20]",
@@ -30,7 +30,7 @@ const badgeVariants = cva(
           "bg-red-500/[0.12] text-red-400 border border-red-500/[0.20]",
         // Outline
         outline: 
-          "border border-white/[0.12] text-white/70 bg-transparent",
+          "border border-border text-foreground/70 bg-transparent",
       },
       size: {
         default: "px-2 py-0.5 text-[11px]",
