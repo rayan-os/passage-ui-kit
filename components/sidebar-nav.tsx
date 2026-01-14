@@ -48,7 +48,7 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
       )}
       {/* Tooltip */}
       {label && (
-        <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-[#1a1a1a] border border-white/[0.12] text-white text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-50 shadow-giga-sm">
+        <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-muted border border-white/[0.12] text-white text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-50 shadow-giga-sm">
           {label}
         </div>
       )}
@@ -58,7 +58,7 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
 
 export function SidebarNav() {
   return (
-    <div className="w-[64px] bg-[#0a0a0a] flex flex-col h-full border-r border-white/[0.08]">
+    <div className="w-[64px] bg-background flex flex-col h-full border-r border-white/[0.08]">
       {/* Top section */}
       <div className="flex flex-col items-center gap-1 p-3">
         {/* Logo */}
@@ -69,7 +69,7 @@ export function SidebarNav() {
         </div>
 
         {/* Search */}
-        <div className="w-10 h-10 flex items-center justify-center bg-[#141414] border border-white/[0.08] rounded-xl shadow-giga-sm hover:border-white/[0.14] transition-all duration-150 cursor-pointer group">
+        <div className="w-10 h-10 flex items-center justify-center bg-card border border-white/[0.08] rounded-xl shadow-giga-sm hover:border-white/[0.14] transition-all duration-150 cursor-pointer group">
           <Search className="w-[18px] h-[18px] text-white/55 group-hover:text-white/80 transition-colors" />
         </div>
 
@@ -229,7 +229,7 @@ export function SidebarNav() {
 
         {/* Profile */}
         <div className="w-10 h-10 flex items-center justify-center">
-          <GradientAvatar name="John Doe" size="md" className="ring-2 ring-white/[0.12] ring-offset-2 ring-offset-[#0a0a0a]" />
+          <GradientAvatar name="John Doe" size="md" className="ring-2 ring-white/[0.12] ring-offset-2 ring-offset-giga-bg" />
         </div>
       </div>
     </div>

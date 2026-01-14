@@ -135,11 +135,11 @@ export function ProcessPanel() {
   const [activeItem, setActiveItem] = useState("pending-loa")
 
   return (
-    <div className="w-[380px] overflow-y-auto h-full bg-[#0a0a0a] border-r border-white/[0.08]">
+    <div className="w-[380px] overflow-y-auto h-full bg-background border-r border-white/[0.08]">
       <div className="flex flex-col h-full">
         <div className="relative">
           {/* Tab Header */}
-          <div className="sticky top-0 z-10 p-4 bg-[#0a0a0a]">
+          <div className="sticky top-0 z-10 p-4 bg-background">
             <Tabs defaultValue="process" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="process">

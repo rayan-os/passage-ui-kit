@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
@@ -20,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
+import { GradientAvatar } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 
 interface Application {
@@ -578,19 +579,34 @@ const applications: Application[] = [
   },
 ]
 
+function countryCodeToFlagEmoji(code: string) {
+  const cleaned = (code || "").trim().toUpperCase()
+  if (cleaned.length !== 2) return "🏳"
+  const A = 65
+  const base = 0x1f1e6
+  const first = cleaned.charCodeAt(0) - A
+  const second = cleaned.charCodeAt(1) - A
+  if (first < 0 || first > 25 || second < 0 || second > 25) return "🏳"
+  return String.fromCodePoint(base + first, base + second)
+}
+
 function CountryFlag({ code }: { code: string }) {
+  const flag = countryCodeToFlagEmoji(code)
   return (
-    <img
-      src={`https://kapowaz.github.io/square-flags/flags/${code}.svg`}
-      width={18}
-      className="rounded-[3px] overflow-clip ring-1 ring-white/[0.08]"
-      alt={code}
-    />
+    <span
+      className="inline-flex items-center justify-center w-[18px] h-[18px] rounded-[5px] bg-white/[0.04] ring-1 ring-white/[0.10] text-[12px] leading-none"
+      aria-label={code.toUpperCase()}
+      title={code.toUpperCase()}
+    >
+      {flag}
+    </span>
   )
 }
 
 export function ApplicationsTable() {
   const [selectedRows, setSelectedRows] = useState<number[]>([])
+  const [query, setQuery] = useState("")
+  const [density, setDensity] = useState<"compact" | "comfortable">("compact")
 
   const toggleRow = (id: number) => {
     setSelectedRows((prev) =>
@@ -598,85 +614,169 @@ export function ApplicationsTable() {
     )
   }
 
-  const toggleAll = () => {
-    if (selectedRows.length === applications.length) {
-      setSelectedRows([])
-    } else {
-      setSelectedRows(applications.map((a) => a.id))
-    }
-  }
+  const filtered = applications.filter((app) => {
+    const q = query.trim().toLowerCase()
+    if (!q) return true
+    return (
+      app.program.toLowerCase().includes(q) ||
+      app.user.toLowerCase().includes(q) ||
+      app.intake.toLowerCase().includes(q) ||
+      app.tuitionPaymentType.toLowerCase().includes(q)
+    )
+  })
+
+  const filteredIdSet = new Set(filtered.map((a) => a.id))
+  const selectedInView = selectedRows.filter((id) => filteredIdSet.has(id))
+  const allInViewSelected =
+    filtered.length > 0 && selectedInView.length === filtered.length
 
   return (
-    <div className="px-5 w-full gap-4 flex flex-col">
+    <div className="w-full h-full min-h-0 flex flex-col px-6 py-6 gap-4">
       {/* Header */}
-      <div className="flex flex-row items-center w-full pt-5">
-        <div className="flex-1 flex flex-col gap-1">
-          <h4 className="text-xl font-semibold tracking-tight text-white">
-            33 applications
+      <div className="flex flex-row items-start gap-4">
+        <div className="flex-1 flex flex-col gap-1 min-w-0">
+          <h4 className="text-[20px] leading-[1.2] font-semibold tracking-tight text-white">
+            {filtered.length} applications
           </h4>
           <p className="text-sm text-white/55">
             Pending LOA queue
+            {query.trim() ? (
+              <span className="text-white/40"> · filtered</span>
+            ) : null}
           </p>
         </div>
-        <div className="flex-1 flex items-center gap-2 justify-end">
-          <div className="flex items-center justify-end gap-2">
-            <Button
-              variant="secondary"
-              size="default"
-              className="gap-2"
+        <div className="flex items-center gap-2 justify-end">
+          <Button variant="secondary" size="default" className="gap-2">
+            <ArrowDownZA className="h-4 w-4" />
+            <span>Created date</span>
+          </Button>
+          <Button variant="secondary" className="gap-2">
+            <SlidersHorizontal className="h-4 w-4" />
+            <span>Filters</span>
+          </Button>
+          <Button variant="secondary" size="icon" aria-label="Columns">
+            <Columns3 className="h-4 w-4" />
+          </Button>
+          <Button variant="secondary" size="icon" aria-label="More">
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex-1 min-w-[260px] max-w-[520px]">
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search program, applicant, intake, payment…"
+            aria-label="Search applications"
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="inline-flex items-center rounded-lg border border-white/[0.10] bg-white/[0.04] p-0.5">
+            <button
+              type="button"
+              onClick={() => setDensity("compact")}
+              className={cn(
+                "h-8 px-3 rounded-md text-xs font-semibold transition-colors",
+                density === "compact"
+                  ? "bg-white text-[#0a0a0a]"
+                  : "text-white/70 hover:text-white hover:bg-white/[0.06]"
+              )}
             >
-              <ArrowDownZA className="h-4 w-4" />
-              <span>Created date</span>
-            </Button>
-            <Button variant="secondary" className="gap-2">
-              <SlidersHorizontal className="h-4 w-4" />
-              <span>Filters</span>
-            </Button>
-            <Button variant="secondary" size="icon">
-              <Columns3 className="h-4 w-4" />
-            </Button>
-            <Button variant="secondary" size="icon">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
+              Compact
+            </button>
+            <button
+              type="button"
+              onClick={() => setDensity("comfortable")}
+              className={cn(
+                "h-8 px-3 rounded-md text-xs font-semibold transition-colors",
+                density === "comfortable"
+                  ? "bg-white text-[#0a0a0a]"
+                  : "text-white/70 hover:text-white hover:bg-white/[0.06]"
+              )}
+            >
+              Comfortable
+            </button>
           </div>
+
+          {query.trim() ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2"
+              onClick={() => setQuery("")}
+            >
+              <X className="h-3.5 w-3.5" />
+              Clear
+            </Button>
+          ) : null}
         </div>
       </div>
 
       {/* Table */}
-      <div className="w-full h-[calc(100vh-140px)] rounded-2xl border border-white/[0.08] bg-[#0d0d0d] overflow-hidden">
-        <div className="w-full h-full overflow-x-auto overflow-y-auto">
-          <Table className="min-w-[1400px]">
-            <TableHeader className="sticky top-0 bg-[#0d0d0d] z-10">
+      <div className="w-full flex-1 min-h-0 rounded-2xl border border-white/[0.08] bg-giga-panel overflow-hidden">
+        <div className="w-full h-full overflow-auto">
+          <Table className="min-w-[1400px]" data-density={density}>
+            <TableHeader className="sticky top-0 bg-giga-panel z-10">
               <TableRow className="hover:bg-transparent border-white/[0.06]">
                 <TableHead className="w-12">
                   <Checkbox
-                    checked={selectedRows.length === applications.length}
-                    onCheckedChange={toggleAll}
+                    checked={allInViewSelected}
+                    onCheckedChange={() => {
+                      if (allInViewSelected) {
+                        setSelectedRows((prev) =>
+                          prev.filter((id) => !filteredIdSet.has(id))
+                        )
+                      } else {
+                        setSelectedRows((prev) => {
+                          const set = new Set(prev)
+                          for (const a of filtered) set.add(a.id)
+                          return Array.from(set)
+                        })
+                      }
+                    }}
                   />
                 </TableHead>
                 <TableHead className="min-w-[280px]">Program</TableHead>
-                <TableHead className="min-w-[180px]">User</TableHead>
+                <TableHead className="min-w-[180px]">Applicant</TableHead>
                 <TableHead className="min-w-[90px]">Intake</TableHead>
-                <TableHead className="min-w-[50px]">Age</TableHead>
+                <TableHead className="min-w-[50px] text-right">Age</TableHead>
                 <TableHead className="min-w-[50px]">Nat.</TableHead>
                 <TableHead className="min-w-[50px]">Res.</TableHead>
                 <TableHead className="min-w-[160px]">Progression</TableHead>
                 <TableHead className="min-w-[60px]">B2X</TableHead>
                 <TableHead className="min-w-[110px]">ET @ LOA</TableHead>
                 <TableHead className="min-w-[130px]">Payment</TableHead>
-                <TableHead className="min-w-[100px]">Student ID</TableHead>
+                <TableHead className="min-w-[110px]">Student ID</TableHead>
                 <TableHead className="min-w-[70px]">Deferral</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {applications.map((app) => (
-                <TableRow
-                  key={app.id}
-                  className={cn(
-                    "transition-all duration-150",
-                    selectedRows.includes(app.id) && "bg-white/[0.06]"
-                  )}
-                >
+              {filtered.length === 0 ? (
+                <TableRow className="hover:bg-transparent">
+                  <TableCell className="py-10" colSpan={13}>
+                    <div className="flex flex-col items-center justify-center gap-2 text-center">
+                      <div className="text-sm font-semibold text-white">
+                        No results
+                      </div>
+                      <div className="text-sm text-white/55">
+                        Try a different search term.
+                      </div>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filtered.map((app) => (
+                  <TableRow
+                    key={app.id}
+                    data-state={
+                      selectedRows.includes(app.id) ? "selected" : undefined
+                    }
+                    className="transition-all duration-150"
+                  >
                   <TableCell>
                     <Checkbox
                       checked={selectedRows.includes(app.id)}
@@ -685,19 +785,23 @@ export function ApplicationsTable() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2 min-w-0">
-                      <Avatar className="h-5 w-5 flex-shrink-0 rounded ring-1 ring-white/[0.08]">
-                        <AvatarImage
-                          src="https://app.passage.com/cdn-images/partners/george-brown-college.jpeg/256"
-                          alt="George Brown College"
-                          className="object-contain"
-                        />
-                      </Avatar>
-                      <span className="truncate text-white/90 text-[13px]">{app.program}</span>
+                      <GradientAvatar
+                        name={app.program}
+                        size="sm"
+                        className="flex-shrink-0 ring-1 ring-white/[0.10]"
+                      />
+                      <span className="truncate text-white/90">
+                        {app.program}
+                      </span>
                     </div>
                   </TableCell>
-                  <TableCell>{app.user}</TableCell>
+                  <TableCell className="text-white/90">
+                    {app.user}
+                  </TableCell>
                   <TableCell>{app.intake}</TableCell>
-                  <TableCell className="font-mono">{app.age}</TableCell>
+                  <TableCell className="font-mono tabular-nums text-right">
+                    {app.age}
+                  </TableCell>
                   <TableCell>
                     <CountryFlag code={app.nationality} />
                   </TableCell>
@@ -737,7 +841,9 @@ export function ApplicationsTable() {
                     </div>
                   </TableCell>
                   <TableCell>{app.tuitionPaymentType}</TableCell>
-                  <TableCell className="font-mono text-[12px]">{app.studentId}</TableCell>
+                  <TableCell className="font-mono text-[12px] tabular-nums">
+                    {app.studentId}
+                  </TableCell>
                   <TableCell>
                     {app.isDeferral ? (
                       <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/[0.12]">
@@ -750,7 +856,8 @@ export function ApplicationsTable() {
                     )}
                   </TableCell>
                 </TableRow>
-              ))}
+                ))
+              )}
             </TableBody>
           </Table>
         </div>

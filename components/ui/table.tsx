@@ -7,7 +7,14 @@ const Table = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <table
     ref={ref}
-    className={cn("w-full caption-bottom text-sm", className)}
+    className={cn(
+      "w-full caption-bottom text-sm",
+      // Density tokens (override by passing `data-density="compact"` on <Table />)
+      "[--giga-table-head-h:2rem] [--giga-table-cell-py:0.375rem] [--giga-table-cell-fs:13px]",
+      "data-[density=compact]:[--giga-table-head-h:1.75rem] data-[density=compact]:[--giga-table-cell-py:0.25rem] data-[density=compact]:[--giga-table-cell-fs:12px]",
+      "data-[density=comfortable]:[--giga-table-head-h:2.25rem] data-[density=comfortable]:[--giga-table-cell-py:0.5rem] data-[density=comfortable]:[--giga-table-cell-fs:13px]",
+      className
+    )}
     {...props}
   />
 ))
@@ -77,7 +84,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-8 px-3 text-left align-middle text-[10px] font-semibold uppercase tracking-[0.06em] text-white/50 [&:has([role=checkbox])]:pr-0 whitespace-nowrap",
+      "h-[var(--giga-table-head-h)] px-3 text-left align-middle text-[10px] font-semibold uppercase tracking-[0.06em] text-white/50 [&:has([role=checkbox])]:pr-0 whitespace-nowrap",
       className
     )}
     {...props}
@@ -92,7 +99,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "px-3 py-1.5 align-middle text-[13px] text-white/90 [&:has([role=checkbox])]:pr-0 max-w-0 truncate",
+      "px-3 py-[var(--giga-table-cell-py)] align-middle text-[length:var(--giga-table-cell-fs)] text-white/90 [&:has([role=checkbox])]:pr-0 max-w-0 truncate",
       className
     )}
     {...props}
