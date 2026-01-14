@@ -10,9 +10,9 @@ const Table = React.forwardRef<
     className={cn(
       "w-full caption-bottom text-sm",
       // Density tokens (override by passing `data-density="compact"` on <Table />)
-      "[--giga-table-head-h:1.75rem] [--giga-table-cell-py:0.25rem] [--giga-table-cell-fs:12px]",
-      "data-[density=compact]:[--giga-table-head-h:1.75rem] data-[density=compact]:[--giga-table-cell-py:0.25rem] data-[density=compact]:[--giga-table-cell-fs:12px]",
-      "data-[density=comfortable]:[--giga-table-head-h:2.125rem] data-[density=comfortable]:[--giga-table-cell-py:0.45rem] data-[density=comfortable]:[--giga-table-cell-fs:13px]",
+      "[--giga-table-head-h:1.875rem] [--giga-table-cell-py:0.375rem] [--giga-table-cell-fs:14px] [--giga-table-cell-lh:22px]",
+      "data-[density=compact]:[--giga-table-head-h:1.75rem] data-[density=compact]:[--giga-table-cell-py:0.25rem] data-[density=compact]:[--giga-table-cell-fs:14px] data-[density=compact]:[--giga-table-cell-lh:20px]",
+      "data-[density=comfortable]:[--giga-table-head-h:2.25rem] data-[density=comfortable]:[--giga-table-cell-py:0.55rem] data-[density=comfortable]:[--giga-table-cell-fs:15px] data-[density=comfortable]:[--giga-table-cell-lh:22px]",
       className
     )}
     {...props}
@@ -99,7 +99,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "px-3 py-[var(--giga-table-cell-py)] align-middle text-[length:var(--giga-table-cell-fs)] text-foreground/90 [&:has([role=checkbox])]:pr-0 max-w-0 truncate",
+      "px-3 py-[var(--giga-table-cell-py)] align-middle text-[length:var(--giga-table-cell-fs)] leading-[var(--giga-table-cell-lh)] text-foreground/90 [&:has([role=checkbox])]:pr-0 max-w-0 truncate",
       className
     )}
     {...props}
