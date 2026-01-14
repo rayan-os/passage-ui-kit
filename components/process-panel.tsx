@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { ChevronDown, ChevronRight, X } from "lucide-react"
+import { GlassSurface } from "@/components/ui/glass"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Accordion,
@@ -135,17 +136,27 @@ export function ProcessPanel() {
   const [activeItem, setActiveItem] = useState("pending-loa")
 
   return (
-    <div className="w-[380px] overflow-y-auto h-full bg-[#0a0a0a] border-r border-white/[0.08]">
+    <GlassSurface
+      blur="regular"
+      radius="md"
+      className="w-[380px] h-full overflow-y-auto border-l-0 border-y-0 rounded-none [--glass-bg:rgba(18,18,18,0.42)] [--glass-border:rgba(255,255,255,0.08)]"
+    >
       <div className="flex flex-col h-full">
         <div className="relative">
           {/* Tab Header */}
-          <div className="sticky top-0 z-10 p-4 bg-[#0a0a0a]">
+          <div className="sticky top-0 z-10 p-4 bg-[rgba(10,10,10,0.20)] backdrop-blur-[12px] border-b border-white/[0.06]">
             <Tabs defaultValue="process" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="process">
+              <TabsList className="grid w-full grid-cols-2 bg-transparent glass-surface [--glass-bg:rgba(18,18,18,0.50)] [--glass-border:rgba(255,255,255,0.08)] [--glass-blur:var(--glass-blur-light)]">
+                <TabsTrigger
+                  value="process"
+                  className="data-[state=active]:bg-white/[0.10] data-[state=active]:text-white data-[state=active]:shadow-none"
+                >
                   Process
                 </TabsTrigger>
-                <TabsTrigger value="owner">
+                <TabsTrigger
+                  value="owner"
+                  className="data-[state=active]:bg-white/[0.10] data-[state=active]:text-white data-[state=active]:shadow-none"
+                >
                   Owner
                 </TabsTrigger>
               </TabsList>
@@ -156,7 +167,7 @@ export function ProcessPanel() {
                   <div className="mt-4">
                     <div className="relative">
                       <Select defaultValue="admission">
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="w-full bg-transparent glass-surface glass-interactive [--glass-bg:rgba(18,18,18,0.52)] [--glass-border:rgba(255,255,255,0.10)] [--glass-blur:var(--glass-blur-light)]">
                           <SelectValue placeholder="Select process" />
                         </SelectTrigger>
                         <SelectContent>
@@ -176,7 +187,7 @@ export function ProcessPanel() {
                       <Accordion type="single" collapsible defaultValue="gbc">
                         <AccordionItem
                           value="gbc"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden glass-surface p-4 mb-3 [--glass-bg:rgba(18,18,18,0.58)] [--glass-border:rgba(255,255,255,0.08)] [--glass-blur:var(--glass-blur-light)]"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
@@ -340,7 +351,7 @@ export function ProcessPanel() {
                         {/* NC Admission - Closed */}
                         <AccordionItem
                           value="nc"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden glass-surface p-4 mb-3 [--glass-bg:rgba(18,18,18,0.58)] [--glass-border:rgba(255,255,255,0.08)] [--glass-blur:var(--glass-blur-light)]"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
@@ -357,7 +368,7 @@ export function ProcessPanel() {
                         {/* BVC Admission - Closed */}
                         <AccordionItem
                           value="bvc"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden glass-surface p-4 mb-3 [--glass-bg:rgba(18,18,18,0.58)] [--glass-border:rgba(255,255,255,0.08)] [--glass-blur:var(--glass-blur-light)]"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
@@ -374,7 +385,7 @@ export function ProcessPanel() {
                         {/* Other schools Admission - Closed */}
                         <AccordionItem
                           value="other"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden glass-surface p-4 mb-3 [--glass-bg:rgba(18,18,18,0.58)] [--glass-border:rgba(255,255,255,0.08)] [--glass-blur:var(--glass-blur-light)]"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
@@ -391,7 +402,7 @@ export function ProcessPanel() {
                         {/* Admission confirmation - Closed */}
                         <AccordionItem
                           value="confirmation"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden glass-surface p-4 mb-3 [--glass-bg:rgba(18,18,18,0.58)] [--glass-border:rgba(255,255,255,0.08)] [--glass-blur:var(--glass-blur-light)]"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
@@ -408,7 +419,7 @@ export function ProcessPanel() {
                         {/* Admission offer status - Closed */}
                         <AccordionItem
                           value="offer-status"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden glass-surface p-4 mb-3 [--glass-bg:rgba(18,18,18,0.58)] [--glass-border:rgba(255,255,255,0.08)] [--glass-blur:var(--glass-blur-light)]"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
@@ -425,7 +436,7 @@ export function ProcessPanel() {
                         {/* Program switch - Closed */}
                         <AccordionItem
                           value="program-switch"
-                          className="border-none rounded-2xl overflow-hidden glass p-4 mb-3"
+                          className="border-none rounded-2xl overflow-hidden glass-surface p-4 mb-3 [--glass-bg:rgba(18,18,18,0.58)] [--glass-border:rgba(255,255,255,0.08)] [--glass-blur:var(--glass-blur-light)]"
                         >
                           <AccordionTrigger className="p-0 hover:no-underline">
                             <div className="flex items-center gap-2">
@@ -453,6 +464,6 @@ export function ProcessPanel() {
           </div>
         </div>
       </div>
-    </div>
+    </GlassSurface>
   )
 }

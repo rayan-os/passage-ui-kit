@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage, GradientAvatar } from "@/components/ui/avatar"
+import { GlassSurface } from "@/components/ui/glass"
 
 interface NavItemProps {
   icon: React.ReactNode
@@ -32,8 +33,8 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
       className={cn(
         "flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-150 relative group",
         active
-          ? "bg-white/[0.12] text-white"
-          : "text-white/55 hover:bg-white/[0.08] hover:text-white/80"
+          ? "bg-white/[0.12] text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+          : "text-white/55 hover:bg-white/[0.08] hover:text-white/85"
       )}
       aria-label={label}
     >
@@ -48,7 +49,7 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
       )}
       {/* Tooltip */}
       {label && (
-        <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-[#1a1a1a] border border-white/[0.12] text-white text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-50 shadow-giga-sm">
+        <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg glass-surface [--glass-bg:rgba(18,18,18,0.70)] [--glass-blur:var(--glass-blur-light)] [--glass-border:var(--glass-border-hairline)] text-white text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-50">
           {label}
         </div>
       )}
@@ -58,7 +59,11 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
 
 export function SidebarNav() {
   return (
-    <div className="w-[64px] bg-[#0a0a0a] flex flex-col h-full border-r border-white/[0.08]">
+    <GlassSurface
+      blur="light"
+      radius="md"
+      className="w-[68px] flex flex-col h-full border-l-0 border-y-0 rounded-none [--glass-bg:rgba(18,18,18,0.44)] [--glass-border:rgba(255,255,255,0.08)]"
+    >
       {/* Top section */}
       <div className="flex flex-col items-center gap-1 p-3">
         {/* Logo */}
@@ -69,9 +74,17 @@ export function SidebarNav() {
         </div>
 
         {/* Search */}
-        <div className="w-10 h-10 flex items-center justify-center bg-[#141414] border border-white/[0.08] rounded-xl shadow-giga-sm hover:border-white/[0.14] transition-all duration-150 cursor-pointer group">
-          <Search className="w-[18px] h-[18px] text-white/55 group-hover:text-white/80 transition-colors" />
-        </div>
+        <GlassSurface
+          variant="interactive"
+          blur="light"
+          radius="md"
+          className="w-10 h-10 flex items-center justify-center cursor-pointer group [--glass-bg:rgba(18,18,18,0.58)] [--glass-border:rgba(255,255,255,0.08)] [--glass-sheen-gradient:var(--glass-sheen-soft)]"
+          role="button"
+          tabIndex={0}
+          aria-label="Search"
+        >
+          <Search className="w-[18px] h-[18px] text-white/55 group-hover:text-white/85 transition-colors" />
+        </GlassSurface>
 
         <div className="w-8 h-px bg-white/[0.08] my-2" />
 
@@ -229,9 +242,13 @@ export function SidebarNav() {
 
         {/* Profile */}
         <div className="w-10 h-10 flex items-center justify-center">
-          <GradientAvatar name="John Doe" size="md" className="ring-2 ring-white/[0.12] ring-offset-2 ring-offset-[#0a0a0a]" />
+          <GradientAvatar
+            name="John Doe"
+            size="md"
+            className="ring-2 ring-white/[0.12] ring-offset-2 ring-offset-[rgba(18,18,18,0.55)]"
+          />
         </div>
       </div>
-    </div>
+    </GlassSurface>
   )
 }
