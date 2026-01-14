@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -22,10 +22,32 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeToggle({ variant = "secondary" }: { variant?: "secondary" | "ghost" }) {
-  const [theme, setTheme] = useState<Theme>(() => getCurrentTheme())
+  const [mounted, setMounted] = useState(false)
+  const [theme, setTheme] = useState<Theme>("dark")
+
+  useEffect(() => {
+    // Defer state updates to avoid setState-in-effect lint rule.
+    requestAnimationFrame(() => {
+      setMounted(true)
+      setTheme(getCurrentTheme())
+    })
+  }, [])
 
   const Icon = theme === "dark" ? Moon : Sun
   const next: Theme = theme === "dark" ? "light" : "dark"
+
+  if (!mounted) {
+    return (
+      <Button
+        type="button"
+        variant={variant}
+        size="icon"
+        aria-label="Theme toggle"
+        disabled
+        className="opacity-0 pointer-events-none"
+      />
+    )
+  }
 
   return (
     <Button

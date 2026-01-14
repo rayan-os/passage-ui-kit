@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 export default function HomePage() {
   return (
@@ -23,9 +24,13 @@ export default function HomePage() {
         </div>
 
         {/* CTA */}
-        <Button asChild className="px-8">
-          <Link href="/admin-panel">Open Admin Panel</Link>
-        </Button>
+        <Link
+          href="/admin-panel"
+          className={cn(buttonVariants({ variant: "default", size: "default" }), "px-8")}
+          prefetch
+        >
+          Open Admin Panel
+        </Link>
       </div>
     </main>
   )
