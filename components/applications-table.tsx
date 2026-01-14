@@ -895,12 +895,191 @@ function CasePanel({
   )
 }
 
+function FiltersPanel({
+  open,
+  onClose,
+  stage,
+  setStage,
+  risk,
+  setRisk,
+  payment,
+  setPayment,
+  onClear,
+}: {
+  open: boolean
+  onClose: () => void
+  stage: string | null
+  setStage: (v: string | null) => void
+  risk: RiskLevel | null
+  setRisk: (v: RiskLevel | null) => void
+  payment: string | null
+  setPayment: (v: string | null) => void
+  onClear: () => void
+}) {
+  if (!open) return null
+
+  const payments = ["Passage loan", "Pay directly to school"] as const
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <div
+        className="absolute inset-0 bg-black/10 dark:bg-black/30 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="absolute right-4 top-4 bottom-4 w-[420px] max-w-[calc(100vw-2rem)] giga-glass rounded-[28px] overflow-hidden">
+        <div className="h-full flex flex-col">
+          <div className="px-5 py-4 border-b border-border bg-card/60 backdrop-blur-xl">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <div className="text-[16px] font-semibold text-foreground">
+                  Filters
+                </div>
+                <div className="text-sm text-foreground/55">
+                  Refine the queue without losing context.
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={onClear}>
+                  Clear all
+                </Button>
+                <Button variant="ghost" size="icon" aria-label="Close" onClick={onClose}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-5 space-y-5 overflow-y-auto">
+            <div className="space-y-2">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                Stage
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setStage(null)}
+                  className={cn(
+                    "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                    stage == null
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                  )}
+                >
+                  All
+                </button>
+                {STAGES.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setStage(s)}
+                    className={cn(
+                      "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                      stage === s
+                        ? "bg-foreground text-background border-foreground"
+                        : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                    )}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                Risk
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRisk(null)}
+                  className={cn(
+                    "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                    risk == null
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                  )}
+                >
+                  All
+                </button>
+                {(["Low", "Medium", "High"] as const).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRisk(r)}
+                    className={cn(
+                      "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                      risk === r
+                        ? "bg-foreground text-background border-foreground"
+                        : cn("border", riskChipTone(r), "hover:bg-foreground/[0.06]")
+                    )}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                Payment
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPayment(null)}
+                  className={cn(
+                    "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                    payment == null
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                  )}
+                >
+                  All
+                </button>
+                {payments.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setPayment(p)}
+                    className={cn(
+                      "h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors",
+                      payment === p
+                        ? "bg-foreground text-background border-foreground"
+                        : "bg-foreground/[0.03] border-border text-foreground/75 hover:bg-foreground/[0.06]"
+                    )}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-card/60 p-4">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+                Tip
+              </div>
+              <div className="mt-2 text-sm text-foreground/55">
+                Click any row to open the right-side case view with full details.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function ApplicationsTable() {
   const [selectedRows, setSelectedRows] = useState<number[]>([])
   const [query, setQuery] = useState("")
   const [density, setDensity] = useState<"compact" | "comfortable">("compact")
   const [stageOverride, setStageOverride] = useState<Record<number, string>>({})
   const [selectedAppId, setSelectedAppId] = useState<number | null>(null)
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const [stageFilter, setStageFilter] = useState<string | null>(null)
+  const [riskFilter, setRiskFilter] = useState<RiskLevel | null>(null)
+  const [paymentFilter, setPaymentFilter] = useState<string | null>(null)
 
   const toggleRow = (id: number) => {
     setSelectedRows((prev) =>
@@ -917,6 +1096,13 @@ export function ApplicationsTable() {
       app.intake.toLowerCase().includes(q) ||
       app.tuitionPaymentType.toLowerCase().includes(q)
     )
+  }).filter((app) => {
+    const stage = stageOverride[app.id] ?? app.progressionLevel
+    if (stageFilter && stage !== stageFilter) return false
+    if (paymentFilter && app.tuitionPaymentType !== paymentFilter) return false
+    const risk = riskFromApp(app)
+    if (riskFilter && risk !== riskFilter) return false
+    return true
   })
 
   const selectedApp = useMemo(() => {
@@ -972,7 +1158,11 @@ export function ApplicationsTable() {
             <ArrowDownZA className="h-4 w-4" />
             <span>Created date</span>
           </Button>
-          <Button variant="secondary" className="gap-2">
+          <Button
+            variant="secondary"
+            className="gap-2"
+            onClick={() => setFiltersOpen(true)}
+          >
             <SlidersHorizontal className="h-4 w-4" />
             <span>Filters</span>
           </Button>
@@ -1250,6 +1440,22 @@ export function ApplicationsTable() {
       </div>
 
       <CasePanel app={selectedApp} open={selectedAppId != null} onClose={() => setSelectedAppId(null)} />
+
+      <FiltersPanel
+        open={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+        stage={stageFilter}
+        setStage={setStageFilter}
+        risk={riskFilter}
+        setRisk={setRiskFilter}
+        payment={paymentFilter}
+        setPayment={setPaymentFilter}
+        onClear={() => {
+          setStageFilter(null)
+          setRiskFilter(null)
+          setPaymentFilter(null)
+        }}
+      />
     </div>
   )
 }

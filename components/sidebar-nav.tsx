@@ -30,10 +30,10 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
       href={href}
       onClick={onClick}
       className={cn(
-        "flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-150 relative group",
+        "flex items-center justify-center w-10 h-10 rounded-full transition-all duration-150 relative group",
         active
-          ? "bg-foreground/[0.10] text-foreground"
-          : "text-foreground/55 hover:bg-foreground/[0.06] hover:text-foreground/80"
+          ? "bg-foreground/[0.10] text-foreground shadow-giga-sm"
+          : "text-foreground/45 hover:bg-foreground/[0.06] hover:text-foreground/75"
       )}
       aria-label={label}
     >
@@ -41,14 +41,14 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
       {badge && (
         <span
           className="absolute -top-0.5 -right-1 text-[9px] font-bold tracking-tight"
-          style={{ color: badgeColor || "#ff6b35" }}
+          style={{ color: badgeColor || "hsl(var(--ring))" }}
         >
           {badge}
         </span>
       )}
       {/* Tooltip */}
       {label && (
-        <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-popover border border-border text-popover-foreground text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-50 shadow-giga-sm">
+        <div className="absolute left-full ml-3 px-2.5 py-1.5 rounded-lg bg-popover/80 border border-border text-popover-foreground text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150 z-50 shadow-giga-sm backdrop-blur-xl">
           {label}
         </div>
       )}
@@ -58,22 +58,20 @@ function NavItem({ icon, label, active, badge, badgeColor, href = "#", onClick }
 
 export function SidebarNav() {
   return (
-    <div className="w-[64px] giga-glass flex flex-col h-full border-r border-border">
+    <div className="w-[72px] giga-glass flex flex-col h-full">
       {/* Top section */}
-      <div className="flex flex-col items-center gap-1 p-3">
+      <div className="flex flex-col items-center gap-1 p-4">
         {/* Logo */}
-        <div className="w-10 h-10 flex items-center justify-center mb-3">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[rgba(197,204,195,0.95)] to-[rgba(168,176,165,0.35)] flex items-center justify-center text-[#0a0a0a] text-sm font-bold shadow-giga-sm">
+        <div className="w-10 h-10 flex items-center justify-center mb-2">
+          <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[rgba(197,204,195,0.95)] to-[rgba(168,176,165,0.35)] flex items-center justify-center text-[#0a0a0a] text-sm font-bold shadow-giga-sm ring-1 ring-white/10">
             P
           </div>
         </div>
 
         {/* Search */}
-        <div className="w-10 h-10 flex items-center justify-center bg-card/70 border border-border rounded-xl shadow-giga-sm hover:border-foreground/[0.16] transition-all duration-150 cursor-pointer group">
-          <Search className="w-[18px] h-[18px] text-foreground/55 group-hover:text-foreground/80 transition-colors" />
-        </div>
+        <NavItem icon={<Search className="w-5 h-5" />} label="Search" />
 
-        <div className="w-8 h-px bg-border my-2" />
+        <div className="w-10 h-px bg-border my-2 opacity-70" />
 
         {/* Dashboard */}
         <NavItem
@@ -118,7 +116,7 @@ export function SidebarNav() {
           label="Internal Tasks"
         />
 
-        <div className="w-8 h-px bg-border my-2" />
+        <div className="w-10 h-px bg-border my-2 opacity-70" />
 
         {/* Funnel Health Tracker */}
         <NavItem
@@ -214,13 +212,13 @@ export function SidebarNav() {
 
         {/* Alert */}
         <NavItem
-          icon={<ShieldAlert className="w-5 h-5 text-[#ff6b35]" />}
+          icon={<ShieldAlert className="w-5 h-5" />}
           label="Alerts"
         />
       </div>
 
       {/* Bottom section */}
-      <div className="mt-auto flex flex-col items-center gap-1 p-3 border-t border-border">
+      <div className="mt-auto flex flex-col items-center gap-2 p-4 border-t border-border/70">
         {/* Refresh */}
         <NavItem
           icon={<RefreshCw className="w-5 h-5" />}

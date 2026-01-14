@@ -43,7 +43,7 @@ function ProcessItem({
   return (
     <div
       className={cn(
-        "flex items-center py-2.5 px-3 rounded-xl cursor-pointer transition-all duration-150 group",
+        "flex items-center py-2 px-3 rounded-xl cursor-pointer transition-all duration-150 group",
         isActive 
           ? "bg-foreground/[0.06] border border-border" 
           : "hover:bg-foreground/[0.04] border border-transparent"
@@ -51,7 +51,7 @@ function ProcessItem({
       onClick={onClick}
     >
       <div
-        className="flex-shrink-0 w-1.5 h-4 mr-3 rounded-full"
+        className="flex-shrink-0 w-1 h-6 mr-3 rounded-full opacity-80"
         style={{ backgroundColor: color }}
       />
       <div className="flex items-center justify-between w-full">
