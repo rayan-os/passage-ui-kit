@@ -10,12 +10,12 @@ type ChipTone = "sage" | "blue" | "purple"
 function toneVars(t: ChipTone) {
   switch (t) {
     case "blue":
-      return "[--glass-tint:rgba(59,130,246,0.12)] [--glass-border:rgba(59,130,246,0.22)]"
+      return "[--glass-tint:rgba(59,130,246,0.14)] [--glass-border:rgba(59,130,246,0.24)]"
     case "purple":
-      return "[--glass-tint:rgba(165,110,255,0.12)] [--glass-border:rgba(165,110,255,0.22)]"
+      return "[--glass-tint:rgba(165,110,255,0.14)] [--glass-border:rgba(165,110,255,0.24)]"
     case "sage":
     default:
-      return "[--glass-tint:rgba(197,204,195,0.12)] [--glass-border:rgba(197,204,195,0.22)]"
+      return "[--glass-tint:rgba(197,204,195,0.14)] [--glass-border:rgba(197,204,195,0.24)]"
   }
 }
 
@@ -46,6 +46,7 @@ export function AgentPrompts({
       <div className="mt-2 flex flex-wrap gap-2">
         {agents.map((a) => {
           const selected = a.id === selectedAgentId
+          const isActive = selected || a.status === "active"
           return (
             <button key={a.id} type="button" onClick={() => onSelectAgent(a.id)}>
               <GlassSurface
@@ -65,8 +66,16 @@ export function AgentPrompts({
                 <span className="w-6 h-6 rounded-xl bg-white/[0.08] border border-white/[0.12] flex items-center justify-center text-[11px] font-bold text-white/80">
                   {a.initials}
                 </span>
+                <span
+                  className={cn(
+                    "w-1.5 h-1.5 rounded-full",
+                    isActive ? "bg-[#ff6b35]" : "bg-white/25"
+                  )}
+                  aria-hidden="true"
+                />
                 <span>{a.name}</span>
                 <span className="text-white/45 font-medium">{a.role}</span>
+                {selected && <span className="ml-0.5 text-white/60 font-medium">Active</span>}
               </GlassSurface>
             </button>
           )

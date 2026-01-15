@@ -1,14 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { FileUp, Mic, Send, ShieldCheck, Sparkles } from "lucide-react"
+import { Clock3, DollarSign, FileUp, GraduationCap, MapPin, Mic, Send } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { GlassSurface } from "@/components/ui/glass"
 import type { Agent } from "@/components/assistant/types"
 import { AgentPrompts } from "@/components/assistant/agent-prompts"
 
 type QuickAction = {
-  id: "upload" | "kyc" | "voice" | "summary"
+  id: "programs" | "province" | "tuition" | "timeline" | "upload" | "voice"
   label: string
   icon: React.ReactNode
   agentId: Agent["id"]
@@ -17,6 +17,34 @@ type QuickAction = {
 
 const actions: QuickAction[] = [
   {
+    id: "programs",
+    label: "Find programs",
+    icon: <GraduationCap className="h-4 w-4" />,
+    agentId: "jackie",
+    prompt: "What programs can I study for May 2026? Please suggest options that fit my profile.",
+  },
+  {
+    id: "province",
+    label: "Pick a province",
+    icon: <MapPin className="h-4 w-4" />,
+    agentId: "jackie",
+    prompt: "Which province should I study in and why? Compare costs, job market, and timelines.",
+  },
+  {
+    id: "tuition",
+    label: "Tuition & payment",
+    icon: <DollarSign className="h-4 w-4" />,
+    agentId: "jackie",
+    prompt: "Help me understand tuition, payment options, and what fees to expect end-to-end.",
+  },
+  {
+    id: "timeline",
+    label: "LOA timeline",
+    icon: <Clock3 className="h-4 w-4" />,
+    agentId: "david",
+    prompt: "What’s the LOA timeline for my case and what can speed it up?",
+  },
+  {
     id: "upload",
     label: "Upload doc",
     icon: <FileUp className="h-4 w-4" />,
@@ -24,25 +52,11 @@ const actions: QuickAction[] = [
     prompt: "I’m uploading my passport + proof of funds. Please validate and flag issues.",
   },
   {
-    id: "kyc",
-    label: "Start KYC",
-    icon: <ShieldCheck className="h-4 w-4" />,
-    agentId: "david",
-    prompt: "Start KYC now and tell me what you need from me.",
-  },
-  {
     id: "voice",
     label: "Call agent",
     icon: <Mic className="h-4 w-4" />,
     agentId: "ella",
     prompt: "Start a live interview for assessment (voice).",
-  },
-  {
-    id: "summary",
-    label: "Summarize case",
-    icon: <Sparkles className="h-4 w-4" />,
-    agentId: "jackie",
-    prompt: "Summarize this case and list the next 3 actions to get LOA issued.",
   },
 ]
 

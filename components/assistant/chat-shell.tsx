@@ -258,43 +258,12 @@ export function ChatShell() {
                 "[--glass-bg:rgba(18,18,18,0.44)] [--glass-border:rgba(255,255,255,0.12)]"
               )}
             >
-              <div className="px-5 py-4 border-b border-white/[0.08]">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <div className="text-[14px] font-semibold text-white tracking-tight">Chat</div>
-                      <div className="text-[11px] font-mono text-white/35">PA-10428</div>
-                    </div>
-                    <div className="mt-1 text-[12px] text-white/50">
-                      Next message routes to{" "}
-                      <span className="text-white/80 font-semibold">
-                        {agentsById[selectedAgentId].name}
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setTraceOpen((v) => !v)}
-                    className={cn(
-                      "glass-surface glass-interactive",
-                      "[--glass-bg:rgba(18,18,18,0.40)] [--glass-border:rgba(255,255,255,0.10)] [--glass-blur:var(--glass-blur-light)]",
-                      "h-9 px-3",
-                      "[border-radius:var(--glass-radius-capsule)]",
-                      "text-[12px] font-semibold text-white/75 hover:text-white"
-                    )}
-                    aria-pressed={traceOpen}
-                  >
-                    {traceOpen ? "Hide trace" : "Trace"}
-                  </button>
-                </div>
-              </div>
-
               <WorkflowTrace
                 steps={trace}
                 agentsById={agentsById}
                 open={traceOpen}
                 onOpenChange={setTraceOpen}
+                compact
               />
 
               <MessageList

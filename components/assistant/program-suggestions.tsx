@@ -48,6 +48,29 @@ function toneVars(t: Program["tone"]) {
   }
 }
 
+function thumbStyle(tone: Program["tone"], seed: number): React.CSSProperties {
+  const a = seed % 3
+  const c1 =
+    tone === "blue" ? "rgba(59,130,246,0.55)" : tone === "purple" ? "rgba(165,110,255,0.55)" : "rgba(197,204,195,0.55)"
+  const c2 =
+    tone === "blue" ? "rgba(34,211,238,0.40)" : tone === "purple" ? "rgba(59,130,246,0.40)" : "rgba(245,158,11,0.35)"
+  const c3 = "rgba(255,255,255,0.10)"
+
+  const x1 = a === 0 ? "18%" : a === 1 ? "72%" : "42%"
+  const y1 = a === 0 ? "22%" : a === 1 ? "18%" : "78%"
+  const x2 = a === 0 ? "78%" : a === 1 ? "24%" : "64%"
+  const y2 = a === 0 ? "74%" : a === 1 ? "66%" : "22%"
+
+  return {
+    backgroundImage: [
+      `radial-gradient(120px 90px at ${x1} ${y1}, ${c1}, rgba(0,0,0,0) 68%)`,
+      `radial-gradient(140px 110px at ${x2} ${y2}, ${c2}, rgba(0,0,0,0) 70%)`,
+      `linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))`,
+    ].join(", "),
+    backgroundBlendMode: "screen, screen, normal",
+  }
+}
+
 function Tag({ children }: { children: React.ReactNode }) {
   return (
     <span className="inline-flex items-center rounded-full bg-white/[0.06] border border-white/[0.10] px-2 py-0.5 text-[10px] text-white/70">
@@ -67,7 +90,7 @@ export function ProgramSuggestions() {
       </div>
 
       <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {demoPrograms.map((p) => (
+        {demoPrograms.map((p, idx) => (
           <GlassSurface
             key={p.title}
             variant="interactive"
@@ -79,7 +102,13 @@ export function ProgramSuggestions() {
               toneVars(p.tone)
             )}
           >
-            <div className="h-16 rounded-xl bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/[0.08]" />
+            <div
+              className="h-20 rounded-xl border border-white/[0.10] overflow-hidden relative"
+              style={thumbStyle(p.tone, idx)}
+            >
+              <div className="absolute inset-0 opacity-30 noise-overlay" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/[0.22] via-transparent to-transparent" />
+            </div>
             <div className="mt-3">
               <div className="text-[12px] font-semibold text-white/90 leading-5 line-clamp-2">
                 {p.title}

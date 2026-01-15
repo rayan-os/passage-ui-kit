@@ -16,33 +16,35 @@ export function WorkflowTrace({
   agentsById,
   open,
   onOpenChange,
+  compact = false,
 }: {
   steps: WorkflowStep[]
   agentsById: Record<Agent["id"], Agent>
   open: boolean
   onOpenChange: (open: boolean) => void
+  compact?: boolean
 }) {
   return (
-    <div className="px-5 pt-4">
+    <div className={cn(compact ? "px-5 pt-3" : "px-5 pt-4")}>
       <button
         type="button"
         onClick={() => onOpenChange(!open)}
         className={cn(
-          "w-full flex items-center justify-between",
-          "text-left",
-          "text-[11px] font-semibold uppercase tracking-[0.12em]",
-          "text-white/55 hover:text-white/75 transition-colors"
+          compact ? "inline-flex items-center gap-2" : "w-full flex items-center justify-between",
+          compact ? "text-[12px] font-semibold" : "text-[11px] font-semibold uppercase tracking-[0.12em]",
+          compact ? "text-white/70 hover:text-white" : "text-white/55 hover:text-white/75",
+          "transition-colors"
         )}
         aria-expanded={open}
       >
-        <span>Workflow trace</span>
+        <span>{compact ? "Trace" : "Workflow trace"}</span>
         {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
       </button>
 
       {open && (
         <GlassSurface
           blur="light"
-          radius="lg"
+          radius={compact ? "md" : "lg"}
           className={cn(
             "mt-3 p-3",
             "[--glass-bg:rgba(18,18,18,0.44)] [--glass-border:rgba(255,255,255,0.10)]"
