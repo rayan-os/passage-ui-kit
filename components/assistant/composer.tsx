@@ -1,14 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { Clock3, DollarSign, FileUp, GraduationCap, MapPin, Mic, Send } from "lucide-react"
+import { DollarSign, GraduationCap, MapPin, Send } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { GlassSurface } from "@/components/ui/glass"
 import type { Agent } from "@/components/assistant/types"
 import { AgentPrompts } from "@/components/assistant/agent-prompts"
 
 type QuickAction = {
-  id: "programs" | "province" | "tuition" | "timeline" | "upload" | "voice"
+  id: "programs" | "province" | "tuition"
   label: string
   icon: React.ReactNode
   agentId: Agent["id"]
@@ -36,27 +36,6 @@ const actions: QuickAction[] = [
     icon: <DollarSign className="h-4 w-4" />,
     agentId: "jackie",
     prompt: "Help me understand tuition, payment options, and what fees to expect end-to-end.",
-  },
-  {
-    id: "timeline",
-    label: "LOA timeline",
-    icon: <Clock3 className="h-4 w-4" />,
-    agentId: "david",
-    prompt: "What’s the LOA timeline for my case and what can speed it up?",
-  },
-  {
-    id: "upload",
-    label: "Upload doc",
-    icon: <FileUp className="h-4 w-4" />,
-    agentId: "david",
-    prompt: "I’m uploading my passport + proof of funds. Please validate and flag issues.",
-  },
-  {
-    id: "voice",
-    label: "Call agent",
-    icon: <Mic className="h-4 w-4" />,
-    agentId: "ella",
-    prompt: "Start a live interview for assessment (voice).",
   },
 ]
 
@@ -157,10 +136,6 @@ export function Composer({
             onClick={() => onQuickAction(a.agentId, a.prompt)}
           />
         ))}
-      </div>
-
-      <div className="mt-2 text-[10px] text-white/35">
-        Press Enter to send · Click an agent to route the next message
       </div>
     </div>
   )

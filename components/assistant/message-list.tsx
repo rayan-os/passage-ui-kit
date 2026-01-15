@@ -25,8 +25,8 @@ export function MessageList({
       {messages.map((m) => (
         <MessageBubble key={m.id} message={m} agentsById={agentsById} />
       ))}
-      {showProgramSuggestions && <ProgramSuggestions />}
       <div ref={endRef} />
+      {showProgramSuggestions && <ProgramSuggestions />}
     </div>
   )
 }

@@ -14,17 +14,17 @@ export function AgentPrompts({
   selectedAgentId: Agent["id"]
   onSelectAgent: (id: Agent["id"]) => void
 }) {
+  const sorted = React.useMemo(() => {
+    const priority: Agent["id"][] = ["jackie", "david", "ella"]
+    const score = (id: Agent["id"]) =>
+      id === selectedAgentId ? -10 : priority.indexOf(id) === -1 ? 999 : priority.indexOf(id)
+    return [...agents].sort((a, b) => score(a.id) - score(b.id))
+  }, [agents, selectedAgentId])
+
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/55">
-          Agents
-        </div>
-        <div className="text-[11px] text-white/40">Choose who replies next</div>
-      </div>
-
-      <div className="mt-2 flex flex-wrap gap-2">
-        {agents.map((a) => {
+      <div className="flex flex-wrap gap-2">
+        {sorted.map((a) => {
           const selected = a.id === selectedAgentId
           const isActive = selected
           return (
@@ -42,9 +42,6 @@ export function AgentPrompts({
                     : "text-white/80"
                 )}
               >
-                <span className="w-6 h-6 rounded-xl bg-white/[0.08] border border-white/[0.12] flex items-center justify-center text-[11px] font-bold text-white/80">
-                  {a.initials}
-                </span>
                 <span
                   className={cn(
                     "w-1.5 h-1.5 rounded-full",
@@ -54,7 +51,6 @@ export function AgentPrompts({
                 />
                 <span>{a.name}</span>
                 <span className="text-white/45 font-medium">{a.role}</span>
-                {selected && <span className="ml-0.5 text-white/60 font-medium">Active</span>}
               </GlassSurface>
             </button>
           )
