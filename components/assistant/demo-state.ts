@@ -15,9 +15,9 @@ export const demoAgents: Agent[] = [
     name: "David",
     role: "Processor",
     initials: "D",
-    status: "working",
-    statusText: "running KYC",
-    lastAction: "validated identity docs",
+    status: "waiting",
+    statusText: "reviewing documents",
+    lastAction: "checking transcripts + finances",
   },
   {
     id: "ella",
@@ -33,49 +33,49 @@ export const demoAgents: Agent[] = [
 export const demoMessages: ChatMessage[] = [
   {
     id: "m1",
-    type: "agent",
-    agentId: "jackie",
-    text:
-      "I can help you get admitted faster. Tell me your program + intake, and I’ll line up the next steps.",
-    createdAt: Date.now() - 1000 * 60 * 6,
-  },
-  {
-    id: "m2",
     type: "user",
-    text: "May 2026 intake. What’s blocking LOA for my application?",
+    text: "Where can I study Computer Science?",
     routedTo: "jackie",
     createdAt: Date.now() - 1000 * 60 * 5,
   },
   {
-    id: "m3",
+    id: "m2",
     type: "agent",
-    agentId: "david",
+    agentId: "jackie",
     text:
-      "KYC is still processing. I’m checking document integrity and matching your identity details across sources now.",
+      "Here are a few strong CS-adjacent options based on typical admission paths. Tell me your intake (e.g. May/Sep) + your budget, and I’ll narrow it down to the best 3.",
     createdAt: Date.now() - 1000 * 60 * 4,
+  },
+  {
+    id: "m3",
+    type: "user",
+    text:
+      "I’m in Ontario. I want something practical and affordable.",
+    routedTo: "jackie",
+    createdAt: Date.now() - 1000 * 60 * 3,
   },
   {
     id: "m4",
     type: "agent",
     agentId: "jackie",
     text:
-      "While David verifies KYC, I’ll prep your LOA packet: ensure tuition payment type is set and the school’s LOA template is selected.",
-    createdAt: Date.now() - 1000 * 60 * 3,
+      "Perfect. I’ll prioritize Ontario programs with strong outcomes and manageable tuition. If you share your highest completed education level, I’ll match the right level (diploma vs BSc vs PG).",
+    createdAt: Date.now() - 1000 * 60 * 2,
   },
   {
     id: "m5",
     type: "user",
-    text: "Ok. Can we escalate if KYC takes more than a day?",
-    routedTo: "jackie",
-    createdAt: Date.now() - 1000 * 60 * 2,
+    text: "Also—can Passage help with tuition payment options?",
+    routedTo: "david",
+    createdAt: Date.now() - 1000 * 60 * 1,
   },
   {
     id: "m6",
     type: "agent",
-    agentId: "jackie",
+    agentId: "david",
     text:
-      "Yes. If KYC exceeds 24h, I’ll flag this as escalated and route it for manual review. In the meantime, I’ll verify LOA prerequisites so we’re ready the moment KYC clears.",
-    createdAt: Date.now() - 1000 * 60 * 1,
+      "Yes. We can break down the total cost, expected fees, and payment options. If you share your target school/program, I’ll estimate tuition and key deadlines.",
+    createdAt: Date.now(),
   },
 ]
 
@@ -84,19 +84,19 @@ export const demoTrace: WorkflowStep[] = [
     id: "w1",
     createdAt: Date.now() - 1000 * 60 * 6,
     agentId: "jackie",
-    label: "Intake triage: parsed program + intake window",
+    label: "Intent: identified Computer Science goal",
   },
   {
     id: "w2",
     createdAt: Date.now() - 1000 * 60 * 4,
-    agentId: "david",
-    label: "KYC started: OCR + identity match",
+    agentId: "jackie",
+    label: "Search: shortlisted programs + schools",
   },
   {
     id: "w3",
     createdAt: Date.now() - 1000 * 60 * 3,
     agentId: "jackie",
-    label: "LOA packet: verified tuition payment + template",
+    label: "Refine: filtered by province + affordability",
   },
 ]
 

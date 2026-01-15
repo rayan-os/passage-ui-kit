@@ -89,7 +89,7 @@ export function ProgramSuggestions() {
         <div className="text-[11px] text-white/40">{demoPrograms.length} results</div>
       </div>
 
-      <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {demoPrograms.map((p, idx) => (
           <GlassSurface
             key={p.title}

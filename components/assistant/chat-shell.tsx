@@ -31,7 +31,7 @@ function nextAgentReply(agentId: Agent["id"], userText: string): string {
       return "Let’s do a quick assessment. What’s your highest completed education level and your target program?"
     case "jackie":
     default:
-      return "Here’s the fastest path: confirm intake + program, verify KYC status, then align LOA requirements with the school’s template. Tell me what you’ve uploaded so far."
+      return "Here’s the fastest path: confirm intake + program, verify your document set, then align LOA requirements with the school’s template. Tell me what you’ve uploaded so far."
   }
 }
 
@@ -145,7 +145,7 @@ export function ChatShell() {
       <main className={cn("min-h-screen relative", theme === "dark" ? "liquid-bg" : "liquid-bg-soft")}>
         <div className="pointer-events-none absolute inset-0 noise-overlay" />
 
-        <div className="mx-auto w-full max-w-[980px] px-4 md:px-6 py-6 md:py-8">
+        <div className="mx-auto w-full max-w-[880px] px-4 md:px-6 py-6 md:py-8">
           {/* Minimal top row */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

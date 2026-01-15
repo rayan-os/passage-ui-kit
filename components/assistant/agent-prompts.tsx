@@ -5,26 +5,6 @@ import { cn } from "@/lib/utils"
 import { GlassSurface } from "@/components/ui/glass"
 import type { Agent } from "@/components/assistant/types"
 
-type ChipTone = "sage" | "blue" | "purple"
-
-function toneVars(t: ChipTone) {
-  switch (t) {
-    case "blue":
-      return "[--glass-tint:rgba(59,130,246,0.14)] [--glass-border:rgba(59,130,246,0.24)]"
-    case "purple":
-      return "[--glass-tint:rgba(165,110,255,0.14)] [--glass-border:rgba(165,110,255,0.24)]"
-    case "sage":
-    default:
-      return "[--glass-tint:rgba(197,204,195,0.14)] [--glass-border:rgba(197,204,195,0.24)]"
-  }
-}
-
-const agentTone: Record<Agent["id"], ChipTone> = {
-  jackie: "sage",
-  david: "blue",
-  ella: "purple",
-}
-
 export function AgentPrompts({
   agents,
   selectedAgentId,
@@ -46,7 +26,7 @@ export function AgentPrompts({
       <div className="mt-2 flex flex-wrap gap-2">
         {agents.map((a) => {
           const selected = a.id === selectedAgentId
-          const isActive = selected || a.status === "active"
+          const isActive = selected
           return (
             <button key={a.id} type="button" onClick={() => onSelectAgent(a.id)}>
               <GlassSurface
@@ -56,8 +36,7 @@ export function AgentPrompts({
                 className={cn(
                   "h-9 px-3 inline-flex items-center gap-2",
                   "text-[12px] font-semibold",
-                  "[--glass-bg:rgba(18,18,18,0.46)]",
-                  toneVars(agentTone[a.id]),
+                  "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)] [--glass-tint:rgba(255,255,255,0.03)]",
                   selected
                     ? "text-white shadow-[0_0_0_1px_rgba(255,255,255,0.10),0_18px_60px_rgba(0,0,0,0.55)]"
                     : "text-white/80"
@@ -69,7 +48,7 @@ export function AgentPrompts({
                 <span
                   className={cn(
                     "w-1.5 h-1.5 rounded-full",
-                    isActive ? "bg-[#ff6b35]" : "bg-white/25"
+                    isActive ? "bg-[#ff6b35]" : "bg-red-400"
                   )}
                   aria-hidden="true"
                 />
