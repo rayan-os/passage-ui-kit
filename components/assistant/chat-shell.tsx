@@ -160,8 +160,8 @@ export function ChatShell() {
                 "[--glass-bg:rgba(18,18,18,0.44)] [--glass-border:rgba(255,255,255,0.12)]"
               )}
             >
-              {/* Active agent (top-left) */}
-              <div className="px-5 pt-4 pb-2">
+              {/* Active agent (top-left) + inactive agents (top-right) */}
+              <div className="px-5 pt-4 pb-2 flex items-center justify-between gap-3">
                 <GlassSurface
                   blur="light"
                   radius="capsule"
@@ -176,6 +176,28 @@ export function ChatShell() {
                   <span>{agentsById[selectedAgentId].name}</span>
                   <span className="text-white/45 font-medium">{agentsById[selectedAgentId].role}</span>
                 </GlassSurface>
+
+                <div className="flex items-center gap-2">
+                  {(["jackie", "david", "ella"] as const)
+                    .filter((id) => id !== selectedAgentId)
+                    .map((id) => (
+                      <button key={id} type="button" onClick={() => setSelectedAgentId(id)}>
+                        <GlassSurface
+                          variant="interactive"
+                          blur="light"
+                          radius="capsule"
+                          className={cn(
+                            "h-9 px-3 inline-flex items-center gap-2",
+                            "text-[12px] font-semibold text-white/80",
+                            "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)] [--glass-tint:rgba(255,255,255,0.03)]"
+                          )}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-400" aria-hidden="true" />
+                          <span>{agentsById[id].name}</span>
+                        </GlassSurface>
+                      </button>
+                    ))}
+                </div>
               </div>
 
               <MessageList messages={messages} agentsById={agentsById} showProgramSuggestions={showPrograms} />
@@ -185,9 +207,6 @@ export function ChatShell() {
                 onChange={setValue}
                 onSend={send}
                 onQuickAction={onQuickAction}
-                agents={agents}
-                selectedAgentId={selectedAgentId}
-                onSelectAgent={setSelectedAgentId}
               />
             </GlassSurface>
           </div>
