@@ -30,7 +30,7 @@ export default function HomePage() {
             Open Admin Panel
           </Link>
           <Link
-            href="/assistant"
+            href="/chat"
             className="inline-flex items-center justify-center px-8 py-3 bg-white/[0.08] text-white border border-white/[0.12] font-semibold rounded-full hover:bg-white/[0.12] hover:border-white/[0.14] transition-colors"
           >
             Open AI Chat
