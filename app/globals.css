@@ -144,6 +144,15 @@
       linear-gradient(180deg, #eef0f6 0%, #f5f6fa 45%, #eef0f6 100%);
   }
 
+  /* Subtle noise overlay (use sparingly) */
+  .noise-overlay {
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.06) 1px, rgba(255, 255, 255, 0) 1px);
+    background-size: 4px 4px;
+    opacity: 0.25;
+    mix-blend-mode: overlay;
+  }
+
   /* Core glass surface */
   .glass-surface {
     --glass-blur: var(--glass-blur-regular);
