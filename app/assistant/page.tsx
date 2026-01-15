@@ -1,38 +1,27 @@
 "use client"
 
 import * as React from "react"
-import { ArrowLeft, Paperclip, Send, Sparkles, ThumbsUp } from "lucide-react"
+import { ArrowLeft, Paperclip, Send, Smile, ThumbsUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { GlassSurface } from "@/components/ui/glass"
 
 type Msg = { id: string; role: "assistant" | "user"; text: string }
 
-const initial: Msg[] = [
+const thread: Msg[] = [
+  { id: "u1", role: "user", text: "hi" },
   {
     id: "a1",
     role: "assistant",
     text:
-      "Hello! I’m Passage AI. I can help you navigate applications, definitions, and next steps.\n\nWhat can I help with today?",
+      "Can you change the date of your reservation for up to seven days in advance? Go to “Your Reservations”, select the relevant one, choose “Change Details”, enter a new date, and click “Confirm”.",
   },
-  { id: "u1", role: "user", text: "hi" },
-  {
-    id: "a2",
-    role: "assistant",
-    text:
-      "Can you clarify what you mean by “add flights”?\n\nSource\nChanging your reservation date →",
-  },
-]
-
-const programs = [
-  { title: "Computer Programming", meta: ["Niagara College", "Diploma", "2 years"] },
-  { title: "Computer Science (BSc)", meta: ["Vancouver Island University", "Undergraduate", "4 years"] },
-  { title: "Bachelor of CS", meta: ["Seneca Polytechnic", "Undergraduate", "3 years"] },
-  { title: "Data Science", meta: ["George Brown", "Postgraduate", "1 year"] },
+  { id: "u2", role: "user", text: "I do! I’d like to add flights." },
+  { id: "a2", role: "assistant", text: "Can you clarify what you mean by “add flights”?" },
 ]
 
 function PassageMark() {
   return (
-    <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[rgba(197,204,195,0.95)] to-[rgba(168,176,165,0.35)] flex items-center justify-center text-[#0a0a0a] text-sm font-bold shadow-[0_14px_40px_rgba(0,0,0,0.12)]">
+    <div className="w-8 h-8 rounded-[14px] bg-gradient-to-br from-[rgba(197,204,195,0.95)] to-[rgba(168,176,165,0.35)] flex items-center justify-center text-[#0a0a0a] text-[12px] font-bold shadow-[0_10px_30px_rgba(0,0,0,0.10)]">
       P
     </div>
   )
@@ -41,26 +30,34 @@ function PassageMark() {
 function Bubble({ role, text }: { role: Msg["role"]; text: string }) {
   const isUser = role === "user"
   return (
-    <div className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}>
-      <GlassSurface
-        blur="light"
-        radius="lg"
-        className={cn(
-          "max-w-[78%] px-4 py-3",
-          "text-[13px] leading-5 whitespace-pre-line",
-          isUser
-            ? "bg-[rgba(59,130,246,0.18)] text-black/80 [--glass-bg:rgba(59,130,246,0.20)] [--glass-border:rgba(59,130,246,0.28)]"
-            : "bg-[rgba(255,255,255,0.62)] text-black/75 [--glass-bg:rgba(255,255,255,0.64)] [--glass-border:rgba(0,0,0,0.06)]"
-        )}
-      >
-        {text}
-      </GlassSurface>
+    <div className={cn("flex w-full items-end gap-2", isUser ? "justify-end" : "justify-start")}>
+      {!isUser && (
+        <div className="shrink-0">
+          <PassageMark />
+        </div>
+      )}
+      <div className={cn("max-w-[78%]", isUser && "max-w-[72%]")}>
+        <GlassSurface
+          blur="light"
+          radius="lg"
+          className={cn(
+            "px-4 py-3",
+            "text-[13px] leading-5 text-black/75",
+            "shadow-[0_12px_40px_rgba(0,0,0,0.08)]",
+            isUser
+              ? "[--glass-bg:rgba(59,130,246,0.86)] [--glass-border:rgba(59,130,246,0.22)] text-white"
+              : "[--glass-bg:rgba(255,255,255,0.72)] [--glass-border:rgba(0,0,0,0.06)]"
+          )}
+        >
+          {text}
+        </GlassSurface>
+      </div>
     </div>
   )
 }
 
 export default function AssistantPage() {
-  const [messages, setMessages] = React.useState<Msg[]>(initial)
+  const [messages, setMessages] = React.useState<Msg[]>(thread)
   const [value, setValue] = React.useState("")
 
   const send = () => {
@@ -76,22 +73,26 @@ export default function AssistantPage() {
         blur="heavy"
         radius="lg"
         className={cn(
-          "w-full max-w-[520px] h-[760px] overflow-hidden",
+          "w-full max-w-[420px] h-[780px] overflow-hidden",
           "flex flex-col",
-          "[--glass-bg:rgba(255,255,255,0.55)] [--glass-border:rgba(0,0,0,0.08)]",
-          "shadow-[0_40px_120px_rgba(0,0,0,0.22)]"
+          "[--glass-bg:rgba(255,255,255,0.82)] [--glass-border:rgba(0,0,0,0.10)]",
+          "shadow-[0_50px_140px_rgba(0,0,0,0.20)]"
         )}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-black/[0.06]">
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-black/[0.06]">
           <button
             type="button"
-            className="w-9 h-9 rounded-2xl flex items-center justify-center text-black/60 hover:text-black hover:bg-black/[0.05] transition-colors"
+            className="w-9 h-9 rounded-2xl flex items-center justify-center text-black/55 hover:text-black hover:bg-black/[0.05] transition-colors"
             aria-label="Back"
           >
             <ArrowLeft className="h-4 w-4" />
           </button>
-          <PassageMark />
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-2xl bg-black flex items-center justify-center text-white text-[12px] font-bold">
+              P
+            </div>
+          </div>
           <div className="flex-1 leading-tight">
             <div className="flex items-center gap-2">
               <div className="text-[13px] font-semibold text-black/80">Passage AI</div>
@@ -107,96 +108,81 @@ export default function AssistantPage() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 min-h-0 overflow-y-auto px-5 py-5 space-y-3">
-          <Bubble role="assistant" text={messages[0].text} />
-          <Bubble role="user" text={messages[1].text} />
-
-          <div className="flex w-full justify-start">
+        <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-3">
+          {/* Answer card (matches reference layout) */}
+          <div className="flex w-full justify-start items-start gap-2">
+            <div className="shrink-0 pt-1">
+              <PassageMark />
+            </div>
             <GlassSurface
               blur="light"
               radius="lg"
-              className="w-full px-4 py-3 [--glass-bg:rgba(255,255,255,0.64)] [--glass-border:rgba(0,0,0,0.06)]"
+              className={cn(
+                "w-full px-4 py-3",
+                "[--glass-bg:rgba(255,255,255,0.76)] [--glass-border:rgba(0,0,0,0.06)]",
+                "shadow-[0_18px_60px_rgba(0,0,0,0.10)]"
+              )}
             >
-              <div className="text-[13px] leading-5 text-black/75 whitespace-pre-line">
-                Yes, you can change the date of your reservation for up to seven days in advance…
+              <div className="text-[13px] leading-5 text-black/70">
+                Yes, you can change the date of your reservation for up to seven days in advance.
+                To do this, go to “Your Reservations”, select the relevant one, then go to “Change
+                Details” and enter a new date. Finally, click “Confirm”.
               </div>
               <div className="mt-3">
                 <div className="text-[11px] font-semibold text-black/40">Source</div>
-                <div className="mt-1 text-[12px] text-black/55 underline decoration-black/20 underline-offset-4">
+                <div className="mt-1 text-[12px] text-black/45 underline decoration-black/20 underline-offset-4">
                   Changing your reservation date →
                 </div>
               </div>
               <div className="mt-3 flex items-center justify-between">
-                <div className="text-[11px] text-black/40">Answer</div>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(59,130,246,0.16)] text-[11px] font-semibold text-black/70 hover:bg-[rgba(59,130,246,0.22)] transition-colors"
-                >
-                  <ThumbsUp className="h-3.5 w-3.5" />
-                  That helped
-                </button>
+                <div className="inline-flex items-center gap-2 text-[11px] text-black/40">
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-black/[0.06] text-[10px] font-semibold text-black/55">
+                    AI
+                  </span>
+                  Answer
+                </div>
+                <span className="text-[11px] text-black/30">i</span>
               </div>
             </GlassSurface>
           </div>
 
-          <Bubble role="assistant" text={"Great! Let me know if you have another question."} />
-          {messages.slice(3).map((m) => (
+          <div className="flex w-full justify-start items-center gap-2 pt-1">
+            <div className="shrink-0">
+              <div className="w-8 h-8 rounded-2xl bg-black/[0.06] flex items-center justify-center">
+                <span className="text-black/35 text-[11px] font-semibold">P</span>
+              </div>
+            </div>
+            <div className="text-[12px] text-black/45">Did that answer your question?</div>
+          </div>
+
+          <div className="flex w-full justify-end">
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[rgba(59,130,246,0.86)] text-[12px] font-semibold text-white shadow-[0_14px_45px_rgba(59,130,246,0.28)] hover:bg-[rgba(59,130,246,0.92)] transition-colors"
+            >
+              <ThumbsUp className="h-4 w-4" />
+              That helped
+            </button>
+          </div>
+
+          <div className="pt-1">
+            <Bubble role="assistant" text="Great! Let me know if you have another question." />
+          </div>
+
+          {messages.map((m) => (
             <Bubble key={m.id} role={m.role} text={m.text} />
           ))}
-
-          {/* Recommendations strip (marketing-ready) */}
-          <div className="pt-2">
-            <div className="flex items-center justify-between">
-              <div className="text-[12px] font-semibold text-black/60">Recommended Programs</div>
-              <div className="text-[11px] text-black/40">{programs.length} programs</div>
-            </div>
-            <div className="mt-3 grid grid-cols-2 gap-3">
-              {programs.map((p) => (
-                <GlassSurface
-                  key={p.title}
-                  blur="light"
-                  radius="lg"
-                  className={cn(
-                    "overflow-hidden",
-                    "[--glass-bg:rgba(255,255,255,0.58)] [--glass-border:rgba(0,0,0,0.06)]"
-                  )}
-                >
-                  <div className="h-20 bg-gradient-to-br from-black/[0.08] to-black/[0.02]" />
-                  <div className="p-3">
-                    <div className="text-[12px] font-semibold text-black/75 truncate">{p.title}</div>
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      {p.meta.map((m) => (
-                        <span
-                          key={m}
-                          className="inline-flex items-center gap-1 rounded-full bg-black/[0.05] px-2 py-0.5 text-[10px] text-black/55"
-                        >
-                          <Sparkles className="h-3 w-3 text-black/35" />
-                          {m}
-                        </span>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      className="mt-3 w-full h-9 rounded-full bg-black/[0.06] hover:bg-black/[0.08] text-[12px] font-medium text-black/65 transition-colors"
-                    >
-                      View details →
-                    </button>
-                  </div>
-                </GlassSurface>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Composer */}
-        <div className="px-5 py-4 border-t border-black/[0.06]">
+        <div className="px-4 py-3 border-t border-black/[0.06]">
           <GlassSurface
             blur="light"
             radius="capsule"
             variant="interactive"
             className={cn(
               "flex items-center gap-2 px-3 py-2",
-              "[--glass-bg:rgba(255,255,255,0.58)] [--glass-border:rgba(0,0,0,0.08)]"
+              "[--glass-bg:rgba(255,255,255,0.72)] [--glass-border:rgba(0,0,0,0.08)]"
             )}
           >
             <button
@@ -217,6 +203,13 @@ export default function AssistantPage() {
             />
             <button
               type="button"
+              className="w-9 h-9 rounded-full flex items-center justify-center text-black/45 hover:text-black/70 hover:bg-black/[0.05] transition-colors"
+              aria-label="Emoji"
+            >
+              <Smile className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
               onClick={send}
               className="w-10 h-10 rounded-full bg-black/[0.07] hover:bg-black/[0.10] text-black/60 hover:text-black/80 transition-colors flex items-center justify-center"
               aria-label="Send"
@@ -224,9 +217,7 @@ export default function AssistantPage() {
               <Send className="h-4 w-4" />
             </button>
           </GlassSurface>
-          <div className="mt-2 text-center text-[10px] text-black/35">
-            Press Enter to send
-          </div>
+          <div className="mt-2 text-center text-[10px] text-black/35">Press Enter to send</div>
         </div>
       </GlassSurface>
     </main>
