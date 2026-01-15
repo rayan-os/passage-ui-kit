@@ -160,6 +160,24 @@ export function ChatShell() {
                 "[--glass-bg:rgba(18,18,18,0.44)] [--glass-border:rgba(255,255,255,0.12)]"
               )}
             >
+              {/* Active agent (top-left) */}
+              <div className="px-5 pt-4 pb-2">
+                <GlassSurface
+                  blur="light"
+                  radius="capsule"
+                  className={cn(
+                    "h-9 px-3 inline-flex items-center gap-2",
+                    "text-[12px] font-semibold text-white",
+                    "[--glass-bg:rgba(18,18,18,0.50)] [--glass-border:rgba(255,255,255,0.14)] [--glass-tint:rgba(34,197,94,0.06)]",
+                    "shadow-[0_0_0_1px_rgba(34,197,94,0.14),0_18px_60px_rgba(0,0,0,0.55)]"
+                  )}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+                  <span>{agentsById[selectedAgentId].name}</span>
+                  <span className="text-white/45 font-medium">{agentsById[selectedAgentId].role}</span>
+                </GlassSurface>
+              </div>
+
               <MessageList messages={messages} agentsById={agentsById} showProgramSuggestions={showPrograms} />
 
               <Composer

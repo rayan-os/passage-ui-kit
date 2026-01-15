@@ -21,36 +21,11 @@ export function AgentPrompts({
     return [...agents].sort((a, b) => score(a.id) - score(b.id))
   }, [agents, selectedAgentId])
 
-  const active = sorted.find((a) => a.id === selectedAgentId)
   const rest = sorted.filter((a) => a.id !== selectedAgentId)
 
   return (
     <div>
-      {/* Active agent (top-left) */}
-      {active && (
-        <div className="flex items-center justify-start">
-          <button type="button" onClick={() => onSelectAgent(active.id)}>
-            <GlassSurface
-              variant="interactive"
-              blur="light"
-              radius="capsule"
-              className={cn(
-                "h-9 px-3 inline-flex items-center gap-2",
-                "text-[12px] font-semibold text-white",
-                "[--glass-bg:rgba(18,18,18,0.50)] [--glass-border:rgba(255,255,255,0.14)] [--glass-tint:rgba(34,197,94,0.06)]",
-                "shadow-[0_0_0_1px_rgba(34,197,94,0.14),0_18px_60px_rgba(0,0,0,0.55)]"
-              )}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-              <span>{active.name}</span>
-              <span className="text-white/45 font-medium">{active.role}</span>
-            </GlassSurface>
-          </button>
-        </div>
-      )}
-
-      {/* Other agents (below) */}
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2">
         {rest.map((a) => (
           <button key={a.id} type="button" onClick={() => onSelectAgent(a.id)}>
             <GlassSurface
