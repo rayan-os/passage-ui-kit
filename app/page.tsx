@@ -22,12 +22,20 @@ export default function HomePage() {
         </div>
 
         {/* CTA */}
-        <Link 
-          href="/admin-panel"
-          className="inline-flex items-center justify-center px-8 py-3 bg-white text-[#0a0a0a] font-semibold rounded-full hover:opacity-90 transition-opacity"
-        >
-          Open Admin Panel
-        </Link>
+        <div className="flex items-center justify-center gap-3">
+          <Link
+            href="/admin-panel"
+            className="inline-flex items-center justify-center px-8 py-3 bg-white text-[#0a0a0a] font-semibold rounded-full hover:opacity-90 transition-opacity"
+          >
+            Open Admin Panel
+          </Link>
+          <Link
+            href="/chat"
+            className="inline-flex items-center justify-center px-8 py-3 bg-white/[0.08] text-white border border-white/[0.12] font-semibold rounded-full hover:bg-white/[0.12] hover:border-white/[0.14] transition-colors"
+          >
+            Open AI Chat
+          </Link>
+        </div>
       </div>
     </main>
   )

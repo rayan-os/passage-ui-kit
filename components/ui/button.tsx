@@ -29,6 +29,9 @@ const buttonVariants = cva(
         // Action button - small white button (GIGA style)
         action:
           "bg-white/[0.92] text-[#0a0a0a] font-bold hover:bg-white active:translate-y-[1px]",
+        // Glass button - Liquid Glass surface (use selectively)
+        glass:
+          "glass-surface glass-interactive text-white/90 hover:text-white [--glass-bg:rgba(18,18,18,0.52)] [--glass-border:rgba(255,255,255,0.10)] [--glass-blur:var(--glass-blur-light)] [--glass-sheen-gradient:var(--glass-sheen-soft)] [--glass-shadow:0_10px_30px_rgba(0,0,0,0.28)]",
       },
       size: {
         default: "h-10 px-6 py-2 text-sm rounded-full",

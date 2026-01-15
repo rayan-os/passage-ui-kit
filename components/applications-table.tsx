@@ -10,7 +10,6 @@ import {
   X,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Table,
@@ -22,6 +21,7 @@ import {
 } from "@/components/ui/table"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
+import { GlassPill, GlassSurface } from "@/components/ui/glass"
 
 interface Application {
   id: number
@@ -607,11 +607,11 @@ export function ApplicationsTable() {
   }
 
   return (
-    <div className="px-5 w-full gap-4 flex flex-col">
+    <div className="px-6 w-full gap-4 flex flex-col">
       {/* Header */}
-      <div className="flex flex-row items-center w-full pt-5">
+      <div className="flex flex-row items-center w-full pt-6">
         <div className="flex-1 flex flex-col gap-1">
-          <h4 className="text-xl font-semibold tracking-tight text-white">
+          <h4 className="text-[20px] leading-6 font-semibold tracking-tight text-white">
             33 applications
           </h4>
           <p className="text-sm text-white/55">
@@ -621,21 +621,21 @@ export function ApplicationsTable() {
         <div className="flex-1 flex items-center gap-2 justify-end">
           <div className="flex items-center justify-end gap-2">
             <Button
-              variant="secondary"
+              variant="glass"
               size="default"
               className="gap-2"
             >
               <ArrowDownZA className="h-4 w-4" />
               <span>Created date</span>
             </Button>
-            <Button variant="secondary" className="gap-2">
+            <Button variant="glass" className="gap-2">
               <SlidersHorizontal className="h-4 w-4" />
               <span>Filters</span>
             </Button>
-            <Button variant="secondary" size="icon">
+            <Button variant="glass" size="icon">
               <Columns3 className="h-4 w-4" />
             </Button>
-            <Button variant="secondary" size="icon">
+            <Button variant="glass" size="icon">
               <MoreVertical className="h-4 w-4" />
             </Button>
           </div>
@@ -643,10 +643,15 @@ export function ApplicationsTable() {
       </div>
 
       {/* Table */}
-      <div className="w-full h-[calc(100vh-140px)] rounded-2xl border border-white/[0.08] bg-[#0d0d0d] overflow-hidden">
+      <GlassSurface
+        variant="elevated"
+        blur="light"
+        radius="lg"
+        className="w-full h-[calc(100vh-156px)] overflow-hidden [--glass-bg:rgba(18,18,18,0.56)] [--glass-border:rgba(255,255,255,0.10)]"
+      >
         <div className="w-full h-full overflow-x-auto overflow-y-auto">
           <Table className="min-w-[1400px]">
-            <TableHeader className="sticky top-0 bg-[#0d0d0d] z-10">
+            <TableHeader className="sticky top-0 bg-[rgba(18,18,18,0.70)] backdrop-blur-[12px] z-10">
               <TableRow className="hover:bg-transparent border-white/[0.06]">
                 <TableHead className="w-12">
                   <Checkbox
@@ -705,23 +710,19 @@ export function ApplicationsTable() {
                     <CountryFlag code={app.residenceCountry} />
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={app.progressionStatus === "success" ? "success" : "warning"}
-                      size="sm"
-                      className="uppercase tracking-wider"
+                    <GlassPill
+                      tone={app.progressionStatus === "success" ? "success" : "warning"}
+                      size="md"
+                      className="uppercase"
                     >
-                      <span className="inline-block rounded-full mr-1.5 shrink-0 bg-current w-1 h-1" />
+                      <span className="inline-block rounded-full mr-0.5 shrink-0 bg-current w-1 h-1" />
                       {app.progressionLevel}
-                    </Badge>
+                    </GlassPill>
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={app.b2x === "B2B" ? "info" : "accent"}
-                      shape="pill"
-                      size="sm"
-                    >
+                    <GlassPill tone={app.b2x === "B2B" ? "info" : "accent"} size="md">
                       {app.b2x}
-                    </Badge>
+                    </GlassPill>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2 min-w-0">
@@ -754,7 +755,7 @@ export function ApplicationsTable() {
             </TableBody>
           </Table>
         </div>
-      </div>
+      </GlassSurface>
     </div>
   )
 }
