@@ -37,14 +37,14 @@ export function MessageBubble({
 
         <GlassSurface
           blur="light"
-          radius="lg"
+          radius="md"
           className={cn(
             "px-4 py-3",
             "text-[13px] leading-5",
             "shadow-[0_16px_60px_rgba(0,0,0,0.35)]",
             isUser
-              ? "[--glass-bg:rgba(197,204,195,0.16)] [--glass-border:rgba(197,204,195,0.22)] text-white/90"
-              : "[--glass-bg:rgba(18,18,18,0.55)] [--glass-border:rgba(255,255,255,0.10)] text-white/85"
+              ? "[--glass-bg:rgba(197,204,195,0.16)] [--glass-border:rgba(197,204,195,0.22)] [--glass-tint:rgba(197,204,195,0.06)] text-white/90"
+              : "[--glass-bg:rgba(18,18,18,0.55)] [--glass-border:rgba(255,255,255,0.10)] [--glass-tint:rgba(165,110,255,0.04)] text-white/85"
           )}
         >
           {message.text}

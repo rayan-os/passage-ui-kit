@@ -3,13 +3,16 @@
 import * as React from "react"
 import type { Agent, ChatMessage } from "@/components/assistant/types"
 import { MessageBubble } from "@/components/assistant/message-bubble"
+import { ProgramSuggestions } from "@/components/assistant/program-suggestions"
 
 export function MessageList({
   messages,
   agentsById,
+  showProgramSuggestions,
 }: {
   messages: ChatMessage[]
   agentsById: Record<Agent["id"], Agent>
+  showProgramSuggestions?: boolean
 }) {
   const endRef = React.useRef<HTMLDivElement | null>(null)
 
@@ -22,6 +25,7 @@ export function MessageList({
       {messages.map((m) => (
         <MessageBubble key={m.id} message={m} agentsById={agentsById} />
       ))}
+      {showProgramSuggestions && <ProgramSuggestions />}
       <div ref={endRef} />
     </div>
   )

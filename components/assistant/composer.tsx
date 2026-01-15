@@ -5,6 +5,7 @@ import { FileUp, Mic, Send, ShieldCheck, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { GlassSurface } from "@/components/ui/glass"
 import type { Agent } from "@/components/assistant/types"
+import { AgentPrompts } from "@/components/assistant/agent-prompts"
 
 type QuickAction = {
   id: "upload" | "kyc" | "voice" | "summary"
@@ -78,17 +79,23 @@ export function Composer({
   onChange,
   onSend,
   onQuickAction,
+  agents,
+  selectedAgentId,
+  onSelectAgent,
 }: {
   value: string
   onChange: (v: string) => void
   onSend: () => void
   onQuickAction: (agentId: Agent["id"], prompt: string) => void
+  agents: Agent[]
+  selectedAgentId: Agent["id"]
+  onSelectAgent: (id: Agent["id"]) => void
 }) {
   return (
     <div className="px-5 pb-5 pt-4 border-t border-white/[0.08]">
       <GlassSurface
         blur="light"
-        radius="lg"
+        radius="md"
         variant="interactive"
         className={cn(
           "flex items-center gap-2 px-3 py-2",
@@ -101,7 +108,7 @@ export function Composer({
           onKeyDown={(e) => {
             if (e.key === "Enter") onSend()
           }}
-          placeholder="Message Passage…"
+          placeholder="Message…"
           className="flex-1 bg-transparent outline-none text-[13px] text-white/90 placeholder:text-white/35"
         />
         <button
@@ -118,6 +125,14 @@ export function Composer({
           <Send className="h-4 w-4" />
         </button>
       </GlassSurface>
+
+      <div className="mt-3">
+        <AgentPrompts
+          agents={agents}
+          selectedAgentId={selectedAgentId}
+          onSelectAgent={onSelectAgent}
+        />
+      </div>
 
       <div className="mt-3 flex flex-wrap gap-2">
         {actions.map((a) => (
