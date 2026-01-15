@@ -131,34 +131,36 @@ export function ProgramSuggestions() {
               "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)] [--glass-tint:rgba(255,255,255,0.03)]"
             )}
           >
-            {/* Image placeholder (swap for real image later) */}
-            <div className="relative h-28 rounded-xl border border-white/[0.10] overflow-hidden">
-              <div className={cn("absolute inset-0 bg-gradient-to-br", thumbClass(p.accent))} />
-              <div className="absolute inset-0 opacity-25 noise-overlay" />
-              <div className={cn("absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r", accentBar(p.accent))} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/[0.30] via-transparent to-transparent" />
-              <div className="absolute bottom-2 left-2 text-[10px] text-white/55">
-                Image placeholder
-              </div>
-            </div>
-
-            <div className="mt-3">
-              <div className="text-[12px] font-semibold text-white/90 leading-5 line-clamp-2">
-                {p.title}
-              </div>
-              <div className="mt-1 text-[11px] text-white/55 truncate">{p.school}</div>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                <Tag>{p.level}</Tag>
-                <Tag>{p.duration}</Tag>
-                <Tag>{p.tuition}</Tag>
+            <div className="flex items-start gap-3">
+              {/* Image placeholder (swap for real image later) */}
+              <div className="relative w-[92px] h-[92px] rounded-xl border border-white/[0.10] overflow-hidden flex-shrink-0">
+                <div className={cn("absolute inset-0 bg-gradient-to-br", thumbClass(p.accent))} />
+                <div className="absolute inset-0 opacity-25 noise-overlay" />
+                <div className={cn("absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r", accentBar(p.accent))} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/[0.30] via-transparent to-transparent" />
+                <div className="absolute bottom-2 left-2 text-[10px] text-white/55">
+                  Image
+                </div>
               </div>
 
-              <button
-                type="button"
-                className="mt-3 w-full h-9 rounded-xl bg-white/[0.06] hover:bg-white/[0.09] border border-white/[0.10] text-[12px] font-semibold text-white/75 hover:text-white transition-colors"
-              >
-                View details →
-              </button>
+              <div className="min-w-0 flex-1">
+                <div className="text-[12px] font-semibold text-white/90 leading-5 line-clamp-2">
+                  {p.title}
+                </div>
+                <div className="mt-1 text-[11px] text-white/55 truncate">{p.school}</div>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  <Tag>{p.level}</Tag>
+                  <Tag>{p.duration}</Tag>
+                  <Tag>{p.tuition}</Tag>
+                </div>
+
+                <button
+                  type="button"
+                  className="mt-3 w-full h-9 rounded-xl bg-white/[0.06] hover:bg-white/[0.09] border border-white/[0.10] text-[12px] font-semibold text-white/75 hover:text-white transition-colors"
+                >
+                  View details →
+                </button>
+              </div>
             </div>
           </GlassSurface>
         ))}
