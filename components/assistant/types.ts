@@ -1,7 +1,7 @@
 export type AgentStatus = "active" | "waiting" | "working" | "escalated"
 
 export type Agent = {
-  id: "jackie" | "david" | "ella" | "support"
+  id: "jackie" | "david" | "ella"
   name: string
   role: string
   initials: string

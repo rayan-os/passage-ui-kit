@@ -28,15 +28,6 @@ export const demoAgents: Agent[] = [
     statusText: "ready",
     lastAction: "standing by for assessment",
   },
-  {
-    id: "support",
-    name: "Support",
-    role: "Human handoff",
-    initials: "S",
-    status: "waiting",
-    statusText: "ready",
-    lastAction: "monitoring case inbox",
-  },
 ]
 
 export const demoMessages: ChatMessage[] = [
@@ -75,15 +66,15 @@ export const demoMessages: ChatMessage[] = [
     id: "m5",
     type: "user",
     text: "Ok. Can we escalate if KYC takes more than a day?",
-    routedTo: "support",
+    routedTo: "jackie",
     createdAt: Date.now() - 1000 * 60 * 2,
   },
   {
     id: "m6",
     type: "agent",
-    agentId: "support",
+    agentId: "jackie",
     text:
-      "Yes — if KYC exceeds 24h, I can create a priority ticket and coordinate a manual review.",
+      "Yes. If KYC exceeds 24h, I’ll flag this as escalated and route it for manual review. In the meantime, I’ll verify LOA prerequisites so we’re ready the moment KYC clears.",
     createdAt: Date.now() - 1000 * 60 * 1,
   },
 ]

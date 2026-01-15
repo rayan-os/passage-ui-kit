@@ -1,13 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { FileUp, Send, ShieldCheck, Sparkles, UserRound } from "lucide-react"
+import { FileUp, Mic, Send, ShieldCheck, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { GlassSurface } from "@/components/ui/glass"
 import type { Agent } from "@/components/assistant/types"
 
 type QuickAction = {
-  id: "upload" | "kyc" | "human" | "summary"
+  id: "upload" | "kyc" | "voice" | "summary"
   label: string
   icon: React.ReactNode
   agentId: Agent["id"]
@@ -30,11 +30,11 @@ const actions: QuickAction[] = [
     prompt: "Start KYC now and tell me what you need from me.",
   },
   {
-    id: "human",
-    label: "Request human",
-    icon: <UserRound className="h-4 w-4" />,
-    agentId: "support",
-    prompt: "Please escalate to a human reviewer for a manual check.",
+    id: "voice",
+    label: "Call agent",
+    icon: <Mic className="h-4 w-4" />,
+    agentId: "ella",
+    prompt: "Start a live interview for assessment (voice).",
   },
   {
     id: "summary",
