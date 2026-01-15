@@ -89,40 +89,40 @@ export function ProgramSuggestions() {
         <div className="text-[11px] text-white/40">{demoPrograms.length} results</div>
       </div>
 
-      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="mt-3 space-y-2">
         {demoPrograms.map((p, idx) => (
           <GlassSurface
             key={p.title}
             variant="interactive"
             blur="light"
             radius="md"
-            className={cn(
-              "p-3",
-              "[--glass-bg:rgba(18,18,18,0.46)]",
-              toneVars(p.tone)
-            )}
+            className={cn("p-3", "[--glass-bg:rgba(18,18,18,0.46)]", toneVars(p.tone))}
           >
-            <div
-              className="h-20 rounded-xl border border-white/[0.10] overflow-hidden relative"
-              style={thumbStyle(p.tone, idx)}
-            >
-              <div className="absolute inset-0 opacity-30 noise-overlay" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/[0.22] via-transparent to-transparent" />
-            </div>
-            <div className="mt-3">
-              <div className="text-[12px] font-semibold text-white/90 leading-5 line-clamp-2">
-                {p.title}
+            <div className="flex items-center gap-3">
+              <div
+                className="w-14 h-14 rounded-xl border border-white/[0.10] overflow-hidden relative flex-shrink-0"
+                style={thumbStyle(p.tone, idx)}
+              >
+                <div className="absolute inset-0 opacity-30 noise-overlay" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/[0.22] via-transparent to-transparent" />
               </div>
-              <div className="mt-1 text-[11px] text-white/55">{p.school}</div>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                <Tag>{p.level}</Tag>
-                <Tag>{p.duration}</Tag>
+
+              <div className="min-w-0 flex-1">
+                <div className="text-[12px] font-semibold text-white/90 leading-5 truncate">
+                  {p.title}
+                </div>
+                <div className="mt-0.5 text-[11px] text-white/55 truncate">{p.school}</div>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  <Tag>{p.level}</Tag>
+                  <Tag>{p.duration}</Tag>
+                </div>
               </div>
+
               <button
                 type="button"
-                className="mt-3 w-full h-9 rounded-xl bg-white/[0.06] hover:bg-white/[0.09] border border-white/[0.10] text-[12px] font-semibold text-white/75 hover:text-white transition-colors"
+                className="h-9 px-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.09] border border-white/[0.10] text-[12px] font-semibold text-white/75 hover:text-white transition-colors flex-shrink-0"
               >
-                View details →
+                View →
               </button>
             </div>
           </GlassSurface>
