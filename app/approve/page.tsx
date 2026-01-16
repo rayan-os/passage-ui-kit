@@ -200,14 +200,14 @@ export default function ApprovePage() {
             </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-1 lg:grid-cols-[480px_1fr] gap-5">
+          <div className="mt-5 grid grid-cols-1 lg:grid-cols-[480px_1fr] gap-5 items-stretch">
             {/* Queue */}
             <GlassSurface
               variant="elevated"
               blur="regular"
               radius="sm"
               className={cn(
-                "overflow-hidden",
+                "overflow-hidden h-full flex flex-col",
                 "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)]"
               )}
             >
@@ -220,7 +220,7 @@ export default function ApprovePage() {
                 </div>
               </div>
 
-              <div className="h-[680px] overflow-y-auto no-scrollbar pr-2">
+              <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pr-2">
                 <Table className="w-full table-fixed">
                   <TableHeader className="sticky top-0 bg-[rgba(18,18,18,0.72)] backdrop-blur-[12px] z-10">
                     <TableRow className="hover:bg-transparent">
