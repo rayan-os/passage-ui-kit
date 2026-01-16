@@ -220,7 +220,7 @@ export default function ApprovePage() {
                 </div>
               </div>
 
-              <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pr-2">
+              <div className="flex-1 min-h-0 overflow-hidden pr-2">
                 <Table className="w-full table-fixed">
                   <TableHeader className="sticky top-0 bg-[rgba(18,18,18,0.72)] backdrop-blur-[12px] z-10">
                     <TableRow className="hover:bg-transparent">
@@ -240,21 +240,21 @@ export default function ApprovePage() {
                         )}
                         onClick={() => setSelectedId(row.id)}
                       >
-                        <TableCell className="font-medium text-white/90 py-2">
+                        <TableCell className="font-medium text-white/90 py-1">
                           <div className="flex flex-col">
                             <span className="truncate">{row.applicant}</span>
-                            <span className="text-[11px] text-white/40 font-mono">{row.id}</span>
+                            <span className="text-[10px] text-white/40 font-mono">{row.id}</span>
                           </div>
                         </TableCell>
-                        <TableCell className="text-white/80 py-2">
+                        <TableCell className="text-white/80 py-1">
                           <span className="block truncate">{row.program}</span>
                         </TableCell>
-                        <TableCell className="min-w-[130px] max-w-none overflow-visible whitespace-nowrap text-clip">
+                        <TableCell className="w-[160px] overflow-visible whitespace-nowrap text-clip py-1">
                           <div className="inline-flex">
                             <GlassPill
                               tone={statusTone(row.status)}
                               size="sm"
-                              className="rounded-md whitespace-nowrap"
+                              className="rounded-md whitespace-nowrap h-5 px-2 text-[9px] tracking-[0.10em]"
                             >
                               {row.status}
                             </GlassPill>
