@@ -220,13 +220,13 @@ export default function ApprovePage() {
                 </div>
               </div>
 
-              <div className="h-[680px] overflow-y-auto no-scrollbar">
-                <Table>
+              <div className="h-[680px] overflow-y-auto no-scrollbar pr-2">
+                <Table className="w-full table-fixed">
                   <TableHeader className="sticky top-0 bg-[rgba(18,18,18,0.72)] backdrop-blur-[12px] z-10">
                     <TableRow className="hover:bg-transparent">
-                      <TableHead className="min-w-[150px]">Applicant</TableHead>
-                      <TableHead className="min-w-[210px]">Program</TableHead>
-                      <TableHead className="min-w-[130px]">Status</TableHead>
+                      <TableHead className="w-[170px]">Applicant</TableHead>
+                      <TableHead>Program</TableHead>
+                      <TableHead className="w-[160px]">Status</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -246,7 +246,9 @@ export default function ApprovePage() {
                             <span className="text-[11px] text-white/40 font-mono">{row.id}</span>
                           </div>
                         </TableCell>
-                        <TableCell className="text-white/80 py-2">{row.program}</TableCell>
+                        <TableCell className="text-white/80 py-2">
+                          <span className="block truncate">{row.program}</span>
+                        </TableCell>
                         <TableCell className="min-w-[130px] max-w-none overflow-visible whitespace-nowrap text-clip">
                           <div className="inline-flex">
                             <GlassPill
