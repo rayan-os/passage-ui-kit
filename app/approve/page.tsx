@@ -198,9 +198,6 @@ export default function ApprovePage() {
                 Review decisions, see evidence, approve in seconds.
               </div>
             </div>
-            <div className="text-[11px] text-white/45">
-              Full audit trail, human in the loop, data stays in Canada.
-            </div>
           </div>
 
           <div className="mt-6 grid grid-cols-1 lg:grid-cols-[520px_1fr] gap-6">
@@ -365,8 +362,8 @@ export default function ApprovePage() {
                       Approve
                     </Button>
                     <Button
-                      className="rounded-md bg-red-500/18 text-red-200 border border-red-500/22 hover:bg-red-500/24"
-                      variant="outline"
+                      className="rounded-md bg-red-500/70 text-white border border-red-500/35 hover:bg-red-500/80"
+                      variant="default"
                     >
                       Reject
                     </Button>
@@ -405,31 +402,16 @@ export default function ApprovePage() {
                     </div>
 
                     <div className="mt-4 rounded-md border border-white/[0.08] bg-white/[0.03] p-3">
-                      <div className="flex items-center justify-between">
-                        <div className="text-[11px] text-white/45">Rules</div>
-                        <div className="text-[11px] text-white/45">Flags</div>
-                      </div>
-                      <div className="mt-2 grid grid-cols-2 gap-3">
-                        <div className="flex flex-wrap gap-2">
-                          {selected.rules.slice(0, 3).map((r) => (
-                            <span
-                              key={r}
-                              className="inline-flex items-center rounded-full bg-white/[0.06] border border-white/[0.10] px-2 py-0.5 text-[10px] text-white/70 font-mono"
-                            >
-                              {r}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="flex flex-wrap gap-2 justify-start">
-                          {selected.flags.slice(0, 2).map((f) => (
-                            <span
-                              key={f}
-                              className="inline-flex items-center rounded-full bg-white/[0.06] border border-white/[0.10] px-2 py-0.5 text-[10px] text-white/70"
-                            >
-                              {f}
-                            </span>
-                          ))}
-                        </div>
+                      <div className="text-[11px] text-white/45">Flagged</div>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {selected.flags.slice(0, 4).map((f) => (
+                          <span
+                            key={f}
+                            className="inline-flex items-center rounded-full bg-white/[0.06] border border-white/[0.10] px-2 py-0.5 text-[10px] text-white/70"
+                          >
+                            {f}
+                          </span>
+                        ))}
                       </div>
                       <div className="mt-3 text-[11px] text-white/45">Full log available in Audit.</div>
                     </div>
@@ -444,7 +426,9 @@ export default function ApprovePage() {
                     )}
                   >
                     <div className="flex items-center gap-2">
-                      <ShieldCheck className="h-4 w-4 text-white/55" />
+                      <div className="w-7 h-7 rounded-md bg-amber-500/18 border border-amber-500/20 flex items-center justify-center">
+                        <ShieldCheck className="h-4 w-4 text-amber-300" />
+                      </div>
                       <div className="text-[12px] font-semibold text-white/85">Compliance</div>
                     </div>
                     <div className="mt-2 text-[11px] text-white/55 leading-5">
