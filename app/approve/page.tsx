@@ -208,7 +208,7 @@ export default function ApprovePage() {
             <GlassSurface
               variant="elevated"
               blur="regular"
-              radius="md"
+              radius="sm"
               className={cn(
                 "overflow-hidden",
                 "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)]"
@@ -253,15 +253,13 @@ export default function ApprovePage() {
                         </TableCell>
                         <TableCell className="text-white/80">{row.program}</TableCell>
                         <TableCell>
-                          <GlassPill tone={riskTone(row.risk)} size="sm">
-                            <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                          <GlassPill tone={riskTone(row.risk)} size="sm" className="rounded-md">
                             {row.risk}
                           </GlassPill>
                         </TableCell>
                         <TableCell className="font-mono text-white/75">{row.missingItems}</TableCell>
                         <TableCell>
-                          <GlassPill tone={statusTone(row.status)} size="sm">
-                            <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                          <GlassPill tone={statusTone(row.status)} size="sm" className="rounded-md">
                             {row.status}
                           </GlassPill>
                         </TableCell>
@@ -277,7 +275,7 @@ export default function ApprovePage() {
               <GlassSurface
                 variant="elevated"
                 blur="regular"
-                radius="md"
+                radius="sm"
                 className={cn(
                   "p-4",
                   "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)]"
@@ -334,7 +332,7 @@ export default function ApprovePage() {
                 <GlassSurface
                   variant="elevated"
                   blur="regular"
-                  radius="md"
+                  radius="sm"
                   className={cn(
                     "p-4",
                     "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)]"
@@ -343,7 +341,7 @@ export default function ApprovePage() {
                   <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/55">
                     Evidence
                   </div>
-                  <div className="mt-4 rounded-lg border border-white/[0.08] bg-white/[0.03]">
+                  <div className="mt-4 rounded-md border border-white/[0.08] bg-white/[0.03]">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/[0.08]">
                       {[
                         ["Identity", selected.fields.identity],
@@ -360,16 +358,22 @@ export default function ApprovePage() {
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <Button className="rounded-lg" variant="default">
+                    <Button
+                      className="rounded-md bg-emerald-500/20 text-emerald-200 border border-emerald-500/25 hover:bg-emerald-500/28"
+                      variant="outline"
+                    >
                       Approve
                     </Button>
-                    <Button className="rounded-lg" variant="secondary">
+                    <Button
+                      className="rounded-md bg-red-500/18 text-red-200 border border-red-500/22 hover:bg-red-500/24"
+                      variant="outline"
+                    >
                       Reject
                     </Button>
-                    <Button className="rounded-lg" variant="glass">
+                    <Button className="rounded-md" variant="glass">
                       Request info
                     </Button>
-                    <Button className="rounded-lg" variant="outline">
+                    <Button className="rounded-md" variant="outline">
                       Send to human review
                     </Button>
                   </div>
@@ -379,7 +383,7 @@ export default function ApprovePage() {
                   <GlassSurface
                     variant="elevated"
                     blur="regular"
-                    radius="md"
+                    radius="sm"
                     className={cn(
                       "p-4",
                       "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)]"
@@ -400,7 +404,7 @@ export default function ApprovePage() {
                       ))}
                     </div>
 
-                    <div className="mt-4 rounded-lg border border-white/[0.08] bg-white/[0.03] p-3">
+                    <div className="mt-4 rounded-md border border-white/[0.08] bg-white/[0.03] p-3">
                       <div className="flex items-center justify-between">
                         <div className="text-[11px] text-white/45">Rules</div>
                         <div className="text-[11px] text-white/45">Flags</div>
@@ -433,7 +437,7 @@ export default function ApprovePage() {
 
                   <GlassSurface
                     blur="regular"
-                    radius="md"
+                    radius="sm"
                     className={cn(
                       "p-4",
                       "[--glass-bg:rgba(18,18,18,0.40)] [--glass-border:rgba(255,255,255,0.10)]"
