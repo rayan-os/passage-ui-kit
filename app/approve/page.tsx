@@ -226,7 +226,6 @@ export default function ApprovePage() {
                     <TableRow className="hover:bg-transparent">
                       <TableHead className="min-w-[150px]">Applicant</TableHead>
                       <TableHead className="min-w-[210px]">Program</TableHead>
-                      <TableHead className="min-w-[70px]">Risk</TableHead>
                       <TableHead className="min-w-[130px]">Status</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -248,17 +247,6 @@ export default function ApprovePage() {
                           </div>
                         </TableCell>
                         <TableCell className="text-white/80 py-2">{row.program}</TableCell>
-                        <TableCell className="min-w-[86px] max-w-none overflow-visible whitespace-nowrap text-clip">
-                          <div className="inline-flex">
-                            <GlassPill
-                              tone={riskTone(row.risk)}
-                              size="sm"
-                              className="rounded-md whitespace-nowrap"
-                            >
-                              {row.risk}
-                            </GlassPill>
-                          </div>
-                        </TableCell>
                         <TableCell className="min-w-[130px] max-w-none overflow-visible whitespace-nowrap text-clip">
                           <div className="inline-flex">
                             <GlassPill
