@@ -249,16 +249,28 @@ export default function ApprovePage() {
                           </div>
                         </TableCell>
                         <TableCell className="text-white/80">{row.program}</TableCell>
-                        <TableCell>
-                          <GlassPill tone={riskTone(row.risk)} size="sm" className="rounded-md">
-                            {row.risk}
-                          </GlassPill>
+                        <TableCell className="min-w-[86px] max-w-none overflow-visible whitespace-nowrap text-clip">
+                          <div className="inline-flex">
+                            <GlassPill
+                              tone={riskTone(row.risk)}
+                              size="sm"
+                              className="rounded-md whitespace-nowrap"
+                            >
+                              {row.risk}
+                            </GlassPill>
+                          </div>
                         </TableCell>
                         <TableCell className="font-mono text-white/75">{row.missingItems}</TableCell>
-                        <TableCell>
-                          <GlassPill tone={statusTone(row.status)} size="sm" className="rounded-md">
-                            {row.status}
-                          </GlassPill>
+                        <TableCell className="min-w-[130px] max-w-none overflow-visible whitespace-nowrap text-clip">
+                          <div className="inline-flex">
+                            <GlassPill
+                              tone={statusTone(row.status)}
+                              size="sm"
+                              className="rounded-md whitespace-nowrap"
+                            >
+                              {row.status}
+                            </GlassPill>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
