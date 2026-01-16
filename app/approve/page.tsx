@@ -200,7 +200,7 @@ export default function ApprovePage() {
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 lg:grid-cols-[520px_1fr] gap-6">
+          <div className="mt-5 grid grid-cols-1 lg:grid-cols-[480px_1fr] gap-5">
             {/* Queue */}
             <GlassSurface
               variant="elevated"
@@ -211,7 +211,7 @@ export default function ApprovePage() {
                 "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)]"
               )}
             >
-              <div className="px-5 py-4 border-b border-white/[0.08]">
+              <div className="px-4 py-3 border-b border-white/[0.08]">
                 <div className="flex items-center justify-between">
                   <div className="text-[12px] font-semibold uppercase tracking-[0.12em] text-white/60">
                     Decision-ready queue
@@ -220,15 +220,14 @@ export default function ApprovePage() {
                 </div>
               </div>
 
-              <div className="h-[740px] overflow-y-auto no-scrollbar">
+              <div className="h-[680px] overflow-y-auto no-scrollbar">
                 <Table>
                   <TableHeader className="sticky top-0 bg-[rgba(18,18,18,0.72)] backdrop-blur-[12px] z-10">
                     <TableRow className="hover:bg-transparent">
-                      <TableHead className="min-w-[160px]">Applicant</TableHead>
-                      <TableHead className="min-w-[220px]">Program</TableHead>
+                      <TableHead className="min-w-[150px]">Applicant</TableHead>
+                      <TableHead className="min-w-[210px]">Program</TableHead>
                       <TableHead className="min-w-[70px]">Risk</TableHead>
-                      <TableHead className="min-w-[90px]">Missing</TableHead>
-                      <TableHead className="min-w-[140px]">Status</TableHead>
+                      <TableHead className="min-w-[130px]">Status</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -242,13 +241,13 @@ export default function ApprovePage() {
                         )}
                         onClick={() => setSelectedId(row.id)}
                       >
-                        <TableCell className="font-medium text-white/90">
+                        <TableCell className="font-medium text-white/90 py-2">
                           <div className="flex flex-col">
                             <span className="truncate">{row.applicant}</span>
                             <span className="text-[11px] text-white/40 font-mono">{row.id}</span>
                           </div>
                         </TableCell>
-                        <TableCell className="text-white/80">{row.program}</TableCell>
+                        <TableCell className="text-white/80 py-2">{row.program}</TableCell>
                         <TableCell className="min-w-[86px] max-w-none overflow-visible whitespace-nowrap text-clip">
                           <div className="inline-flex">
                             <GlassPill
@@ -260,7 +259,6 @@ export default function ApprovePage() {
                             </GlassPill>
                           </div>
                         </TableCell>
-                        <TableCell className="font-mono text-white/75">{row.missingItems}</TableCell>
                         <TableCell className="min-w-[130px] max-w-none overflow-visible whitespace-nowrap text-clip">
                           <div className="inline-flex">
                             <GlassPill
@@ -280,7 +278,7 @@ export default function ApprovePage() {
             </GlassSurface>
 
             {/* Decision panel */}
-            <div className="space-y-6">
+            <div className="space-y-5">
               <GlassSurface
                 variant="elevated"
                 blur="regular"
@@ -305,7 +303,7 @@ export default function ApprovePage() {
                   </GlassPill>
                 </div>
 
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-[1fr_220px] gap-5">
+                <div className="mt-3 grid grid-cols-1 md:grid-cols-[1fr_220px] gap-5">
                   <div>
                     <div className="mt-2 text-[13px] text-white/80 leading-6">
                       Recommendation{" "}
@@ -368,19 +366,16 @@ export default function ApprovePage() {
 
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Button
-                      className="rounded-md bg-emerald-500/20 text-emerald-200 border border-emerald-500/25 hover:bg-emerald-500/28"
+                      className="rounded-md bg-transparent text-emerald-300 border border-emerald-500/25 hover:bg-emerald-500/10"
                       variant="outline"
                     >
                       Approve
                     </Button>
                     <Button
-                      className="rounded-md bg-red-500/70 text-white border border-red-500/35 hover:bg-red-500/80"
-                      variant="default"
+                      className="rounded-md bg-transparent text-red-300 border border-red-500/25 hover:bg-red-500/10"
+                      variant="outline"
                     >
                       Reject
-                    </Button>
-                    <Button className="rounded-md" variant="glass">
-                      Request info
                     </Button>
                     <Button className="rounded-md" variant="outline">
                       Send to human review
