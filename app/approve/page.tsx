@@ -279,7 +279,7 @@ export default function ApprovePage() {
                 blur="regular"
                 radius="md"
                 className={cn(
-                  "p-5",
+                  "p-4",
                   "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)]"
                 )}
               >
@@ -288,7 +288,9 @@ export default function ApprovePage() {
                     <div className="text-[14px] font-semibold text-white tracking-tight">
                       {selected.applicant}
                     </div>
-                    <div className="mt-1 text-[12px] text-white/55">{selected.program}</div>
+                    <div className="mt-1 text-[12px] text-white/55">
+                      {selected.program} · <span className="font-mono text-white/45">{selected.id}</span>
+                    </div>
                   </div>
                   <GlassPill tone={statusTone(selected.status)} size="md">
                     <CircleDot className="h-4 w-4" />
@@ -296,17 +298,11 @@ export default function ApprovePage() {
                   </GlassPill>
                 </div>
 
-                <div className="mt-5 grid grid-cols-1 md:grid-cols-[1fr_220px] gap-5">
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-[1fr_220px] gap-5">
                   <div>
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/55">
-                      Summary
-                    </div>
                     <div className="mt-2 text-[13px] text-white/80 leading-6">
-                      Recommendation:{" "}
+                      Recommendation{" "}
                       <span className="font-semibold text-white">{selected.recommendation}</span>
-                    </div>
-                    <div className="mt-2 text-[12px] text-white/55">
-                      Top reasons
                     </div>
                     <ul className="mt-2 space-y-1.5">
                       {selected.reasons.slice(0, 3).map((r) => (
@@ -319,15 +315,9 @@ export default function ApprovePage() {
                   </div>
 
                   <div>
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/55">
-                      Confidence
-                    </div>
                     <div className="mt-2 flex items-center justify-between">
                       <div className="text-[20px] font-semibold text-white">{pct(selected.confidence)}</div>
-                      <GlassPill tone="neutral" size="sm">
-                        <CheckCircle2 className="h-4 w-4" />
-                        model
-                      </GlassPill>
+                      <div className="text-[11px] text-white/45">confidence</div>
                     </div>
                     <div className="mt-3 h-2 rounded-full bg-white/[0.06] overflow-hidden border border-white/[0.08]">
                       <div
@@ -335,9 +325,7 @@ export default function ApprovePage() {
                         style={{ width: pct(selected.confidence) }}
                       />
                     </div>
-                    <div className="mt-2 text-[11px] text-white/45">
-                      High confidence does not replace human judgment.
-                    </div>
+                    <div className="mt-2 text-[11px] text-white/45">Review evidence before approving.</div>
                   </div>
                 </div>
               </GlassSurface>
@@ -348,45 +336,40 @@ export default function ApprovePage() {
                   blur="regular"
                   radius="md"
                   className={cn(
-                    "p-5",
+                    "p-4",
                     "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)]"
                   )}
                 >
                   <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/55">
-                    Evidence & extracted fields
+                    Evidence
                   </div>
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-3">
-                      <div className="text-[11px] text-white/45">Identity</div>
-                      <div className="mt-1 text-[12px] text-white/80">{selected.fields.identity}</div>
-                    </div>
-                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-3">
-                      <div className="text-[11px] text-white/45">English score</div>
-                      <div className="mt-1 text-[12px] text-white/80">{selected.fields.english}</div>
-                    </div>
-                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-3">
-                      <div className="text-[11px] text-white/45">Transcript summary</div>
-                      <div className="mt-1 text-[12px] text-white/80">{selected.fields.transcript}</div>
-                    </div>
-                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-3">
-                      <div className="text-[11px] text-white/45">Intake / Province</div>
-                      <div className="mt-1 text-[12px] text-white/80">
-                        {selected.fields.intake} · {selected.fields.province}
-                      </div>
+                  <div className="mt-4 rounded-lg border border-white/[0.08] bg-white/[0.03]">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/[0.08]">
+                      {[
+                        ["Identity", selected.fields.identity],
+                        ["English", selected.fields.english],
+                        ["Transcript", selected.fields.transcript],
+                        ["Intake / Province", `${selected.fields.intake} · ${selected.fields.province}`],
+                      ].map(([k, v]) => (
+                        <div key={k} className="bg-[rgba(18,18,18,0.30)] p-3">
+                          <div className="text-[11px] text-white/45">{k}</div>
+                          <div className="mt-1 text-[12px] text-white/80 leading-5">{v}</div>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    <Button className="rounded-xl" variant="default">
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Button className="rounded-lg" variant="default">
                       Approve
                     </Button>
-                    <Button className="rounded-xl" variant="secondary">
+                    <Button className="rounded-lg" variant="secondary">
                       Reject
                     </Button>
-                    <Button className="rounded-xl" variant="glass">
+                    <Button className="rounded-lg" variant="glass">
                       Request info
                     </Button>
-                    <Button className="rounded-xl" variant="outline">
+                    <Button className="rounded-lg" variant="outline">
                       Send to human review
                     </Button>
                   </div>
@@ -398,18 +381,18 @@ export default function ApprovePage() {
                     blur="regular"
                     radius="md"
                     className={cn(
-                      "p-5",
+                      "p-4",
                       "[--glass-bg:rgba(18,18,18,0.46)] [--glass-border:rgba(255,255,255,0.12)]"
                     )}
                   >
                     <div className="flex items-center justify-between">
                       <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/55">
-                        Audit trail
+                        Audit
                       </div>
                       <FileText className="h-4 w-4 text-white/35" />
                     </div>
                     <div className="mt-3 space-y-2">
-                      {selected.audit.map((a) => (
+                      {selected.audit.slice(0, 3).map((a) => (
                         <div key={a} className="text-[12px] text-white/78 flex items-start gap-2">
                           <span className="mt-1 w-1.5 h-1.5 rounded-full bg-white/35 shrink-0" />
                           <span className="leading-5">{a}</span>
@@ -417,11 +400,14 @@ export default function ApprovePage() {
                       ))}
                     </div>
 
-                    <div className="mt-5 grid grid-cols-1 gap-4">
-                      <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-3">
-                        <div className="text-[11px] text-white/45">Rules fired</div>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {selected.rules.slice(0, 4).map((r) => (
+                    <div className="mt-4 rounded-lg border border-white/[0.08] bg-white/[0.03] p-3">
+                      <div className="flex items-center justify-between">
+                        <div className="text-[11px] text-white/45">Rules</div>
+                        <div className="text-[11px] text-white/45">Flags</div>
+                      </div>
+                      <div className="mt-2 grid grid-cols-2 gap-3">
+                        <div className="flex flex-wrap gap-2">
+                          {selected.rules.slice(0, 3).map((r) => (
                             <span
                               key={r}
                               className="inline-flex items-center rounded-full bg-white/[0.06] border border-white/[0.10] px-2 py-0.5 text-[10px] text-white/70 font-mono"
@@ -430,11 +416,8 @@ export default function ApprovePage() {
                             </span>
                           ))}
                         </div>
-                      </div>
-                      <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-3">
-                        <div className="text-[11px] text-white/45">Flagged</div>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {selected.flags.slice(0, 3).map((f) => (
+                        <div className="flex flex-wrap gap-2 justify-start">
+                          {selected.flags.slice(0, 2).map((f) => (
                             <span
                               key={f}
                               className="inline-flex items-center rounded-full bg-white/[0.06] border border-white/[0.10] px-2 py-0.5 text-[10px] text-white/70"
@@ -444,6 +427,7 @@ export default function ApprovePage() {
                           ))}
                         </div>
                       </div>
+                      <div className="mt-3 text-[11px] text-white/45">Full log available in Audit.</div>
                     </div>
                   </GlassSurface>
 
