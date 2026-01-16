@@ -618,6 +618,24 @@ export function ApplicationsTable() {
             Pending LOA queue
           </p>
         </div>
+        <div className="hidden lg:flex items-center gap-2">
+          <div className="flex items-center gap-1 text-[12px] font-semibold">
+            <span className="px-3 py-2 rounded-full bg-white/[0.06] border border-white/[0.10] text-white/70">
+              Intake
+            </span>
+            <span className="px-3 py-2 rounded-full bg-white/[0.06] border border-white/[0.10] text-white/70">
+              Verify
+            </span>
+            <a
+              href="/approve"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-2 rounded-full bg-white/[0.10] border border-white/[0.14] text-white hover:bg-white/[0.12] transition-colors"
+            >
+              Approve
+            </a>
+          </div>
+        </div>
         <div className="flex-1 flex items-center gap-2 justify-end">
           <div className="flex items-center justify-end gap-2">
             <Button
