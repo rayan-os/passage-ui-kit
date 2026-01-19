@@ -1,21 +1,31 @@
-import { FlatCompat } from "@eslint/eslintrc"
-import js from "@eslint/js"
-import path from "node:path"
-import { fileURLToPath } from "node:url"
+import nextPlugin from "@next/eslint-plugin-next"
+import reactPlugin from "eslint-plugin-react"
+import reactHooksPlugin from "eslint-plugin-react-hooks"
+import tsParser from "@typescript-eslint/parser"
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-})
-
+/** @type {import("eslint").Linter.FlatConfig[]} */
 export default [
-  ...compat.extends("next/core-web-vitals"),
   {
     ignores: [".next/**", "node_modules/**"],
   },
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: { jsx: true },
+      },
+    },
+    settings: {
+      react: { version: "detect" },
+    },
+  },
+  // Core Next.js + React rules
+  nextPlugin.configs["core-web-vitals"],
+  reactPlugin.configs.flat.recommended,
+  reactPlugin.configs.flat["jsx-runtime"],
+  reactHooksPlugin.configs.flat["recommended-latest"],
 ]
 
