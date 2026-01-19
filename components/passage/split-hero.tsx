@@ -6,6 +6,10 @@ import * as React from "react"
 import { ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
+  StudentPanelVisual,
+  UniversityPanelVisual,
+} from "@/components/passage/panel-visuals"
+import {
   otherPassageMode,
   passageHomeCopy,
   type PassageMode,
@@ -67,6 +71,8 @@ function ModePanel({
   const expanded = isHovered || isActive || isNavigating
   const dimmed = Boolean(otherHovered || otherActive || (navigatingTo && !isNavigating))
 
+  const Visual = mode === "university" ? UniversityPanelVisual : StudentPanelVisual
+
   return (
     <Link
       href={copy.href}
@@ -97,8 +103,8 @@ function ModePanel({
           "absolute inset-0 pointer-events-none",
           "bg-gradient-to-br",
           mode === "university"
-            ? "from-[rgba(197,204,195,0.12)] via-[rgba(255,255,255,0.02)] to-transparent"
-            : "from-[rgba(59,130,246,0.10)] via-[rgba(255,255,255,0.02)] to-transparent",
+            ? "from-[rgba(197,204,195,0.14)] via-[rgba(59,130,246,0.06)] to-transparent"
+            : "from-[rgba(59,130,246,0.14)] via-[rgba(244,63,94,0.06)] to-transparent",
           "transition-opacity duration-[280ms] ease-glass",
           expanded ? "opacity-100" : "opacity-70",
           dimmed && "opacity-40"
@@ -106,66 +112,95 @@ function ModePanel({
       />
       <div
         className={cn(
-          "absolute -top-28 -right-28 h-64 w-64 rounded-full blur-[80px] pointer-events-none",
+          "absolute -top-32 -right-28 h-72 w-72 rounded-full blur-[90px] pointer-events-none",
           mode === "university"
-            ? "bg-[rgba(197,204,195,0.10)]"
-            : "bg-[rgba(59,130,246,0.10)]",
+            ? "bg-[rgba(197,204,195,0.12)]"
+            : "bg-[rgba(59,130,246,0.12)]",
           "transition-opacity duration-[280ms] ease-glass",
           expanded ? "opacity-100" : "opacity-60",
           dimmed && "opacity-30"
         )}
       />
 
-      <div className="relative z-10 flex h-full flex-col p-7 sm:p-9">
-        <div className="flex items-center justify-between gap-4">
-          <span className="text-[11px] font-semibold tracking-[0.16em] uppercase text-white/55">
-            {copy.audience}
-          </span>
-          {isActive && (
-            <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#c5ccc3]">
-              Active
+      {/* Content + visual split */}
+      <div className="relative z-10 grid h-full grid-rows-[auto_1fr] md:grid-rows-1 md:grid-cols-[1.05fr_0.95fr]">
+        {/* Content side */}
+        <div className="flex flex-col p-7 sm:p-9 md:pr-6">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-[11px] font-semibold tracking-[0.16em] uppercase text-white/55">
+              {copy.audience}
             </span>
-          )}
-        </div>
+            {isActive && (
+              <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#c5ccc3]">
+                Active
+              </span>
+            )}
+          </div>
 
-        <div className="mt-6">
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
-            {copy.title}
-          </h2>
-          <p className="mt-3 text-sm sm:text-base text-white/70 max-w-[46ch]">
-            {copy.body}
-          </p>
-        </div>
+          <div className="mt-6">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+              {copy.title}
+            </h2>
+            <p className="mt-3 text-sm sm:text-base text-white/70 max-w-[46ch]">
+              {copy.body}
+            </p>
+          </div>
 
-        {/* Hover reveal */}
-        <div
-          className={cn(
-            "mt-6",
-            "transition-[opacity,transform,max-height] duration-[280ms] ease-glass",
-            expanded ? "opacity-100 translate-y-0 max-h-64" : "opacity-0 translate-y-1 max-h-0"
-          )}
-          aria-hidden={!expanded}
-        >
-          <p className="text-sm text-white/75">{copy.hover.secondary}</p>
-          <FeatureBullets bullets={copy.hover.bullets} />
-        </div>
-
-        {/* Primary CTA (part of link) */}
-        <div className="mt-auto pt-8">
+          {/* Hover reveal */}
           <div
             className={cn(
-              "inline-flex items-center justify-center gap-2",
-              "h-11 px-4 rounded-glass-lg",
-              "bg-white text-[#0a0a0a] font-semibold text-sm",
-              "shadow-glass-sm",
-              "transition-all duration-[220ms] ease-glass",
-              "group-hover:bg-white/95 group-hover:shadow-glass-md",
-              "group-active:scale-[0.98]",
-              dimmed && "opacity-90"
+              "mt-6",
+              "transition-[opacity,transform,max-height] duration-[280ms] ease-glass",
+              expanded
+                ? "opacity-100 translate-y-0 max-h-64"
+                : "opacity-0 translate-y-1 max-h-0"
             )}
+            aria-hidden={!expanded}
           >
-            {copy.primaryCta}
-            <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            <p className="text-sm text-white/75">{copy.hover.secondary}</p>
+            <FeatureBullets bullets={copy.hover.bullets} />
+          </div>
+
+          {/* Primary CTA */}
+          <div className="mt-auto pt-8">
+            <div
+              className={cn(
+                "inline-flex items-center justify-center gap-2",
+                "h-11 px-4 rounded-glass-lg",
+                "bg-white text-[#0a0a0a] font-semibold text-sm",
+                "shadow-glass-sm",
+                "transition-all duration-[220ms] ease-glass",
+                "group-hover:bg-white/95 group-hover:shadow-glass-md",
+                "group-active:scale-[0.98]",
+                dimmed && "opacity-90"
+              )}
+            >
+              {copy.primaryCta}
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+
+        {/* Visual side */}
+        <div className="relative min-h-[200px] md:min-h-full">
+          <div
+            className={cn(
+              "absolute inset-0",
+              "border-t md:border-t-0 md:border-l border-white/[0.08]",
+              "transition-opacity duration-[280ms] ease-glass",
+              dimmed ? "opacity-70" : "opacity-100"
+            )}
+            aria-hidden="true"
+          />
+          <div
+            className={cn(
+              "absolute inset-0",
+              "transition-[transform,opacity] duration-[320ms] ease-glass",
+              expanded ? "opacity-100 scale-[1.02]" : "opacity-90 scale-[1.0]"
+            )}
+            aria-hidden="true"
+          >
+            <Visual />
           </div>
         </div>
       </div>
@@ -204,9 +239,14 @@ export function PassageSplitHero() {
   return (
     <main className="relative min-h-screen bg-[#050505] overflow-hidden">
       {/* Ambient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#070707] to-[#050505]" />
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[780px] h-[520px] rounded-full bg-[rgba(197,204,195,0.03)] blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[520px] h-[520px] rounded-full bg-[rgba(59,130,246,0.02)] blur-[140px] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#070707] via-[#050505] to-[#050505]" />
+      {/* Color mesh (subtle, premium) */}
+      <div className="absolute inset-0 bg-[radial-gradient(55%_55%_at_20%_25%,rgba(197,204,195,0.10)_0%,transparent_60%),radial-gradient(45%_45%_at_80%_30%,rgba(59,130,246,0.08)_0%,transparent_55%),radial-gradient(40%_40%_at_75%_75%,rgba(244,63,94,0.06)_0%,transparent_60%)]" />
+      {/* Soft blooms */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[560px] rounded-full bg-[rgba(197,204,195,0.03)] blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[640px] h-[640px] rounded-full bg-[rgba(59,130,246,0.025)] blur-[170px] pointer-events-none" />
+      {/* Subtle grain */}
+      <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay pointer-events-none bg-[radial-gradient(circle_at_20%_20%,white_1px,transparent_1px)] [background-size:14px_14px]" />
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-4 sm:px-6 pt-28 pb-10">
         <div className="mb-8 sm:mb-10 text-center space-y-3">
