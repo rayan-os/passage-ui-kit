@@ -1,6 +1,4 @@
 import nextPlugin from "@next/eslint-plugin-next"
-import reactPlugin from "eslint-plugin-react"
-import reactHooksPlugin from "eslint-plugin-react-hooks"
 import tsParser from "@typescript-eslint/parser"
 
 /** @type {import("eslint").Linter.FlatConfig[]} */
@@ -18,14 +16,8 @@ export default [
         ecmaFeatures: { jsx: true },
       },
     },
-    settings: {
-      react: { version: "detect" },
-    },
   },
   // Core Next.js + React rules
   nextPlugin.configs["core-web-vitals"],
-  reactPlugin.configs.flat.recommended,
-  reactPlugin.configs.flat["jsx-runtime"],
-  reactHooksPlugin.configs.flat["recommended-latest"],
 ]
 
