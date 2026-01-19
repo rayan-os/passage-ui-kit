@@ -20,9 +20,13 @@ export function UniversityPanelVisual() {
   return (
     <div className="relative h-full w-full">
       {/* Base mesh */}
-      <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_30%_20%,rgba(197,204,195,0.35)_0%,rgba(197,204,195,0.08)_35%,transparent_70%),radial-gradient(55%_55%_at_80%_65%,rgba(59,130,246,0.18)_0%,transparent_60%),linear-gradient(135deg,rgba(255,255,255,0.06),transparent_55%)]" />
+      <div className="absolute inset-0 passage-float [animation:passageFloat_7s_ease-in-out_infinite] bg-[radial-gradient(60%_60%_at_30%_20%,rgba(197,204,195,0.35)_0%,rgba(197,204,195,0.08)_35%,transparent_70%),radial-gradient(55%_55%_at_80%_65%,rgba(59,130,246,0.18)_0%,transparent_60%),linear-gradient(135deg,rgba(255,255,255,0.06),transparent_55%)]" />
       {/* Shimmer line */}
       <div className="absolute inset-0 opacity-70 before:absolute before:inset-[-40%] before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent)] before:bg-[length:200%_100%] before:animate-glass-shimmer" />
+      {/* Energy sweep */}
+      <div className="absolute inset-0 opacity-70 pointer-events-none">
+        <div className="absolute -left-1/2 top-0 h-full w-1/2 rotate-[12deg] bg-[linear-gradient(90deg,transparent,rgba(197,204,195,0.12),rgba(59,130,246,0.10),transparent)] passage-sweep [animation:passageSweep_1.6s_ease-out_0.35s_1]" />
+      </div>
 
       <div className="absolute inset-0">
         <Svg>
@@ -109,9 +113,13 @@ export function StudentPanelVisual() {
   return (
     <div className="relative h-full w-full">
       {/* Base mesh */}
-      <div className="absolute inset-0 bg-[radial-gradient(55%_55%_at_25%_30%,rgba(59,130,246,0.35)_0%,rgba(59,130,246,0.10)_35%,transparent_70%),radial-gradient(55%_55%_at_80%_70%,rgba(244,63,94,0.22)_0%,transparent_60%),linear-gradient(135deg,rgba(255,255,255,0.05),transparent_55%)]" />
+      <div className="absolute inset-0 passage-float [animation:passageFloat_7.5s_ease-in-out_infinite] bg-[radial-gradient(55%_55%_at_25%_30%,rgba(59,130,246,0.35)_0%,rgba(59,130,246,0.10)_35%,transparent_70%),radial-gradient(55%_55%_at_80%_70%,rgba(244,63,94,0.22)_0%,transparent_60%),linear-gradient(135deg,rgba(255,255,255,0.05),transparent_55%)]" />
       {/* Shimmer line */}
       <div className="absolute inset-0 opacity-70 before:absolute before:inset-[-40%] before:bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent)] before:bg-[length:200%_100%] before:animate-glass-shimmer" />
+      {/* Energy sweep */}
+      <div className="absolute inset-0 opacity-70 pointer-events-none">
+        <div className="absolute -left-1/2 top-0 h-full w-1/2 rotate-[12deg] bg-[linear-gradient(90deg,transparent,rgba(59,130,246,0.14),rgba(244,63,94,0.10),transparent)] passage-sweep [animation:passageSweep_1.6s_ease-out_0.45s_1]" />
+      </div>
 
       <div className="absolute inset-0">
         <Svg>

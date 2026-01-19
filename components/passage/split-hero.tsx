@@ -213,12 +213,22 @@ export function PassageSplitHero() {
   const reducedMotion = usePrefersReducedMotion()
   const { mode, setMode, hydrated } = usePassageMode()
 
+  const [entered, setEntered] = React.useState(false)
   const [hovered, setHovered] = React.useState<HoverState>(null)
   const [navigatingTo, setNavigatingTo] = React.useState<PassageMode | null>(
     null
   )
 
   const activeMode = hydrated ? mode : null
+
+  React.useEffect(() => {
+    if (reducedMotion) {
+      setEntered(true)
+      return
+    }
+    const id = window.requestAnimationFrame(() => setEntered(true))
+    return () => window.cancelAnimationFrame(id)
+  }, [reducedMotion])
 
   const onChoose = React.useCallback(
     (next: PassageMode) => {
@@ -248,8 +258,28 @@ export function PassageSplitHero() {
       {/* Subtle grain */}
       <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay pointer-events-none bg-[radial-gradient(circle_at_20%_20%,white_1px,transparent_1px)] [background-size:14px_14px]" />
 
+      {/* Portal veil (entrance) */}
+      <div
+        className={cn(
+          "absolute inset-0 pointer-events-none",
+          "bg-[radial-gradient(60%_60%_at_50%_35%,rgba(255,255,255,0.05)_0%,rgba(0,0,0,0.55)_70%,rgba(0,0,0,0.85)_100%)]",
+          entered ? "opacity-0" : "opacity-100"
+        )}
+        style={{
+          transition: reducedMotion ? undefined : "opacity 650ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+        aria-hidden="true"
+      />
+
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-4 sm:px-6 pt-28 pb-10">
-        <div className="mb-8 sm:mb-10 text-center space-y-3">
+        <div
+          className={cn(
+            "mb-8 sm:mb-10 text-center space-y-3",
+            entered
+              ? "passage-portal-in [animation:passagePortalIn_700ms_cubic-bezier(0.22,1,0.36,1)_both]"
+              : "opacity-0"
+          )}
+        >
           <p className="text-xs font-semibold tracking-[0.18em] uppercase text-white/55">
             {passageHomeCopy.hero.kicker}
           </p>
@@ -283,23 +313,69 @@ export function PassageSplitHero() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          <ModePanel
-            mode="university"
-            hovered={hovered}
-            activeMode={activeMode}
-            navigatingTo={navigatingTo}
-            setHovered={setHovered}
-            onChoose={onChoose}
+        <div className="relative">
+          {/* Central energy seam */}
+          <div
+            className={cn(
+              "pointer-events-none absolute left-1/2 top-1/2 hidden md:block -translate-x-1/2 -translate-y-1/2",
+              "h-[110%] w-px",
+              "bg-gradient-to-b from-transparent via-white/[0.16] to-transparent",
+              "shadow-[0_0_24px_rgba(59,130,246,0.18)]",
+              entered &&
+                "passage-seam-pulse [animation:passageSeamPulse_900ms_cubic-bezier(0.22,1,0.36,1)_both]"
+            )}
+            aria-hidden="true"
           />
-          <ModePanel
-            mode="student"
-            hovered={hovered}
-            activeMode={activeMode}
-            navigatingTo={navigatingTo}
-            setHovered={setHovered}
-            onChoose={onChoose}
+          <div
+            className={cn(
+              "pointer-events-none absolute left-1/2 top-1/2 hidden md:block -translate-x-1/2 -translate-y-1/2",
+              "h-[110%] w-10",
+              "bg-[radial-gradient(closest-side,rgba(59,130,246,0.14),transparent)]",
+              entered ? "opacity-100" : "opacity-0"
+            )}
+            style={{
+              transition: reducedMotion ? undefined : "opacity 700ms ease-out",
+              transitionDelay: reducedMotion ? undefined : "120ms",
+            }}
+            aria-hidden="true"
           />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div
+              className={cn(
+                entered
+                  ? "passage-portal-in [animation:passagePortalIn_800ms_cubic-bezier(0.22,1,0.36,1)_both]"
+                  : "opacity-0"
+              )}
+              style={{ animationDelay: reducedMotion ? undefined : "80ms" }}
+            >
+              <ModePanel
+                mode="university"
+                hovered={hovered}
+                activeMode={activeMode}
+                navigatingTo={navigatingTo}
+                setHovered={setHovered}
+                onChoose={onChoose}
+              />
+            </div>
+            <div
+              className={cn(
+                entered
+                  ? "passage-portal-in [animation:passagePortalIn_800ms_cubic-bezier(0.22,1,0.36,1)_both]"
+                  : "opacity-0"
+              )}
+              style={{ animationDelay: reducedMotion ? undefined : "160ms" }}
+            >
+              <ModePanel
+                mode="student"
+                hovered={hovered}
+                activeMode={activeMode}
+                navigatingTo={navigatingTo}
+                setHovered={setHovered}
+                onChoose={onChoose}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </main>
