@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import * as React from "react"
 import { GlassButton, GlassPill } from "@/components/ui/glass"
 import { cn } from "@/lib/utils"
+import { DotField } from "@/components/passage/dot-field"
 import {
   otherPassageMode,
   passageHomeCopy,
@@ -45,6 +46,7 @@ export function PassageTopNav({
       <div className="mx-auto w-full max-w-6xl">
         <div
           className={cn(
+            "relative overflow-hidden",
             "mt-4 flex items-center justify-between gap-3",
             "rounded-glass-xl",
             "bg-glass-bg/70 backdrop-blur-glass-heavy",
@@ -52,7 +54,12 @@ export function PassageTopNav({
             "shadow-glass-sm"
           )}
         >
-          <div className="flex items-center gap-3 px-4 py-3">
+          {/* Live dot background */}
+          <DotField className="absolute inset-0 opacity-70" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.20))]" aria-hidden="true" />
+          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(60%_60%_at_20%_30%,rgba(59,130,246,0.10)_0%,transparent_60%),radial-gradient(60%_60%_at_70%_60%,rgba(197,204,195,0.08)_0%,transparent_60%)]" aria-hidden="true" />
+
+          <div className="relative z-10 flex w-full items-center gap-3 px-4 py-3">
             <Link
               href="/"
               className={cn(
@@ -65,39 +72,45 @@ export function PassageTopNav({
                 if (pathname === "/") return
               }}
             >
-              <span
-                className={cn(
-                  "grid place-items-center size-8 rounded-glass-md",
-                  "bg-gradient-to-br from-[#c5ccc3] to-[#a8b0a5]",
-                  "text-[#0a0a0a] font-bold text-sm shadow-glass-sm shadow-[rgba(197,204,195,0.2)]"
-                )}
-                aria-hidden="true"
-              >
-                P
-              </span>
-              <span className="text-sm font-semibold tracking-tight">
-                {passageHomeCopy.brand}
+              <span className="text-base font-semibold tracking-tight">
+                Passage
+                <span
+                  className="inline-block align-middle ml-1 size-1.5 rounded-full bg-[#ff6b35]"
+                  aria-hidden="true"
+                />
               </span>
             </Link>
 
-            {showModeActions ? (
-              <GlassPill
-                variant="default"
-                size="sm"
-                className="hidden sm:inline-flex"
+            {/* Center links */}
+            <nav className="hidden md:flex items-center gap-6 ml-6">
+              <Link
+                href={effectiveMode === "university" ? "/universities" : "/students"}
+                className="text-xs font-medium tracking-[0.14em] uppercase text-white/75 hover:text-white transition-colors duration-glass"
               >
-                {effectiveMode === "university"
-                  ? "Universities"
-                  : "Students"}
-              </GlassPill>
-            ) : (
-              <span className="hidden sm:block text-xs text-white/45">
-                {passageHomeCopy.hero.kicker}
-              </span>
-            )}
+                Solutions
+              </Link>
+              <Link
+                href={effectiveMode === "university" ? "/universities#workflow" : "/students#workflow"}
+                className="text-xs font-medium tracking-[0.14em] uppercase text-white/75 hover:text-white transition-colors duration-glass"
+              >
+                Workflow
+              </Link>
+            </nav>
+
+            <div className="ml-auto hidden sm:flex items-center gap-2">
+              {showModeActions ? (
+                <GlassPill variant="default" size="sm">
+                  {effectiveMode === "university" ? "Universities" : "Students"}
+                </GlassPill>
+              ) : (
+                <span className="text-xs text-white/50">
+                  {passageHomeCopy.hero.kicker}
+                </span>
+              )}
+            </div>
           </div>
 
-          <div className="flex items-center gap-2 px-3 py-3">
+          <div className="relative z-10 flex items-center gap-2 px-3 py-3">
             {showModeActions && (
               <>
                 <button
