@@ -192,3 +192,92 @@ export function StudentPanelVisual() {
   )
 }
 
+export function UniversityCardBackdrop() {
+  return (
+    <svg
+      viewBox="0 0 600 420"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+      aria-hidden="true"
+      focusable="false"
+      preserveAspectRatio="none"
+    >
+      <defs>
+        <linearGradient id="uOrb" x1="0" y1="0" x2="600" y2="420">
+          <stop offset="0" stopColor="rgba(197,204,195,0.20)" />
+          <stop offset="0.55" stopColor="rgba(255,255,255,0.06)" />
+          <stop offset="1" stopColor="rgba(59,130,246,0.14)" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M-40 290C80 160 230 120 360 160C490 200 600 150 680 90"
+        stroke="url(#uOrb)"
+        strokeWidth="1.4"
+        opacity="0.55"
+      />
+      <path
+        d="M-10 330C120 210 270 190 380 225C500 265 610 230 690 185"
+        stroke="rgba(255,255,255,0.10)"
+        strokeWidth="1.2"
+        opacity="0.45"
+      />
+      {[...Array(16)].map((_, i) => (
+        <circle
+          key={i}
+          cx={50 + i * 38}
+          cy={60 + (i % 4) * 28}
+          r="1"
+          fill="rgba(255,255,255,0.10)"
+          opacity="0.6"
+        />
+      ))}
+    </svg>
+  )
+}
+
+export function StudentCardBackdrop() {
+  return (
+    <svg
+      viewBox="0 0 600 420"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-full w-full"
+      aria-hidden="true"
+      focusable="false"
+      preserveAspectRatio="none"
+    >
+      <defs>
+        <linearGradient id="sOrb" x1="0" y1="0" x2="600" y2="420">
+          <stop offset="0" stopColor="rgba(59,130,246,0.20)" />
+          <stop offset="0.55" stopColor="rgba(255,255,255,0.06)" />
+          <stop offset="1" stopColor="rgba(244,63,94,0.14)" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M20 320C120 150 290 110 410 150C520 185 585 250 560 315C525 410 330 420 210 360"
+        stroke="url(#sOrb)"
+        strokeWidth="1.4"
+        opacity="0.55"
+      />
+      <path
+        d="M80 345C170 220 300 200 400 235C500 268 545 320 515 360"
+        stroke="rgba(255,255,255,0.10)"
+        strokeWidth="1.2"
+        opacity="0.45"
+      />
+      {[
+        [150, 265],
+        [245, 210],
+        [345, 220],
+        [455, 270],
+      ].map(([x, y]) => (
+        <g key={`${x}-${y}`}>
+          <circle cx={x} cy={y} r="6" fill="rgba(59,130,246,0.07)" />
+          <circle cx={x} cy={y} r="2" fill="rgba(255,255,255,0.55)" />
+        </g>
+      ))}
+    </svg>
+  )
+}
+

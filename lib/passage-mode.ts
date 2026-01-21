@@ -13,17 +13,15 @@ export function otherPassageMode(mode: PassageMode): PassageMode {
 export const passageHomeCopy = {
   brand: "Passage",
   hero: {
-    kicker: "One company, two experiences",
-    headline: "Choose your path",
-    subhead:
-      "Select the experience that matches your role. You can switch anytime.",
+    headline: "Choose your experience",
+    subhead: "Pick the experience that matches your role.",
   },
   modes: {
     university: {
-      audience: "Universities and admissions teams",
-      title: "AI Admissions Automation",
-      body: "Automate counselling, assessment, processing, and support, with approvals and audit logs.",
-      primaryCta: "Explore for universities",
+      label: "For universities",
+      title: "Admissions Automation",
+      body: "Automate documents, eligibility, and routing, with human approvals and audit trails.",
+      primaryCta: "Explore universities",
       href: "/universities",
       landing: {
         headline: "AI powered admissions automation",
@@ -32,8 +30,7 @@ export const passageHomeCopy = {
         primaryCta: "Request Demo",
       },
       hover: {
-        secondary: "Deploy agents into your admissions workflow.",
-        bullets: ["Build agents", "Connect policies and data", "Track throughput and audit trail"],
+        bullets: ["Build agents", "Connect policies", "Track throughput and audit trail"],
       },
       nav: {
         secondaryCta: "Request demo",
@@ -41,10 +38,10 @@ export const passageHomeCopy = {
       },
     },
     student: {
-      audience: "Students",
       title: "Admissions and Financing",
-      body: "Get matched, apply faster, unlock financing when eligible.",
-      primaryCta: "Explore for students",
+      label: "For students",
+      body: "Get matched, apply faster, and unlock financing when eligible.",
+      primaryCta: "Explore students",
       href: "/students",
       landing: {
         headline: "Admissions and financing, in one guided journey",
@@ -53,8 +50,7 @@ export const passageHomeCopy = {
         primaryCta: "Apply Now",
       },
       hover: {
-        secondary: "One guided journey from interest to enrollment.",
-        bullets: ["Pick programs", "Apply with confidence", "Access financing"],
+        bullets: ["Eligibility checks", "Document collection", "Financing offers"],
       },
       nav: {
         secondaryCta: "Apply now",

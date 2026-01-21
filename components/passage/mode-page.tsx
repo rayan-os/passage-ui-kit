@@ -34,7 +34,7 @@ export function PassageModePage({ mode }: { mode: PassageMode }) {
 
         <div className="relative">
           <p className="text-xs font-semibold tracking-[0.18em] uppercase text-white/55">
-            {copy.audience}
+            {copy.label}
           </p>
           <h1 className="mt-5 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-white [text-wrap:balance]">
             {copy.landing.headline}
@@ -56,9 +56,6 @@ export function PassageModePage({ mode }: { mode: PassageMode }) {
         <div className="relative mt-14 w-full max-w-4xl rounded-glass-xl border border-white/[0.08] bg-black/25 backdrop-blur-glass-heavy p-6 text-left">
           <p className="text-xs font-semibold tracking-[0.16em] uppercase text-white/55">
             Overview
-          </p>
-          <p className="mt-3 text-sm text-white/70">
-            {copy.hover.secondary}
           </p>
           <ul className="mt-4 grid gap-2 sm:grid-cols-3 text-sm text-white/70">
             {copy.hover.bullets.map((b) => (

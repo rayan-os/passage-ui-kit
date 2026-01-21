@@ -6,8 +6,8 @@ import * as React from "react"
 import { ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
-  StudentPanelVisual,
-  UniversityPanelVisual,
+  StudentCardBackdrop,
+  UniversityCardBackdrop,
 } from "@/components/passage/panel-visuals"
 import { GlowRing } from "@/components/passage/glow-ring"
 import {
@@ -37,7 +37,7 @@ function FeatureBullets({ bullets }: { bullets: readonly string[] }) {
       {bullets.map((b) => (
         <li key={b} className="flex items-start gap-2">
           <span
-            className="mt-1.5 size-1.5 rounded-full bg-[#c5ccc3]/70 shadow-[0_0_12px_rgba(197,204,195,0.25)]"
+            className="mt-1.5 size-1.5 rounded-full bg-white/35"
             aria-hidden="true"
           />
           <span>{b}</span>
@@ -72,7 +72,7 @@ function ModePanel({
   const expanded = isHovered || isActive || isNavigating
   const dimmed = Boolean(otherHovered || otherActive || (navigatingTo && !isNavigating))
 
-  const Visual = mode === "university" ? UniversityPanelVisual : StudentPanelVisual
+  const Backdrop = mode === "university" ? UniversityCardBackdrop : StudentCardBackdrop
 
   return (
     <Link
@@ -80,11 +80,12 @@ function ModePanel({
       className={cn(
         "group relative overflow-hidden",
         "rounded-glass-xl border",
-        "bg-glass-bg backdrop-blur-glass-heavy",
-        "shadow-glass-md",
+        "bg-glass-bg/55 backdrop-blur-glass-heavy",
+        "shadow-glass-sm",
         "transition-[transform,opacity,filter,border-color,box-shadow] duration-[280ms] ease-glass",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c5ccc3]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a]",
-        expanded && "shadow-glass-lg border-glass-border-strong",
+        "border-white/[0.10]",
+        expanded && "shadow-glass-md border-white/[0.18]",
         dimmed && "opacity-75",
         expanded && "scale-[1.01]"
       )}
@@ -98,110 +99,87 @@ function ModePanel({
       }}
       aria-label={copy.primaryCta}
     >
-      {/* Panel tint + glow */}
-      <div
-        className={cn(
-          "absolute inset-0 pointer-events-none",
-          "bg-gradient-to-br",
-          mode === "university"
-            ? "from-[rgba(197,204,195,0.14)] via-[rgba(59,130,246,0.06)] to-transparent"
-            : "from-[rgba(59,130,246,0.14)] via-[rgba(244,63,94,0.06)] to-transparent",
-          "transition-opacity duration-[280ms] ease-glass",
-          expanded ? "opacity-100" : "opacity-70",
-          dimmed && "opacity-40"
-        )}
-      />
-      <div
-        className={cn(
-          "absolute -top-32 -right-28 h-72 w-72 rounded-full blur-[90px] pointer-events-none",
-          mode === "university"
-            ? "bg-[rgba(197,204,195,0.12)]"
-            : "bg-[rgba(59,130,246,0.12)]",
-          "transition-opacity duration-[280ms] ease-glass",
-          expanded ? "opacity-100" : "opacity-60",
-          dimmed && "opacity-30"
-        )}
-      />
-
-      {/* Content + visual split */}
-      <div className="relative z-10 grid h-full grid-rows-[auto_1fr] md:grid-rows-1 md:grid-cols-[1.05fr_0.95fr]">
-        {/* Content side */}
-        <div className="flex flex-col p-7 sm:p-9 md:pr-6">
-          <div className="flex items-center justify-between gap-4">
-            <span className="text-[11px] font-semibold tracking-[0.16em] uppercase text-white/55">
-              {copy.audience}
-            </span>
-            {isActive && (
-              <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#c5ccc3]">
-                Active
-              </span>
-            )}
-          </div>
-
-          <div className="mt-6">
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
-              {copy.title}
-            </h2>
-            <p className="mt-3 text-sm sm:text-base text-white/70 max-w-[46ch]">
-              {copy.body}
-            </p>
-          </div>
-
-          {/* Hover reveal */}
+      {/* Subtle unique card backdrop (no “poster block”) */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className={cn(
+            "absolute inset-0",
+            mode === "university"
+              ? "bg-[radial-gradient(70%_70%_at_25%_20%,rgba(197,204,195,0.10)_0%,transparent_60%),radial-gradient(60%_60%_at_80%_70%,rgba(59,130,246,0.08)_0%,transparent_62%)]"
+              : "bg-[radial-gradient(70%_70%_at_25%_20%,rgba(59,130,246,0.10)_0%,transparent_60%),radial-gradient(60%_60%_at_75%_75%,rgba(244,63,94,0.07)_0%,transparent_62%)]"
+          )}
+        />
+        <div
+          className={cn(
+            "absolute inset-0 opacity-70",
+            expanded ? "opacity-90" : "opacity-65",
+            dimmed && "opacity-45"
+          )}
+        >
+          <Backdrop />
+        </div>
+        <div
+          className={cn(
+            "absolute inset-0",
+            "transition-opacity duration-[280ms] ease-glass",
+            expanded ? "opacity-100" : "opacity-0"
+          )}
+          aria-hidden="true"
+        >
           <div
             className={cn(
-              "mt-6",
-              "transition-[opacity,transform,max-height] duration-[280ms] ease-glass",
-              expanded
-                ? "opacity-100 translate-y-0 max-h-64"
-                : "opacity-0 translate-y-1 max-h-0"
+              "absolute -inset-[1px] rounded-[inherit]",
+              mode === "university"
+                ? "shadow-[0_0_0_1px_rgba(197,204,195,0.18),0_0_24px_rgba(59,130,246,0.14)]"
+                : "shadow-[0_0_0_1px_rgba(59,130,246,0.18),0_0_24px_rgba(244,63,94,0.12)]"
             )}
-            aria-hidden={!expanded}
-          >
-            <p className="text-sm text-white/75">{copy.hover.secondary}</p>
-            <FeatureBullets bullets={copy.hover.bullets} />
-          </div>
+          />
+        </div>
+      </div>
 
-          {/* Primary CTA */}
-          <div className="mt-auto pt-8">
-            <div
-              className={cn(
-                "inline-flex items-center justify-center gap-2",
-                "h-11 px-4 rounded-glass-lg",
-                "bg-white text-[#0a0a0a] font-semibold text-sm",
-                "shadow-glass-sm",
-                "transition-all duration-[220ms] ease-glass",
-                "group-hover:bg-white/95 group-hover:shadow-glass-md",
-                "group-active:scale-[0.98]",
-                dimmed && "opacity-90"
-              )}
-            >
-              {copy.primaryCta}
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-            </div>
-          </div>
+      {/* Content (symmetric cards) */}
+      <div className="relative z-10 flex h-full flex-col p-9 sm:p-10">
+        <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-white/55">
+          {copy.label}
+        </span>
+
+        <div className="mt-6">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+            {copy.title}
+          </h2>
+          <p className="mt-3 text-sm sm:text-base text-white/70 max-w-[42ch]">
+            {copy.body}
+          </p>
         </div>
 
-        {/* Visual side */}
-        <div className="relative min-h-[200px] md:min-h-full">
+        {/* Hover reveal (bullets only, cleaner) */}
+        <div
+          className={cn(
+            "mt-6",
+            "transition-[opacity,transform,max-height] duration-[280ms] ease-glass",
+            expanded ? "opacity-100 translate-y-0 max-h-64" : "opacity-0 translate-y-1 max-h-0"
+          )}
+          aria-hidden={!expanded}
+        >
+          <FeatureBullets bullets={copy.hover.bullets} />
+        </div>
+
+        {/* CTA (identical style both sides) */}
+        <div className="mt-auto pt-9">
           <div
             className={cn(
-              "absolute inset-0",
-              "border-t md:border-t-0 md:border-l border-white/[0.08]",
-              "transition-opacity duration-[280ms] ease-glass",
-              dimmed ? "opacity-70" : "opacity-100"
+              "inline-flex items-center justify-center gap-2",
+              "h-11 px-5 rounded-glass-lg",
+              "bg-white text-[#0a0a0a] font-semibold text-sm",
+              "shadow-glass-sm",
+              "transition-all duration-[220ms] ease-glass",
+              "group-hover:bg-white/95 group-hover:shadow-glass-md",
+              "group-active:scale-[0.98]",
+              dimmed && "opacity-90"
             )}
-            aria-hidden="true"
-          />
-          <div
-            className={cn(
-              "absolute inset-0",
-              "transition-[transform,opacity] duration-[320ms] ease-glass",
-              expanded ? "opacity-100 scale-[1.02]" : "opacity-90 scale-[1.0]"
-            )}
-            aria-hidden="true"
           >
-            <Visual />
+            {copy.primaryCta}
+            <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </div>
         </div>
       </div>
@@ -273,7 +251,7 @@ export function PassageSplitHero() {
         }}
         aria-hidden="true"
       >
-        <GlowRing mode={ringMode} intensity={0.95} className="absolute inset-0" />
+        <GlowRing mode={ringMode} intensity={0.55} className="absolute inset-0" />
       </div>
 
       {/* Portal veil (entrance) */}
@@ -298,37 +276,12 @@ export function PassageSplitHero() {
               : "opacity-0"
           )}
         >
-          <p className="text-xs font-semibold tracking-[0.18em] uppercase text-white/55">
-            {passageHomeCopy.hero.kicker}
-          </p>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
+          <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-0.02em] text-white">
             {passageHomeCopy.hero.headline}
           </h1>
           <p className="text-sm sm:text-base text-white/60">
             {passageHomeCopy.hero.subhead}
           </p>
-
-          {activeMode && (
-            <p className="pt-2 text-xs text-white/55">
-              You’re viewing the {activeMode === "university" ? "universities" : "students"} experience.{" "}
-              <button
-                type="button"
-                className={cn(
-                  "text-white/80 hover:text-white underline underline-offset-4",
-                  "decoration-white/[0.25] hover:decoration-white/[0.45]",
-                  "transition-colors duration-glass",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c5ccc3]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a] rounded"
-                )}
-                onClick={() => {
-                  if (!switchTo) return
-                  setMode(switchTo)
-                }}
-              >
-                Switch to {switchTo === "university" ? "universities" : "students"}
-              </button>
-              .
-            </p>
-          )}
         </div>
 
         <div className="relative">

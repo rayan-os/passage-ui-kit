@@ -57,7 +57,7 @@ export function GlowRing({
         className="absolute inset-[-16%] rounded-full blur-[38px] opacity-70"
         style={{
           background: `radial-gradient(circle at 50% 50%, ${palette.b} 0%, transparent 62%)`,
-          opacity: 0.42 * intensity,
+          opacity: 0.26 * intensity,
         }}
       />
 
@@ -66,7 +66,7 @@ export function GlowRing({
         className="absolute inset-[18%] rounded-full blur-[34px]"
         style={{
           background: `radial-gradient(circle at 50% 45%, rgba(255,255,255,0.08) 0%, transparent 55%)`,
-          opacity: 0.55 * intensity,
+          opacity: 0.32 * intensity,
         }}
       />
 
