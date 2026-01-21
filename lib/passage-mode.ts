@@ -25,6 +25,12 @@ export const passageHomeCopy = {
       body: "Automate counselling, assessment, processing, and support, with approvals and audit logs.",
       primaryCta: "Explore for universities",
       href: "/universities",
+      landing: {
+        headline: "AI powered admissions automation",
+        subhead:
+          "Move applicants from counselling to enrollment faster, with automated document processing, eligibility checks, and follow ups.",
+        primaryCta: "Request Demo",
+      },
       hover: {
         secondary: "Deploy agents into your admissions workflow.",
         bullets: ["Build agents", "Connect policies and data", "Track throughput and audit trail"],
@@ -40,6 +46,12 @@ export const passageHomeCopy = {
       body: "Get matched, apply faster, unlock financing when eligible.",
       primaryCta: "Explore for students",
       href: "/students",
+      landing: {
+        headline: "Admissions and financing, in one guided journey",
+        subhead:
+          "Explore programs, apply with confidence, and unlock financing when eligible — with one clear path from interest to enrollment.",
+        primaryCta: "Apply Now",
+      },
       hover: {
         secondary: "One guided journey from interest to enrollment.",
         bullets: ["Pick programs", "Apply with confidence", "Access financing"],

@@ -9,6 +9,7 @@ import {
   StudentPanelVisual,
   UniversityPanelVisual,
 } from "@/components/passage/panel-visuals"
+import { GlowRing } from "@/components/passage/glow-ring"
 import {
   otherPassageMode,
   passageHomeCopy,
@@ -220,6 +221,8 @@ export function PassageSplitHero() {
   )
 
   const activeMode = hydrated ? mode : null
+  const ringMode: "neutral" | PassageMode =
+    navigatingTo ?? hovered ?? activeMode ?? "neutral"
 
   React.useEffect(() => {
     if (reducedMotion) {
@@ -257,6 +260,21 @@ export function PassageSplitHero() {
       <div className="absolute bottom-0 right-1/4 w-[640px] h-[640px] rounded-full bg-[rgba(59,130,246,0.025)] blur-[170px] pointer-events-none" />
       {/* Subtle grain */}
       <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay pointer-events-none bg-[radial-gradient(circle_at_20%_20%,white_1px,transparent_1px)] [background-size:14px_14px]" />
+
+      {/* Big portal ring behind the split (ties to the destination pages) */}
+      <div
+        className={cn(
+          "pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[52%]",
+          "w-[520px] h-[520px] sm:w-[720px] sm:h-[720px] lg:w-[860px] lg:h-[860px]",
+          entered ? "opacity-95" : "opacity-0"
+        )}
+        style={{
+          transition: reducedMotion ? undefined : "opacity 700ms ease-out",
+        }}
+        aria-hidden="true"
+      >
+        <GlowRing mode={ringMode} intensity={0.95} className="absolute inset-0" />
+      </div>
 
       {/* Portal veil (entrance) */}
       <div
