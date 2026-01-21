@@ -9,7 +9,7 @@ import {
   StudentCardBackdrop,
   UniversityCardBackdrop,
 } from "@/components/passage/panel-visuals"
-import { GlowRing } from "@/components/passage/glow-ring"
+import { MorphingRing } from "@/components/passage/morphing-ring"
 import {
   otherPassageMode,
   passageHomeCopy,
@@ -217,15 +217,13 @@ export function PassageSplitHero() {
       setNavigatingTo(next)
 
       const href = passageHomeCopy.modes[next].href
-      const delay = reducedMotion ? 0 : 240
+      const delay = reducedMotion ? 0 : 320
       window.setTimeout(() => {
         router.push(href)
       }, delay)
     },
     [reducedMotion, router, setMode]
   )
-
-  const switchTo = activeMode ? otherPassageMode(activeMode) : null
 
   return (
     <main className="relative min-h-screen bg-[#050505] overflow-hidden">
@@ -251,7 +249,13 @@ export function PassageSplitHero() {
         }}
         aria-hidden="true"
       >
-        <GlowRing mode={ringMode} intensity={0.55} className="absolute inset-0" />
+        <MorphingRing
+          mode={ringMode}
+          intensity={0.9}
+          active={Boolean(navigatingTo)}
+          entered={entered}
+          className="absolute inset-0"
+        />
       </div>
 
       {/* Portal veil (entrance) */}

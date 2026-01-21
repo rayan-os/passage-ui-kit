@@ -5,7 +5,7 @@ import { PassageTopNav } from "@/components/passage/top-nav"
 import { cn } from "@/lib/utils"
 import { passageHomeCopy, type PassageMode } from "@/lib/passage-mode"
 import { usePassageMode } from "@/components/passage/mode-provider"
-import { GlowRing } from "@/components/passage/glow-ring"
+import { MorphingRing } from "@/components/passage/morphing-ring"
 import { GlassButton } from "@/components/ui/glass"
 
 export function PassageModePage({ mode }: { mode: PassageMode }) {
@@ -29,7 +29,7 @@ export function PassageModePage({ mode }: { mode: PassageMode }) {
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center px-4 sm:px-6 pt-28 pb-10 text-center">
         {/* Portal ring like the reference */}
         <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[52%] w-[520px] h-[520px] sm:w-[680px] sm:h-[680px] md:w-[760px] md:h-[760px] opacity-90">
-          <GlowRing mode={mode} intensity={1.05} className="absolute inset-0" />
+          <MorphingRing mode={mode} intensity={1.05} className="absolute inset-0" />
         </div>
 
         <div className="relative">
