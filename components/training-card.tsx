@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 
 // ─────────────────────────────────────────────────────────────
 // Types
@@ -78,30 +78,24 @@ const CheckIcon = () => (
   </svg>
 );
 
-const SyncIcon = () => (
-  <motion.svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    className="text-white/50"
-    animate={{ rotate: 360 }}
-    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-  >
-    <path
-      d="M4 12a8 8 0 018-8v4l4-4-4-4v4a8 8 0 00-8 8h4z"
-      stroke="currentColor"
-      strokeWidth="2"
-      fill="none"
-    />
-    <path
-      d="M20 12a8 8 0 01-8 8v-4l-4 4 4 4v-4a8 8 0 008-8h-4z"
-      stroke="currentColor"
-      strokeWidth="2"
-      fill="none"
-    />
-  </motion.svg>
-);
+// ─────────────────────────────────────────────────────────────
+// Hooks
+// ─────────────────────────────────────────────────────────────
+
+function useReducedMotion(): boolean {
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mediaQuery.matches);
+
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
+  return reducedMotion;
+}
 
 // ─────────────────────────────────────────────────────────────
 // Sub-components
@@ -240,53 +234,28 @@ const GuidelineRow = ({
 );
 
 // ─────────────────────────────────────────────────────────────
-// Noise Texture Overlay
+// Noise Texture Overlay (CSS-based for better performance)
 // ─────────────────────────────────────────────────────────────
 
 const NoiseOverlay = ({ reducedMotion }: { reducedMotion: boolean }) => {
-  const [noiseUrl, setNoiseUrl] = useState<string>("");
-
-  useEffect(() => {
-    // Generate noise texture using canvas
-    const canvas = document.createElement("canvas");
-    canvas.width = 200;
-    canvas.height = 200;
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      const imageData = ctx.createImageData(200, 200);
-      for (let i = 0; i < imageData.data.length; i += 4) {
-        const value = Math.random() * 255;
-        imageData.data[i] = value;
-        imageData.data[i + 1] = value;
-        imageData.data[i + 2] = value;
-        imageData.data[i + 3] = 15; // Low opacity
-      }
-      ctx.putImageData(imageData, 0, 0);
-      setNoiseUrl(canvas.toDataURL());
-    }
-  }, []);
-
-  if (!noiseUrl) return null;
-
   return (
     <motion.div
-      className="absolute inset-0 pointer-events-none z-10"
+      className="absolute inset-0 pointer-events-none z-10 opacity-[0.03]"
       style={{
-        backgroundImage: `url(${noiseUrl})`,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
         backgroundRepeat: "repeat",
-        opacity: 0.4,
       }}
       animate={
         reducedMotion
           ? {}
           : {
-              backgroundPosition: ["0px 0px", "200px 200px"],
+              opacity: [0.03, 0.05, 0.03],
             }
       }
       transition={{
-        duration: 8,
+        duration: 4,
         repeat: Infinity,
-        ease: "linear",
+        ease: "easeInOut",
       }}
     />
   );
@@ -297,19 +266,17 @@ const NoiseOverlay = ({ reducedMotion }: { reducedMotion: boolean }) => {
 // ─────────────────────────────────────────────────────────────
 
 const LightSweep = ({ reducedMotion }: { reducedMotion: boolean }) => (
-  <motion.div
-    className="absolute inset-0 pointer-events-none overflow-hidden rounded-t-[20px]"
-    initial={{ opacity: 0 }}
-  >
+  <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-t-[20px]">
     <motion.div
       className="absolute top-0 left-0 w-1/3 h-full"
       style={{
         background:
-          "linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)",
+          "linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent)",
       }}
+      initial={{ x: "-100%" }}
       animate={
         reducedMotion
-          ? {}
+          ? { x: "-100%" }
           : {
               x: ["-100%", "400%"],
             }
@@ -321,7 +288,34 @@ const LightSweep = ({ reducedMotion }: { reducedMotion: boolean }) => (
         ease: "easeInOut",
       }}
     />
-  </motion.div>
+  </div>
+);
+
+// ─────────────────────────────────────────────────────────────
+// Sync Icon with rotation
+// ─────────────────────────────────────────────────────────────
+
+const SyncIcon = ({ reducedMotion }: { reducedMotion: boolean }) => (
+  <motion.svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    className="text-white/50"
+    animate={reducedMotion ? {} : { rotate: 360 }}
+    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+  >
+    <path
+      d="M21 12a9 9 0 11-9-9"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
+    <path
+      d="M12 3v3l3-1.5L12 3z"
+      fill="currentColor"
+    />
+  </motion.svg>
 );
 
 // ─────────────────────────────────────────────────────────────
@@ -329,8 +323,12 @@ const LightSweep = ({ reducedMotion }: { reducedMotion: boolean }) => (
 // ─────────────────────────────────────────────────────────────
 
 export default function TrainingCard() {
-  const prefersReducedMotion = useReducedMotion();
-  const reducedMotion = prefersReducedMotion ?? false;
+  const [mounted, setMounted] = useState(false);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Data
   const sources: SourceItem[] = [
@@ -359,6 +357,15 @@ export default function TrainingCard() {
     { title: "Escalation Rules", description: "Escalate billing issues over $500" },
     { title: "Response Format", description: "Keep responses under 3 paragraphs" },
   ];
+
+  // Show a simple loading state until mounted
+  if (!mounted) {
+    return (
+      <div className="relative w-full min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="text-white/40 text-sm">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full min-h-screen overflow-hidden flex items-center justify-center">
@@ -447,17 +454,18 @@ export default function TrainingCard() {
           ───────────────────────────────────────────────────────── */}
       <motion.div
         className="relative z-20 w-full max-w-[580px] mx-4"
-        animate={
-          reducedMotion
-            ? {}
-            : {
-                y: [0, -8, 0],
-              }
-        }
+        initial={{ opacity: 0, y: 20 }}
+        animate={{
+          opacity: 1,
+          y: reducedMotion ? 0 : [0, -8, 0],
+        }}
         transition={{
-          duration: 7,
-          repeat: Infinity,
-          ease: "easeInOut",
+          opacity: { duration: 0.5 },
+          y: {
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+          },
         }}
       >
         {/* Glass window container */}
@@ -548,7 +556,7 @@ export default function TrainingCard() {
               ───────────────────────────────────────────────────── */}
           <div className="flex items-center justify-between px-5 py-3 border-t border-white/[0.06] bg-white/[0.02]">
             <div className="flex items-center gap-2 text-xs text-white/50">
-              <SyncIcon />
+              <SyncIcon reducedMotion={reducedMotion} />
               <span>Syncing...</span>
             </div>
             <span className="text-xs text-white/40">Updated: 2m ago</span>
