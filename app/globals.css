@@ -537,6 +537,15 @@
   }
 }
 
+@keyframes portalRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .passage-portal-in,
   .passage-seam-pulse,

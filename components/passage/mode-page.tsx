@@ -10,6 +10,9 @@ import { GlassButton } from "@/components/ui/glass"
 
 export function PassageModePage({ mode }: { mode: PassageMode }) {
   const { setMode } = usePassageMode()
+  const ringBoxRef = React.useRef<HTMLDivElement | null>(null)
+  const rafRef = React.useRef<number | null>(null)
+  const [ringAngle, setRingAngle] = React.useState<number | null>(null)
 
   React.useEffect(() => {
     setMode(mode)
@@ -18,7 +21,23 @@ export function PassageModePage({ mode }: { mode: PassageMode }) {
   const copy = passageHomeCopy.modes[mode]
 
   return (
-    <main className="relative min-h-screen bg-[#050505] overflow-hidden">
+    <main
+      className="relative min-h-screen bg-[#050505] overflow-hidden"
+      onPointerMove={(e) => {
+        const box = ringBoxRef.current
+        if (!box) return
+        if (rafRef.current) return
+        rafRef.current = window.requestAnimationFrame(() => {
+          rafRef.current = null
+          const r = box.getBoundingClientRect()
+          const cx = r.left + r.width / 2
+          const cy = r.top + r.height / 2
+          const a = Math.atan2(e.clientY - cy, e.clientX - cx)
+          setRingAngle(a)
+        })
+      }}
+      onPointerLeave={() => setRingAngle(null)}
+    >
       <PassageTopNav forceMode={mode} />
 
       {/* Ambient background */}
@@ -28,8 +47,16 @@ export function PassageModePage({ mode }: { mode: PassageMode }) {
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center px-4 sm:px-6 pt-28 pb-10 text-center">
         {/* Portal ring like the reference */}
-        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[52%] w-[520px] h-[520px] sm:w-[680px] sm:h-[680px] md:w-[760px] md:h-[760px] opacity-90">
-          <MorphingRing mode={mode} intensity={1.05} className="absolute inset-0" />
+        <div
+          ref={ringBoxRef}
+          className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[52%] w-[520px] h-[520px] sm:w-[680px] sm:h-[680px] md:w-[760px] md:h-[760px] opacity-90"
+        >
+          <MorphingRing
+            mode={mode}
+            intensity={1.05}
+            angleRad={ringAngle}
+            className="absolute inset-0"
+          />
         </div>
 
         <div className="relative">

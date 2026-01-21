@@ -192,6 +192,10 @@ export function PassageSplitHero() {
   const reducedMotion = usePrefersReducedMotion()
   const { mode, setMode, hydrated } = usePassageMode()
 
+  const ringBoxRef = React.useRef<HTMLDivElement | null>(null)
+  const rafRef = React.useRef<number | null>(null)
+  const [ringAngle, setRingAngle] = React.useState<number | null>(null)
+
   const [entered, setEntered] = React.useState(false)
   const [hovered, setHovered] = React.useState<HoverState>(null)
   const [navigatingTo, setNavigatingTo] = React.useState<PassageMode | null>(
@@ -226,7 +230,24 @@ export function PassageSplitHero() {
   )
 
   return (
-    <main className="relative min-h-screen bg-[#050505] overflow-hidden">
+    <main
+      className="relative min-h-screen bg-[#050505] overflow-hidden"
+      onPointerMove={(e) => {
+        if (reducedMotion) return
+        const box = ringBoxRef.current
+        if (!box) return
+        if (rafRef.current) return
+        rafRef.current = window.requestAnimationFrame(() => {
+          rafRef.current = null
+          const r = box.getBoundingClientRect()
+          const cx = r.left + r.width / 2
+          const cy = r.top + r.height / 2
+          const a = Math.atan2(e.clientY - cy, e.clientX - cx)
+          setRingAngle(a)
+        })
+      }}
+      onPointerLeave={() => setRingAngle(null)}
+    >
       {/* Ambient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#070707] via-[#050505] to-[#050505]" />
       {/* Color mesh (subtle, premium) */}
@@ -239,6 +260,7 @@ export function PassageSplitHero() {
 
       {/* Big portal ring behind the split (ties to the destination pages) */}
       <div
+        ref={ringBoxRef}
         className={cn(
           "pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[52%]",
           "w-[520px] h-[520px] sm:w-[720px] sm:h-[720px] lg:w-[860px] lg:h-[860px]",
@@ -254,6 +276,7 @@ export function PassageSplitHero() {
           intensity={0.9}
           active={Boolean(navigatingTo)}
           entered={entered}
+          angleRad={ringAngle}
           className="absolute inset-0"
         />
       </div>

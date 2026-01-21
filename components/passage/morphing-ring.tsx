@@ -6,18 +6,6 @@ import { type PassageMode } from "@/lib/passage-mode"
 
 type Mode = PassageMode | "neutral"
 
-function lerp(a: number, b: number, t: number) {
-  return a + (b - a) * t
-}
-
-function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n))
-}
-
-function easeOutCubic(t: number) {
-  return 1 - Math.pow(1 - t, 3)
-}
-
 function getPalette(mode: Mode) {
   if (mode === "university") {
     return {
@@ -40,68 +28,13 @@ function getPalette(mode: Mode) {
   }
 }
 
-function buildBlobPath({
-  points,
-  cx,
-  cy,
-  baseR,
-  amp1,
-  amp2,
-  phase,
-}: {
-  points: number
-  cx: number
-  cy: number
-  baseR: number
-  amp1: number
-  amp2: number
-  phase: number
-}) {
-  const coords: Array<{ x: number; y: number }> = []
-  for (let i = 0; i < points; i++) {
-    const t = (i / points) * Math.PI * 2
-    // Two layered sine “noise” fields to get the organic OpenAI-like ring.
-    const n =
-      Math.sin(t * 1.0 + phase * 0.9) * amp1 +
-      Math.sin(t * 2.0 - phase * 0.65) * (amp1 * 0.55) +
-      Math.sin(t * 3.0 + phase * 0.35) * (amp2 * 0.70) +
-      Math.sin(t * 5.0 - phase * 0.25) * (amp2 * 0.45)
-    const r = baseR + n
-    coords.push({ x: cx + Math.cos(t) * r, y: cy + Math.sin(t) * r })
-  }
-
-  // Catmull-Rom → Bezier for smooth closed curve
-  const CR = (p0: any, p1: any, p2: any, p3: any) => {
-    const c1x = p1.x + (p2.x - p0.x) / 6
-    const c1y = p1.y + (p2.y - p0.y) / 6
-    const c2x = p2.x - (p3.x - p1.x) / 6
-    const c2y = p2.y - (p3.y - p1.y) / 6
-    return { c1x, c1y, c2x, c2y }
-  }
-
-  let d = ""
-  for (let i = 0; i < points; i++) {
-    const p0 = coords[(i - 1 + points) % points]
-    const p1 = coords[i]
-    const p2 = coords[(i + 1) % points]
-    const p3 = coords[(i + 2) % points]
-    const { c1x, c1y, c2x, c2y } = CR(p0, p1, p2, p3)
-
-    if (i === 0) d += `M ${p1.x.toFixed(2)} ${p1.y.toFixed(2)} `
-    d += `C ${c1x.toFixed(2)} ${c1y.toFixed(2)} ${c2x.toFixed(
-      2
-    )} ${c2y.toFixed(2)} ${p2.x.toFixed(2)} ${p2.y.toFixed(2)} `
-  }
-  d += "Z"
-  return d
-}
-
 export function MorphingRing({
   mode,
   className,
   intensity = 1,
   active = false,
   entered = true,
+  angleRad,
 }: {
   mode: Mode
   className?: string
@@ -110,12 +43,9 @@ export function MorphingRing({
   active?: boolean
   /** used to fade ring in after entrance */
   entered?: boolean
+  /** pointer angle around ring center (radians) for highlight */
+  angleRad?: number | null
 }) {
-  const pathRef = React.useRef<SVGPathElement | null>(null)
-  const blurRef = React.useRef<SVGPathElement | null>(null)
-  const frameRef = React.useRef<number | null>(null)
-  const lastRef = React.useRef<number>(0)
-
   const [reduced, setReduced] = React.useState(false)
   React.useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -126,88 +56,17 @@ export function MorphingRing({
   }, [])
 
   const palette = React.useMemo(() => getPalette(mode), [mode])
+  const angleDeg = React.useMemo(() => {
+    if (typeof angleRad !== "number") return null
+    // rotate so 0 rad points “up”
+    return (angleRad * 180) / Math.PI + 90
+  }, [angleRad])
 
-  // Smoothly transition “shape personality” on mode change
-  const targetRef = React.useRef({ amp1: 14, amp2: 9 })
-  React.useEffect(() => {
-    const next =
-      mode === "university"
-        ? { amp1: 12, amp2: 7 }
-        : mode === "student"
-          ? { amp1: 15, amp2: 10 }
-          : { amp1: 10, amp2: 7 }
-    targetRef.current = next
-  }, [mode])
-
-  const stateRef = React.useRef({
-    amp1: 10,
-    amp2: 7,
-    phase: 0,
-    modeBlend: 1,
-    zoom: 1,
-  })
-
-  React.useEffect(() => {
-    if (reduced) return
-
-    const points = 44
-    const baseR = 176
-    const cx = 210
-    const cy = 210
-
-    function tick(t: number) {
-      const last = lastRef.current || t
-      const dt = Math.min(40, t - last)
-      lastRef.current = t
-
-      const s = stateRef.current
-      const target = targetRef.current
-
-      // drift phase
-      s.phase += (dt / 1000) * 0.85
-
-      // ease shape toward target
-      s.amp1 = lerp(s.amp1, target.amp1, 0.04)
-      s.amp2 = lerp(s.amp2, target.amp2, 0.04)
-
-      // click “pull in”
-      const desiredZoom = active ? 1.08 : 1
-      s.zoom = lerp(s.zoom, desiredZoom, active ? 0.06 : 0.05)
-
-      const d = buildBlobPath({
-        points,
-        cx,
-        cy,
-        baseR: baseR * s.zoom,
-        amp1: s.amp1,
-        amp2: s.amp2,
-        phase: s.phase,
-      })
-
-      if (pathRef.current) pathRef.current.setAttribute("d", d)
-      if (blurRef.current) blurRef.current.setAttribute("d", d)
-
-      frameRef.current = window.requestAnimationFrame(tick)
-    }
-
-    frameRef.current = window.requestAnimationFrame(tick)
-    return () => {
-      if (frameRef.current) window.cancelAnimationFrame(frameRef.current)
-      frameRef.current = null
-    }
-  }, [active, reduced])
-
-  // Reduced motion: render a single static blob
-  const staticD = React.useMemo(() => {
-    return buildBlobPath({
-      points: 44,
-      cx: 210,
-      cy: 210,
-      baseR: 176,
-      amp1: mode === "student" ? 15 : mode === "university" ? 12 : 10,
-      amp2: mode === "student" ? 10 : 7,
-      phase: 0.8,
-    })
+  // Ring thickness subtly varies by mode (still a “true ring”)
+  const maskStops = React.useMemo(() => {
+    if (mode === "university") return { inner: 56, mid: 60, outer: 66, fade: 70 }
+    if (mode === "student") return { inner: 55, mid: 60, outer: 67, fade: 71 }
+    return { inner: 56, mid: 60, outer: 66, fade: 70 }
   }, [mode])
 
   return (
@@ -219,60 +78,62 @@ export function MorphingRing({
       }}
       aria-hidden="true"
     >
-      <svg
-        viewBox="0 0 420 420"
-        className="h-full w-full"
-        xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <defs>
-          <linearGradient id="ringGrad" x1="0" y1="0" x2="420" y2="420">
-            <stop offset="0" stopColor={palette.a} stopOpacity={0.95} />
-            <stop offset="0.55" stopColor={palette.b} stopOpacity={0.95} />
-            <stop offset="1" stopColor={palette.c} stopOpacity={0.90} />
-          </linearGradient>
-          <filter id="ringGlow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation={18 * intensity} result="b" />
-            <feColorMatrix
-              in="b"
-              type="matrix"
-              values="
-                1 0 0 0 0
-                0 1 0 0 0
-                0 0 1 0 0
-                0 0 0 0.55 0"
-              result="c"
-            />
-            <feMerge>
-              <feMergeNode in="c" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
+      <div
+        className={cn(
+          "absolute inset-0 rounded-full",
+          "transition-[transform,opacity,filter] duration-300 ease-out"
+        )}
+        style={{
+          transform: `scale(${active ? 1.08 : 1})`,
+          filter: `blur(${Math.max(0, 0.5 * intensity)}px)`,
+          opacity: 0.9 * intensity,
+          background: `conic-gradient(from 220deg, ${palette.a}, ${palette.b}, ${palette.c}, ${palette.a})`,
+          WebkitMaskImage: `radial-gradient(circle at 50% 50%, transparent ${maskStops.inner}%, black ${maskStops.mid}%, black ${maskStops.outer}%, transparent ${maskStops.fade}%)`,
+          maskImage: `radial-gradient(circle at 50% 50%, transparent ${maskStops.inner}%, black ${maskStops.mid}%, black ${maskStops.outer}%, transparent ${maskStops.fade}%)`,
+        }}
+      />
 
-        {/* soft bloom behind */}
-        <path
-          ref={blurRef}
-          d={staticD}
-          fill="none"
-          stroke="url(#ringGrad)"
-          strokeWidth={36}
-          strokeLinecap="round"
-          opacity={0.22 * intensity}
-          filter="url(#ringGlow)"
-        />
+      {/* Outer glow (subtle) */}
+      <div
+        className="absolute inset-[-18%] rounded-full blur-[44px]"
+        style={{
+          background: `radial-gradient(circle at 50% 50%, ${palette.b} 0%, transparent 62%)`,
+          opacity: 0.18 * intensity,
+        }}
+      />
 
-        {/* main ring */}
-        <path
-          ref={pathRef}
-          d={staticD}
-          fill="none"
-          stroke="url(#ringGrad)"
-          strokeWidth={14}
-          strokeLinecap="round"
-          opacity={0.90 * intensity}
+      {/* Cursor-following highlight segment */}
+      <div
+        className={cn(
+          "absolute inset-0 rounded-full",
+          reduced ? "opacity-0" : "opacity-100"
+        )}
+        style={{
+          transform: `rotate(${angleDeg ?? 0}deg)`,
+          transition: angleDeg == null ? undefined : "transform 140ms ease-out",
+          opacity: angleDeg == null ? 0.55 : 0.85,
+          WebkitMaskImage: `radial-gradient(circle at 50% 50%, transparent ${maskStops.inner}%, black ${maskStops.mid}%, black ${maskStops.outer}%, transparent ${maskStops.fade}%)`,
+          maskImage: `radial-gradient(circle at 50% 50%, transparent ${maskStops.inner}%, black ${maskStops.mid}%, black ${maskStops.outer}%, transparent ${maskStops.fade}%)`,
+          background:
+            "conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.00) 320deg, rgba(255,255,255,0.14) 350deg, rgba(255,255,255,0.00) 360deg)",
+          filter: "blur(0.6px)",
+        }}
+      />
+
+      {/* Gentle auto-rotation if no pointer angle */}
+      {angleDeg == null && !reduced && (
+        <div
+          className="absolute inset-0 rounded-full opacity-70"
+          style={{
+            animation: "portalRotate 14s linear infinite",
+            WebkitMaskImage: `radial-gradient(circle at 50% 50%, transparent ${maskStops.inner}%, black ${maskStops.mid}%, black ${maskStops.outer}%, transparent ${maskStops.fade}%)`,
+            maskImage: `radial-gradient(circle at 50% 50%, transparent ${maskStops.inner}%, black ${maskStops.mid}%, black ${maskStops.outer}%, transparent ${maskStops.fade}%)`,
+            background:
+              "conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.00) 260deg, rgba(255,255,255,0.10) 310deg, rgba(255,255,255,0.00) 360deg)",
+            filter: "blur(0.7px)",
+          }}
         />
-      </svg>
+      )}
     </div>
   )
 }
